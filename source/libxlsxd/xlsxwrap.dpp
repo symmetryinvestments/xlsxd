@@ -1,3 +1,5 @@
+module libxlsxd.xlsxwrap;
+
 #include "xlsxwriter/app.h"
 #include "xlsxwriter/chart.h"
 #include "xlsxwriter/chartsheet.h"

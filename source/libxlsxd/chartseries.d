@@ -1,6 +1,6 @@
 module libxlsxd.chartseries;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct Chartseries {
 	lxw_chart_series* handle;

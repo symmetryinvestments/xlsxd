@@ -5,7 +5,7 @@ import libxlsxd.datetime;
 import libxlsxd.format;
 import libxlsxd.chart;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct Worksheet {
 	import std.string : toStringz;

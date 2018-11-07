@@ -1,6 +1,6 @@
 module libxlsxd;
 
-public import xlsxwrap;
+public import libxlsxd.xlsxwrap;
 
 public import libxlsxd.workbook;
 public import libxlsxd.worksheet;
