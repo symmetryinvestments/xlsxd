@@ -12,12 +12,12 @@
 	"configurations": [
 		{
 			"name": "library",
-			"preGenerateCommands" : ["make", "make buildclib"],
-			"lflags-posix": ["libxlsxwriter/build/libxlsxwriter.a"]
+			"preGenerateCommands" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
+			"lflags-posix": ["$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a"]
 		},
 		{
 			"name": "externclib",
-			"preGenerateCommands" : ["make"],
+			"preGenerateCommands" : ["make -C $PACKAGE_DIR"],
 			"lflags-posix" : ["-L-lxlsxwriter"]
 		}
 	]
