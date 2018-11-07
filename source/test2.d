@@ -233,7 +233,7 @@ unittest {
 
 	auto chartsheet = wb.addChartsheet("__thechartsheet");
 	runner!(Chartsheet, ["__ctor", "__dtor", "__xdtor", "opAssign",
-			"chartsheetAssembleXmlFile", "chartsheetFree"])(chartsheet);
+			"assembleXmlFile", "free"])(chartsheet);
 
 	auto chartseries = chart.addChartseries("__thechartseries", "=A1 * 2");
 	runner!(Chartseries, ["__ctor", "__dtor", "__xdtor", "opAssign"])

@@ -34,24 +34,24 @@ struct WorkbookImpl {
 		workbook_close(this.handle);
 	}
 
-    Worksheet addWorksheet(string name) {
-    	return Worksheet(workbook_add_worksheet(this.handle,
+	Worksheet addWorksheet(string name) {
+		return Worksheet(workbook_add_worksheet(this.handle,
 					name.toStringz())
 				);
 	}
 
-    Chartsheet addChartsheet(string name) {
-    	return Chartsheet(workbook_add_chartsheet(this.handle, 
+	Chartsheet addChartsheet(string name) {
+		return Chartsheet(workbook_add_chartsheet(this.handle, 
 					name.toStringz())
 				);
 	}
 
-    Format addFormat() {
-    	return Format(workbook_add_format(this.handle));
+	Format addFormat() {
+		return Format(workbook_add_format(this.handle));
 	}
 
-    Format addFormat(string name) {
-    	auto t = Format(workbook_add_format(this.handle));
+	Format addFormat(string name) {
+		auto t = Format(workbook_add_format(this.handle));
 		this.formats[name] = t;
 		return t;
 	}
@@ -60,40 +60,40 @@ struct WorkbookImpl {
 		return this.formats[name];
 	}
 
-    Chart addChart(ubyte chartType) {
-    	return Chart(workbook_add_chart(this.handle, chartType));
+	Chart addChart(ubyte chartType) {
+		return Chart(workbook_add_chart(this.handle, chartType));
 	}
 
-    void setProperties(DocProperties property) {
-    	enforce(workbook_set_properties(this.handle, property.handle) 
+	void setProperties(DocProperties property) {
+		enforce(workbook_set_properties(this.handle, property.handle) 
 				== LXW_NO_ERROR
 			);
 	}
 
-    void setCustomProperties(T)(string name, T t) {
+	void setCustomProperties(T)(string name, T t) {
 		import std.traits : isIntegral, isFloatingPoint, isSomeString;
 		import std.datetime.datetime : DateTime;
 
 		static if(is(T == bool)) {
-    		enforce(workbook_set_custom_property_boolean(this.handle,
+			enforce(workbook_set_custom_property_boolean(this.handle,
 						name.toStringz(), t
 					) 
 					== LXW_NO_ERROR
 				);
 		} else static if(isIntegral!T) {
-    		enforce(workbook_set_custom_property_integer(this.handle,
+			enforce(workbook_set_custom_property_integer(this.handle,
 						name.toStringz(), to!int(t)
 					) 
 					== LXW_NO_ERROR
 				);
 		} else static if(isFloatingPoint!T) {
-    		enforce(workbook_set_custom_property_number(this.handle,
+			enforce(workbook_set_custom_property_number(this.handle,
 						name.toStringz(), to!double(t)
 					) 
 					== LXW_NO_ERROR
 				);
 		} else static if(is(T == Datetime)) {
-    		enforce(workbook_set_custom_property_datetime(this.handle, 
+			enforce(workbook_set_custom_property_datetime(this.handle, 
 						toStringz(name), &t.handle)
 					== LXW_NO_ERROR
 				);
@@ -104,7 +104,7 @@ struct WorkbookImpl {
 	}
 
 	void defineName(string name, string formula) {
-    	enforce(workbook_define_name(this.handle, name.toStringz(),
+		enforce(workbook_define_name(this.handle, name.toStringz(),
 						formula.toStringz()
 					)
 				== LXW_NO_ERROR
