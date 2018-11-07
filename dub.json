@@ -1,0 +1,24 @@
+{
+	"name": "xlsxd",
+	"authors": [
+		"Robert Schadek"
+	],
+	"dependencies" : {
+		"dpp": "~>0.0.5"
+	},
+	"description": "A thin wrapper around libxlsx to write excel spreadsheets",
+	"copyright": "Symmetry Investments",
+	"license": "BSD",
+	"configurations": [
+		{
+			"name": "localclib",
+			"preGenerateCommands" : ["make"],
+			"lflags-posix": ["libxlsxwriter/build/libxlsxwriter.a"]
+		},
+		{
+			"name": "externclib",
+			"preGenerateCommands" : ["make"],
+			"lflags-posix" : ["-L-lxlsxwriter"]
+		}
+	]
+}
