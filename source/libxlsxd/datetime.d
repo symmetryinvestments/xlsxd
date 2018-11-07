@@ -1,7 +1,7 @@
 module libxlsxd.datetime;
 
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct Datetime {
 	import std.datetime.date : DateTime;

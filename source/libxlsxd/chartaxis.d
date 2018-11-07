@@ -1,6 +1,6 @@
 module libxlsxd.chartaxis;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct Chartaxis {
 	lxw_chart_axis* handle;

@@ -1,6 +1,6 @@
 module libxlsxd.chart;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct Chart {
 	import libxlsxd.types;

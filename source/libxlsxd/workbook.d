@@ -1,6 +1,6 @@
 module libxlsxd.workbook;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 import std.string : toStringz;
 import std.typecons : refCounted, RefCounted;
 

@@ -1,6 +1,6 @@
 module libxlsxd.format;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 Format newFormat() {
 	return Format(lxw_format_new());

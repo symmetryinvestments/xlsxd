@@ -1,6 +1,6 @@
 module libxlsxd.docproperties;
 
-import xlsxwrap;
+import libxlsxd.xlsxwrap;
 
 struct DocProperties {
 	lxw_doc_properties* handle;
