@@ -11,8 +11,8 @@
 	"license": "BSD",
 	"configurations": [
 		{
-			"name": "localclib",
-			"preGenerateCommands" : ["make"],
+			"name": "library",
+			"preGenerateCommands" : ["make", "make buildclib"],
 			"lflags-posix": ["libxlsxwriter/build/libxlsxwriter.a"]
 		},
 		{
