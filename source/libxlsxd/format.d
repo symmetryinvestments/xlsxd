@@ -138,7 +138,7 @@ struct Format {
 		format_set_right(this.handle, right);
 	}
 
-	void setBorder_color(lxw_color_t color) {
+	void setBorderColor(lxw_color_t color) {
 		format_set_border_color(this.handle, color);
 	}
 
