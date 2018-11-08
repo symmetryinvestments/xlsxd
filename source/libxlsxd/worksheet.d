@@ -30,6 +30,33 @@ struct Worksheet {
 			this.writeDatetime(row, col, value, format);
 		} else static if(is(T == bool)) {	
 			this.writeBoolean(row, col, value, format);
+		} else {
+			static assert(false, "The function 'write' does not support type
+					'" ~ T.stringof ~ "'");
+		}
+	}
+
+	size_t writeAndGetWidth(T)(RowType row, ColType col, T value) {
+		return writeAndGetWidth(row, col, value, Format(null));
+	}
+
+	size_t writeAndGetWidth(T)(RowType row, ColType col, T value, 
+			Format format) 
+	{
+		import std.traits : isIntegral, isFloatingPoint, isSomeString;
+		import std.conv : to;
+		static if((isFloatingPoint!T || isIntegral!T) && !is(T == bool)) {
+			this.writeNumber(row, col, value, format);
+			return to!string(value).length;
+		} else static if(isSomeString!T) {	
+			this.writeString(row, col, value, format);
+			return value.length;
+		} else static if(is(T == bool)) {	
+			this.writeBoolean(row, col, value, format);
+			return value ? 4 : 5;
+		} else {
+			static assert(false, "The function 'writeAndGetWidth' does not "
+					~ " support type '" ~ T.stringof ~ "'");
 		}
 	}
 

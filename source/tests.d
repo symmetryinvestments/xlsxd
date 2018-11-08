@@ -32,4 +32,18 @@ unittest {
     worksheet.write(4, 2, "Hello 1337");
 	worksheet.setColumn(4, 2, 20.0);
 
+	size_t len = worksheet.writeAndGetWidth(5, 5, "Hello");
+	assert(len == 5);
+
+	len = worksheet.writeAndGetWidth(5, 6, true);
+	assert(len == 4);
+
+	len = worksheet.writeAndGetWidth(5, 6, false);
+	assert(len == 5);
+
+	len = worksheet.writeAndGetWidth(5, 7, 133);
+	assert(len == 3);
+
+	len = worksheet.writeAndGetWidth(5, 8, 133.7);
+	assert(len == 5);
 }
