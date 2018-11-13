@@ -12,7 +12,7 @@ struct Worksheet {
 	import std.exception : enforce;
 	lxw_worksheet* handle;
 
-	this(lxw_worksheet* handle) {
+	this(lxw_worksheet* handle) @nogc nothrow {
 		this.handle = handle;
 	}
 
@@ -65,7 +65,7 @@ struct Worksheet {
 	}
 
 	void writeNumber(RowType row, ColType col, double num,
-			Format format)
+			Format format) 
 	{
 		enforce(worksheet_write_number(this.handle, row, col,
 					num, format.handle) == LXW_NO_ERROR);
@@ -90,7 +90,7 @@ struct Worksheet {
 	}
 	
 	void writeArrayFormula(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, string formula)
+			RowType lastRow, ColType lastCol, string formula) 
 	{
 		this.writeArrayFormula(firstRow, firstCol, lastRow, lastCol, formula,
 				Format(null)
@@ -98,7 +98,7 @@ struct Worksheet {
 	}
 
 	void writeArrayFormula(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, string formula, Format format)
+			RowType lastRow, ColType lastCol, string formula, Format format) 
 	{
 		enforce(worksheet_write_array_formula(this.handle, firstRow,
 					firstCol, lastRow, lastCol, toStringz(formula),
@@ -109,7 +109,9 @@ struct Worksheet {
 		this.writeDatetime(row, col, datetime, Format(null));
 	}
 
-	void writeDatetime(RowType row, ColType col, Datetime datetime, Format format) {
+	void writeDatetime(RowType row, ColType col, Datetime datetime, 
+			Format format) 
+	{
 		enforce(worksheet_write_datetime(this.handle, row, col,
 					&datetime.handle, format.handle) == LXW_NO_ERROR);
 	}
@@ -142,13 +144,13 @@ struct Worksheet {
 	}
 
 	void writeFormulaNum(RowType row, ColType col, string formula,
-			double value)
+			double value) 
 	{
 		this.writeFormulaNum(row, col, formula, Format(null), value);
 	}
 
 	void writeFormulaNum(RowType row, ColType col, string formula,
-			Format format, double value)
+			Format format, double value) 
 	{
 		enforce(worksheet_write_formula_num(this.handle, row,
 					col, toStringz(formula), format.handle, value
@@ -188,7 +190,7 @@ struct Worksheet {
 	}
 
 	void setRowOpt(RowType row, double height, Format format,
-			lxw_row_col_options* options)
+			lxw_row_col_options* options) 
 	{
 		enforce(worksheet_set_row_opt(this.handle, row, height,
 					format.handle, options) == LXW_NO_ERROR);
@@ -198,7 +200,9 @@ struct Worksheet {
 		this.setColumn(firstCol, lastCol, width, Format(null));
 	}
 
-	void setColumn(ColType firstCol, ColType lastCol, double width, Format format) {
+	void setColumn(ColType firstCol, ColType lastCol, double width, 
+			Format format) 
+	{
 		enforce(worksheet_set_column(this.handle, firstCol, lastCol,
 					width, format.handle
 				)
@@ -207,13 +211,13 @@ struct Worksheet {
 	}
 
 	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
-			lxw_row_col_options* options)
+			lxw_row_col_options* options) 
 	{
 		this.setColumnOpt(firstCol, lastCol, width, Format(null), options);
 	}
 
 	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
-			Format format, lxw_row_col_options* options)
+			Format format, lxw_row_col_options* options) 
 	{
 		enforce(worksheet_set_column_opt(this.handle, firstCol, lastCol,
 					width, format.handle, options)
@@ -230,7 +234,7 @@ struct Worksheet {
 	}
 
 	void insertImageOpt(RowType row, ColType col, string filename,
-			lxw_image_options* options)
+			lxw_image_options* options) 
 	{
 		enforce(worksheet_insert_image_opt(this.handle, row, col,
 					toStringz(filename), options
@@ -240,7 +244,7 @@ struct Worksheet {
 	}
 
 	void insertImageBuffer(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize)
+			size_t bufSize) 
 	{
 		enforce(worksheet_insert_image_buffer(this.handle, row,
 					col, buf, bufSize
@@ -250,7 +254,7 @@ struct Worksheet {
 	}
 
 	void insertImageBufferOpt(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize, lxw_image_options* options)
+			size_t bufSize, lxw_image_options* options) 
 	{
 		enforce(worksheet_insert_image_buffer_opt(this.handle, row,
 					col, buf, bufSize, options
@@ -265,7 +269,7 @@ struct Worksheet {
 	}
 
 	void insertChartOpt(RowType row, ColType col, Chart chart,
-			lxw_image_options* options)
+			lxw_image_options* options) 
 	{
 		enforce(worksheet_insert_chart_opt(this.handle, row,
 					col, chart.handle, options
@@ -275,14 +279,14 @@ struct Worksheet {
 	}
 
 	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol, string str)
+			ColType lastCol, string str) 
 	{
 		this.mergeRange(firstRow, firstCol, lastRow,
 			lastCol, str, Format(null));
 	}
 
 	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol, string str, Format format)
+			ColType lastCol, string str, Format format) 
 	{
 		enforce(worksheet_merge_range(this.handle, firstRow, firstCol,
 					lastRow, lastCol, toStringz(str), format.handle
@@ -292,14 +296,13 @@ struct Worksheet {
 	}
 
 	void autofilter(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol)
-	{
+			ColType lastCol) {
 		enforce(worksheet_autofilter(this.handle, firstRow, firstCol,
 					lastRow, lastCol) == LXW_NO_ERROR);
 	}
 
 	void dataValidationCell(RowType row, ColType col,
-			lxw_data_validation* validator)
+			lxw_data_validation* validator) 
 	{
 		enforce(worksheet_data_validation_cell(this.handle, row,
 					col, validator
@@ -309,7 +312,7 @@ struct Worksheet {
 	}
 
 	void dataValidationRange(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, lxw_data_validation* validator)
+			RowType lastRow, ColType lastCol, lxw_data_validation* validator) 
 	{
 		enforce(worksheet_data_validation_range(this.handle, firstRow,
 					firstCol, lastRow, lastCol, validator
@@ -318,55 +321,57 @@ struct Worksheet {
 			);
 	}
 
-	void activate() {
+	void activate() @nogc nothrow {
 		worksheet_activate(this.handle);
 	}
 
-	void select() {
+	void select() @nogc nothrow {
 		worksheet_select(this.handle);
 	}
 
-	void hide() {
+	void hide() @nogc nothrow {
 		worksheet_hide(this.handle);
 	}
 
-	void setFirstSheet() {
+	void setFirstSheet() @nogc nothrow {
 		worksheet_set_first_sheet(this.handle);
 	}
 
-	void freezePanes(RowType row, ColType col) {
+	void freezePanes(RowType row, ColType col) @nogc nothrow {
 		worksheet_freeze_panes(this.handle, row, col);
 	}
 
-	void splitPanes(double vertical, double horizontal) {
+	void splitPanes(double vertical, double horizontal) @nogc nothrow {
 		worksheet_split_panes(this.handle, vertical, horizontal);
 	}
 
 	void setSelection(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol)
+			ColType lastCol) @nogc nothrow 
 	{
 		worksheet_set_selection(this.handle, firstRow, firstCol, lastRow,
 				lastCol
 			);
 	}
 
-	void setLandscape() {
+	void setLandscape() @nogc nothrow {
 		worksheet_set_landscape(this.handle);
 	}
 
-	void setPortrait() {
+	void setPortrait() @nogc nothrow {
 		worksheet_set_portrait(this.handle);
 	}
 
-	void setPageView() {
+	void setPageView() @nogc nothrow {
 		worksheet_set_page_view(this.handle);
 	}
 
-	void setPaper(ubyte paperType) {
+	void setPaper(ubyte paperType) @nogc nothrow {
 		worksheet_set_paper(this.handle, paperType);
 	}
 
-	void setMargins(double left, double right, double top, double bottom) {
+	void setMargins(double left, double right, double top, double bottom)
+			@nogc nothrow 
+	{
 		worksheet_set_margins(this.handle, left, right, top, bottom);
 	}
 
@@ -410,27 +415,27 @@ struct Worksheet {
 			);
 	}
 
-	void printAcross() {
+	void printAcross() @nogc nothrow {
 		worksheet_print_across(this.handle);
 	}
 
-	void setZoom(ushort scale) {
+	void setZoom(ushort scale) @nogc nothrow {
 		worksheet_set_zoom(this.handle, scale);
 	}
 
-	void gridlines(ubyte option) {
+	void gridlines(ubyte option) @nogc nothrow {
 		worksheet_gridlines(this.handle, option);
 	}
 
-	void centerHorizontally() {
+	void centerHorizontally() @nogc nothrow {
 		worksheet_center_horizontally(this.handle);
 	}
 
-	void centerVertically() {
+	void centerVertically() @nogc nothrow {
 		worksheet_center_vertically(this.handle);
 
 	}
-	void printRowColHeaders() {
+	void printRowColHeaders() @nogc nothrow {
 		worksheet_print_row_col_headers(this.handle);
 	}
 
@@ -446,7 +451,7 @@ struct Worksheet {
 	}
 
 	void printArea(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol)
+			ColType lastCol) 
 	{
 		enforce(worksheet_print_area(this.handle, firstRow, firstCol, lastRow,
 					lastCol
@@ -455,27 +460,27 @@ struct Worksheet {
 			);
 	}
 
-	void fitToPages(ushort width, ushort height) {
+	void fitToPages(ushort width, ushort height) @nogc nothrow {
 		worksheet_fit_to_pages(this.handle, width, height);
 	}
 
-	void setStartPage(ushort startPage) {
+	void setStartPage(ushort startPage) @nogc nothrow {
 		worksheet_set_start_page(this.handle, startPage);
 	}
 
-	void setPrintScale(ushort scale) {
+	void setPrintScale(ushort scale) @nogc nothrow {
 		worksheet_set_print_scale(this.handle, scale);
 	}
 
-	void rightToLeft() {
+	void rightToLeft() @nogc nothrow {
 		worksheet_right_to_left(this.handle);
 	}
 
-	void hideZero() {
+	void hideZero() @nogc nothrow {
 		worksheet_hide_zero(this.handle);
 	}
 
-	void setTabColor(lxw_color_t color) {
+	void setTabColor(lxw_color_t color) @nogc nothrow {
 		worksheet_set_tab_color(this.handle, color);
 	}
 
@@ -484,13 +489,13 @@ struct Worksheet {
 	}
 
 	void outlineSettings(ubyte visible, ubyte symbolsBelow,
-			ubyte symbolsRight, ubyte autoStyle)
+			ubyte symbolsRight, ubyte autoStyle) @nogc nothrow 
 	{
 		worksheet_outline_settings(this.handle, visible, symbolsBelow,
 			symbolsRight, autoStyle);
 	}
 
-	void setDefaultRow(double height, ubyte hideUnusedRows) {
+	void setDefaultRow(double height, ubyte hideUnusedRows) @nogc nothrow {
 		worksheet_set_default_row(this.handle, height, hideUnusedRows);
 	}
 }

@@ -9,7 +9,7 @@ struct Chartaxis {
 	import std.string : toStringz;
 	import std.conv : to;
 
-	this(lxw_chart_axis* handle) {
+	this(lxw_chart_axis* handle) @nogc nothrow pure @safe {
 		this.handle = handle;
 	}
 
@@ -23,11 +23,11 @@ struct Chartaxis {
 			);
 	}
 
-	void setNameFont(lxw_chart_font* font) {
+	void setNameFont(lxw_chart_font* font) @nogc nothrow {
 		chart_axis_set_name_font(this.handle, font);
 	}
 
-	void setNumFont(lxw_chart_font* font) {
+	void setNumFont(lxw_chart_font* font) @nogc nothrow {
 		chart_axis_set_num_font(this.handle, font);
 	}
 
@@ -35,83 +35,83 @@ struct Chartaxis {
 		chart_axis_set_num_format(this.handle, toStringz(numFormat));
 	}
 
-	void setLine(lxw_chart_line* line) {
+	void setLine(lxw_chart_line* line) @nogc nothrow {
 		chart_axis_set_line(this.handle, line);
 	}
 
-	void setFill(lxw_chart_fill* fill) {
+	void setFill(lxw_chart_fill* fill) @nogc nothrow {
 		chart_axis_set_fill(this.handle, fill);
 	}
 
-	void setPattern(lxw_chart_pattern* pattern) {
+	void setPattern(lxw_chart_pattern* pattern) @nogc nothrow {
 		chart_axis_set_pattern(this.handle, pattern);
 	}
 
-	void setReverse() {
+	void setReverse() @nogc nothrow {
 		chart_axis_set_reverse(this.handle);
 	}
 
-	void setCrossing(double value) {
+	void setCrossing(double value) @nogc nothrow {
 		chart_axis_set_crossing(this.handle, value);
 	}
 
-	void setCrossing_max() {
+	void setCrossing_max() @nogc nothrow {
 		chart_axis_set_crossing_max(this.handle);
 	}
 
-	void off() {
+	void off() @nogc nothrow {
 		chart_axis_off(this.handle);
 	}
 
-	void setPosition(uint8_t position) {
+	void setPosition(ubyte position) @nogc nothrow {
 		chart_axis_set_position(this.handle, position);
 	}
 
-	void setLabelPosition(uint8_t position) {
+	void setLabelPosition(ubyte position) @nogc nothrow {
 		chart_axis_set_label_position(this.handle, position);
 	}
 
-	void setLabelAlign(uint8_t align_) {
+	void setLabelAlign(ubyte align_) @nogc nothrow {
 		chart_axis_set_label_align(this.handle, align_);
 	}
 
-	void setMin(double min) {
+	void setMin(double min) @nogc nothrow {
 		chart_axis_set_min(this.handle, min);
 	}
 
-	void setMax(double max) {
+	void setMax(double max) @nogc nothrow {
 		chart_axis_set_max(this.handle, max);
 	}
 
-	void setLogBase(uint16_t base) {
+	void setLogBase(ushort base) @nogc nothrow {
 		chart_axis_set_log_base(this.handle, base);
 	}
 
-	void setMajorTickMark(uint8_t mark) {
+	void setMajorTickMark(ubyte mark) @nogc nothrow {
 		chart_axis_set_major_tick_mark(this.handle, mark);
 	}
 
-	void setMinorTickMark(uint8_t mark) {
+	void setMinorTickMark(ubyte mark) @nogc nothrow {
 		chart_axis_set_minor_tick_mark(this.handle, mark);
 	}
 
-	void setIntervalUnit(uint16_t unit) {
+	void setIntervalUnit(ushort unit) @nogc nothrow {
 		chart_axis_set_interval_unit(this.handle, unit);
 	}
 
-	void setIntervalTick(uint16_t tick) {
+	void setIntervalTick(ushort tick) @nogc nothrow {
 		chart_axis_set_interval_tick(this.handle, tick);
 	}
 
-	void setMajorUnit(double unit) {
+	void setMajorUnit(double unit) @nogc nothrow {
 		chart_axis_set_major_unit(this.handle, unit);
 	}
 
-	void setMinorUnit(double unit) {
+	void setMinorUnit(double unit) @nogc nothrow {
 		chart_axis_set_minor_unit(this.handle, unit);
 	}
 
-	void setDisplayUnits(uint8_t unit) {
+	void setDisplayUnits(ubyte unit) @nogc nothrow {
 		chart_axis_set_display_units(this.handle, unit);
 	}
 
@@ -127,11 +127,11 @@ struct Chartaxis {
 		chart_axis_minor_gridlines_set_visible(this.handle, to!ubyte(isVisiable));
 	}
 
-	void majorGridlinesSetLine(lxw_chart_line* line) {
+	void majorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow {
 		chart_axis_major_gridlines_set_line(this.handle, line);
 	}
 
-	void minorGridlinesSetLine(lxw_chart_line* line) {
+	void minorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow {
 		chart_axis_minor_gridlines_set_line(this.handle, line);
 	}
 }
