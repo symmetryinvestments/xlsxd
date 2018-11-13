@@ -9,7 +9,7 @@ struct Datetime {
 
 	lxw_datetime handle;
 
-	this(lxw_datetime dt) {
+	this(lxw_datetime dt) @nogc nothrow pure @safe {
 		this.handle = handle;
 	}
 

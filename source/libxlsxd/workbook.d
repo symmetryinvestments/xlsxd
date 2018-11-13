@@ -34,7 +34,7 @@ struct WorkbookImpl {
 		workbook_close(this.handle);
 	}
 
-	Worksheet addWorksheet(string name) {
+	Worksheet addWorksheet(string name) nothrow {
 		return Worksheet(workbook_add_worksheet(this.handle,
 					name.toStringz())
 				);
@@ -46,21 +46,21 @@ struct WorkbookImpl {
 				);
 	}
 
-	Format addFormat() {
+	Format addFormat() nothrow @nogc {
 		return Format(workbook_add_format(this.handle));
 	}
 
-	Format addFormat(string name) {
+	Format addFormat(string name) nothrow {
 		auto t = Format(workbook_add_format(this.handle));
 		this.formats[name] = t;
 		return t;
 	}
 
-	Format getFormat(string name) {
+	Format getFormat(string name) nothrow {
 		return this.formats[name];
 	}
 
-	Chart addChart(ubyte chartType) {
+	Chart addChart(ubyte chartType) @nogc nothrow {
 		return Chart(workbook_add_chart(this.handle, chartType));
 	}
 

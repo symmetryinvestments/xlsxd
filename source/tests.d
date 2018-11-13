@@ -1,9 +1,11 @@
 import libxlsxd;
 
 unittest {
+	import std.conv : to;
     /* Create a new workbook and add a worksheet. */
     auto workbook  = newWorkbook("demo.xlsx");
-    auto worksheet = workbook.addWorksheet(null);
+	foreach(i; 0 .. 2) {
+    auto worksheet = workbook.addWorksheet(to!string(i));
 
     /* Add a format. */
     auto format = workbook.addFormat();
@@ -15,7 +17,7 @@ unittest {
     worksheet.setColumn(0, 0, 20);
 
     /* Write some simple text. */
-    worksheet.writeString(0, 0, "Hello");
+    worksheet.writeString(0, 0, "Hello " ~ to!string(i));
 
     /* Text with formatting. */
     worksheet.writeString(1, 0, "World", format);
@@ -46,4 +48,5 @@ unittest {
 
 	len = worksheet.writeAndGetWidth(5, 8, 133.7);
 	assert(len == 5);
+	}
 }

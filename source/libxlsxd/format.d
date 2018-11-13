@@ -14,195 +14,195 @@ struct Format {
 	import std.string : toStringz;
 	lxw_format* handle;
 
-	this(lxw_format* handle) {
+	this(lxw_format* handle) pure @nogc nothrow {
 		this.handle = handle;
 	}
 
-	int32_t getXfIndex() {
+	int getXfIndex() @nogc nothrow {
 		return lxw_format_get_xf_index(this.handle);
 	}
 
-	lxw_font* getFontKey() {
+	lxw_font* getFontKey() @nogc nothrow {
 		return lxw_format_get_font_key(this.handle);
 	}
 
-	lxw_border* getBorderKey() {
+	lxw_border* getBorderKey() @nogc nothrow {
 		return lxw_format_get_border_key(this.handle);
 	}
 
-	lxw_fill* getFillKey() {
+	lxw_fill* getFillKey() @nogc nothrow {
 		return lxw_format_get_fill_key(this.handle);
 	}
 
-	static lxw_color_t checkColor(lxw_color_t color) {
+	static lxw_color_t checkColor(lxw_color_t color) @nogc nothrow {
 		return lxw_format_check_color(color);
 	}
 
-	void setFontName(string fontname) {
+	void setFontName(string fontname) nothrow {
 		format_set_font_name(this.handle, toStringz(fontname));
 	}
 
-	void setFontSize(double size) {
+	void setFontSize(double size) @nogc nothrow {
 		format_set_font_size(this.handle, size);
 	}
 
-	void setFontColor(lxw_color_t color) {
+	void setFontColor(lxw_color_t color) @nogc nothrow {
 		format_set_font_color(this.handle, color);
 	}
 
-	void setBold() {
+	void setBold() @nogc nothrow {
 		format_set_bold(this.handle);
 	}
 
-	void setItalic() {
+	void setItalic() @nogc nothrow {
 		format_set_italic(this.handle);
 	}
 
-	void setUnderline(uint8_t style) {
+	void setUnderline(ubyte style) @nogc nothrow {
 		format_set_underline(this.handle, style);
 	}
 
-	void setFontStrikeout() {
+	void setFontStrikeout() @nogc nothrow {
 		format_set_font_strikeout(this.handle);
 	}
 
-	void setFontScript(uint8_t style) {
+	void setFontScript(ubyte style) @nogc nothrow {
 		format_set_font_script(this.handle, style);
 	}
 
-	void setNumFormat(string numFormat) {
+	void setNumFormat(string numFormat) nothrow {
 		format_set_num_format(this.handle, toStringz(numFormat));
 	}
 
-	void setNumFormatIndex(uint8_t index) {
+	void setNumFormatIndex(ubyte index) @nogc nothrow {
 		format_set_num_format_index(this.handle, index);
 	}
 
-	void setUnlocked() {
+	void setUnlocked() @nogc nothrow {
 		format_set_unlocked(this.handle);
 	}
 
-	void setHidden() {
+	void setHidden() @nogc nothrow {
 		format_set_hidden(this.handle);
 	}
 
-	void setAlign(uint8_t align_) {
+	void setAlign(ubyte align_) @nogc nothrow {
 		format_set_align(this.handle, align_);
 	}
 
-	void setTextWrap() {
+	void setTextWrap() @nogc nothrow {
 		format_set_text_wrap(this.handle);
 	}
 
-	void setRotation(int16_t angle) {
+	void setRotation(short angle) @nogc nothrow {
 		format_set_rotation(this.handle, angle);
 	}
 
-	void setIndent(uint8_t level) {
+	void setIndent(ubyte level) @nogc nothrow {
 		format_set_indent(this.handle, level);
 	}
 
-	void setShrink() {
+	void setShrink() @nogc nothrow {
 		format_set_shrink(this.handle);
 	}
 
-	void setPattern(uint8_t pattern) {
+	void setPattern(ubyte pattern) @nogc nothrow {
 		format_set_pattern(this.handle, pattern);
 	}
 
-	void setBgColor(lxw_color_t color) {
+	void setBgColor(lxw_color_t color) @nogc nothrow {
 		format_set_bg_color(this.handle, color);
 	}
 
-	void setFgColor(lxw_color_t color) {
+	void setFgColor(lxw_color_t color) @nogc nothrow {
 		format_set_fg_color(this.handle, color);
 	}
 
-	void setBorder(uint8_t border) {
+	void setBorder(ubyte border) @nogc nothrow {
 		format_set_border(this.handle, border);
 	}
 
-	void setBottom(uint8_t bottom) {
+	void setBottom(ubyte bottom) @nogc nothrow {
 		format_set_bottom(this.handle, bottom);
 	}
 
-	void setTop(uint8_t top) {
+	void setTop(ubyte top) @nogc nothrow {
 		format_set_top(this.handle, top);
 	}
 
-	void setLeft(uint8_t left) {
+	void setLeft(ubyte left) @nogc nothrow {
 		format_set_left(this.handle, left);
 	}
 
-	void setRight(uint8_t right) {
+	void setRight(ubyte right) @nogc nothrow {
 		format_set_right(this.handle, right);
 	}
 
-	void setBorderColor(lxw_color_t color) {
+	void setBorderColor(lxw_color_t color) @nogc nothrow {
 		format_set_border_color(this.handle, color);
 	}
 
-	void setBottomColor(lxw_color_t color) {
+	void setBottomColor(lxw_color_t color) @nogc nothrow {
 		format_set_bottom_color(this.handle, color);
 	}
 
-	void setTopColor(lxw_color_t color) {
+	void setTopColor(lxw_color_t color) @nogc nothrow {
 		format_set_top_color(this.handle, color);
 	}
 
-	void setLeftColor(lxw_color_t color) {
+	void setLeftColor(lxw_color_t color) @nogc nothrow {
 		format_set_left_color(this.handle, color);
 	}
 
-	void setRightColor(lxw_color_t color) {
+	void setRightColor(lxw_color_t color) @nogc nothrow {
 		format_set_right_color(this.handle, color);
 	}
 
-	void setDiagType(uint8_t type) {
+	void setDiagType(ubyte type) @nogc nothrow {
 		format_set_diag_type(this.handle, type);
 	}
 
-	void setDiagColor(lxw_color_t color) {
+	void setDiagColor(lxw_color_t color) @nogc nothrow {
 		format_set_diag_color(this.handle, color);
 	}
 
-	void setDiagBorder(uint8_t border) {
+	void setDiagBorder(ubyte border) @nogc nothrow {
 		format_set_diag_border(this.handle, border);
 	}
 
-	void setFontOutline() {
+	void setFontOutline() @nogc nothrow {
 		format_set_font_outline(this.handle);
 	}
 
-	void setFontShadow() {
+	void setFontShadow() @nogc nothrow {
 		format_set_font_shadow(this.handle);
 	}
 
-	void setFontFamily(uint8_t family) {
+	void setFontFamily(ubyte family) @nogc nothrow {
 		format_set_font_family(this.handle, family);
 	}
 
-	void setFontCharset(uint8_t charset) {
+	void setFontCharset(ubyte charset) @nogc nothrow {
 		format_set_font_charset(this.handle, charset);
 	}
 
-	void setFontScheme(string schema) {
+	void setFontScheme(string schema) nothrow {
 		format_set_font_scheme(this.handle, toStringz(schema));
 	}
 
-	void setFontCondense() {
+	void setFontCondense() @nogc nothrow {
 		format_set_font_condense(this.handle);
 	}
 
-	void setFontExtend() {
+	void setFontExtend() @nogc nothrow {
 		format_set_font_extend(this.handle);
 	}
 
-	void setReadingOrder(uint8_t order) {
+	void setReadingOrder(ubyte order) @nogc nothrow {
 		format_set_reading_order(this.handle, order);
 	}
 
-	void setTheme(uint8_t theme) {
+	void setTheme(ubyte theme) @nogc nothrow {
 		format_set_theme(this.handle, theme);
 	}
 }

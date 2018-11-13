@@ -9,7 +9,7 @@ struct Chartsheet {
 
 	lxw_chartsheet* handle;
 
-	this(lxw_chartsheet* handle) {
+	this(lxw_chartsheet* handle) @nogc nothrow pure @safe {
 		this.handle = handle;
 	}
 
@@ -25,23 +25,23 @@ struct Chartsheet {
 			);
 	}
 
-	void activate() {
+	void activate() nothrow @nogc {
 		chartsheet_activate(this.handle);
 	}
 
-	void select() {
+	void select() nothrow @nogc {
 		chartsheet_select(this.handle);
 	}
 
-	void hide() {
+	void hide() nothrow @nogc {
 		chartsheet_hide(this.handle);
 	}
 
-	void setFirstSheet() {
+	void setFirstSheet() nothrow @nogc {
 		chartsheet_set_first_sheet(this.handle);
 	}
 
-	void setTabColor(lxw_color_t color) {
+	void setTabColor(lxw_color_t color) nothrow @nogc {
 		chartsheet_set_tab_color(this.handle, color);
 	}
 
@@ -49,23 +49,25 @@ struct Chartsheet {
 		chartsheet_protect(this.handle, toStringz(password), option);
 	}
 
-	void setZoom(uint16_t zoom) {
+	void setZoom(ushort zoom) nothrow @nogc {
 		chartsheet_set_zoom(this.handle, zoom);
 	}
 
-	void setLandscape() {
+	void setLandscape() nothrow @nogc {
 		chartsheet_set_landscape(this.handle);
 	}
 
-	void setPortrait() {
+	void setPortrait() nothrow @nogc {
 		chartsheet_set_portrait(this.handle);
 	}
 
-	void setPaper(uint8_t paper) {
+	void setPaper(ubyte paper) nothrow @nogc {
 		chartsheet_set_paper(this.handle, paper);
 	}
 
-	void setMargins(double left, double right, double top, double bottom) {
+	void setMargins(double left, double right, double top, double bottom)
+			nothrow @nogc 
+	{
 		chartsheet_set_margins(this.handle, left, right, top, bottom);
 	}
 
@@ -93,11 +95,11 @@ struct Chartsheet {
 			);
 	}
 
-	void free() {
+	void free() nothrow @nogc {
 		lxw_chartsheet_free(this.handle);
 	}
 
-	void assembleXmlFile() {
+	void assembleXmlFile() nothrow @nogc {
 		lxw_chartsheet_assemble_xml_file(this.handle);
 	}
 }

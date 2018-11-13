@@ -9,7 +9,7 @@ struct Chartseries {
 	import std.string : toStringz;
 	import std.conv : to;
 
-	this(lxw_chart_series* handle) {
+	this(lxw_chart_series* handle) @nogc nothrow pure @safe {
 		this.handle = handle;
 	}
 
@@ -39,39 +39,39 @@ struct Chartseries {
 			);
 	}
 
-	void setLine(lxw_chart_line* line) {
+	void setLine(lxw_chart_line* line) nothrow @nogc {
 		chart_series_set_line(this.handle, line);
 	}
 
-	void setFill(lxw_chart_fill* fill) {
+	void setFill(lxw_chart_fill* fill) nothrow @nogc {
 		chart_series_set_fill(this.handle, fill);
 	}
 
-	void setInvertIfNegative() {
+	void setInvertIfNegative() nothrow @nogc {
 		chart_series_set_invert_if_negative(this.handle);
 	}
 
-	void setPattern(lxw_chart_pattern* pattern) {
+	void setPattern(lxw_chart_pattern* pattern) nothrow @nogc {
 		chart_series_set_pattern(this.handle, pattern);
 	}
 
-	void setMarkerType(uint8_t mark) {
+	void setMarkerType(ubyte mark) nothrow @nogc {
 		chart_series_set_marker_type(this.handle, mark);
 	}
 
-	void setMarkerSize(uint8_t size) {
+	void setMarkerSize(ubyte size) nothrow @nogc {
 		chart_series_set_marker_size(this.handle, size);
 	}
 
-	void setMarkerLine(lxw_chart_line* line) {
+	void setMarkerLine(lxw_chart_line* line) nothrow @nogc {
 		chart_series_set_marker_line(this.handle, line);
 	}
 
-	void setMarkerFill(lxw_chart_fill* fill) {
+	void setMarkerFill(lxw_chart_fill* fill) nothrow @nogc {
 		chart_series_set_marker_fill(this.handle, fill);
 	}
 
-	void setMarkerPattern(lxw_chart_pattern* pattern) {
+	void setMarkerPattern(lxw_chart_pattern* pattern) nothrow @nogc {
 		chart_series_set_marker_pattern(this.handle, pattern);
 	}
 
@@ -81,11 +81,11 @@ struct Chartseries {
 			);
 	}
 
-	void setSmooth(uint8_t smooth) {
+	void setSmooth(ubyte smooth) nothrow @nogc {
 		chart_series_set_smooth(this.handle, smooth);
 	}
 
-	void setLabels() {
+	void setLabels() nothrow @nogc {
 		chart_series_set_labels(this.handle);
 	}
 
@@ -97,23 +97,23 @@ struct Chartseries {
 			);
 	}
 
-	void setLabelsSeparator(uint8_t seperator) {
+	void setLabelsSeparator(ubyte seperator) nothrow @nogc {
 		chart_series_set_labels_separator(this.handle, seperator);
 	}
 
-	void setLabelsPosition(uint8_t position) {
+	void setLabelsPosition(ubyte position) nothrow @nogc {
 		chart_series_set_labels_position(this.handle, position);
 	}
 
-	void setLabelsLeaderLine() {
+	void setLabelsLeaderLine() nothrow @nogc {
 		chart_series_set_labels_leader_line(this.handle);
 	}
 
-	void setLabelsLegend() {
+	void setLabelsLegend() nothrow @nogc {
 		chart_series_set_labels_legend(this.handle);
 	}
 
-	void setLabelsPercentage() {
+	void setLabelsPercentage() nothrow @nogc {
 		chart_series_set_labels_percentage(this.handle);
 	}
 
@@ -121,27 +121,27 @@ struct Chartseries {
 		chart_series_set_labels_num_format(this.handle, toStringz(format));
 	}
 
-	void setLabelsFont(lxw_chart_font* font) {
+	void setLabelsFont(lxw_chart_font* font) nothrow @nogc {
 		chart_series_set_labels_font(this.handle, font);
 	}
 
-	void setTrendline(uint8_t type, uint8_t value) {
+	void setTrendline(ubyte type, ubyte value) nothrow @nogc {
 		chart_series_set_trendline(this.handle, type, value);
 	}
 
-	void setTrendlineForecast(double forward, double backward) {
+	void setTrendlineForecast(double forward, double backward) nothrow @nogc {
 		chart_series_set_trendline_forecast(this.handle, forward, backward);
 	}
 
-	void setTrendlineEquation() {
+	void setTrendlineEquation() nothrow @nogc {
 		chart_series_set_trendline_equation(this.handle);
 	}
 
-	void setTrendlineRsquared() {
+	void setTrendlineRsquared() nothrow @nogc {
 		chart_series_set_trendline_r_squared(this.handle);
 	}
 
-	void setTrendlineIntercept(double intercept) {
+	void setTrendlineIntercept(double intercept) nothrow @nogc {
 		chart_series_set_trendline_intercept(this.handle, intercept);
 	}
 
@@ -149,34 +149,36 @@ struct Chartseries {
 		chart_series_set_trendline_name(this.handle, toStringz(name));
 	}
 
-	void setTrendlineLine(lxw_chart_line* line) {
+	void setTrendlineLine(lxw_chart_line* line) nothrow @nogc {
 		chart_series_set_trendline_line(this.handle, line);
 	}
 
-	lxw_series_error_bars* getErrorBars(
-			lxw_chart_error_bar_axis axis)
+	lxw_series_error_bars* getErrorBars( lxw_chart_error_bar_axis axis) nothrow 
+			@nogc 
 	{
 		return chart_series_get_error_bars(this.handle, axis);
 	}
 
-	void setErrorBars(lxw_series_error_bars* bars, uint8_t type, double value) {
+	void setErrorBars(lxw_series_error_bars* bars, ubyte type, double value)
+			nothrow @nogc 
+	{
 		chart_series_set_error_bars(bars, type, value);
 	}
 
 	void setErrorBarsDirection(lxw_series_error_bars* bars,
-			uint8_t direction)
+			ubyte direction) nothrow @nogc 
 	{
 		chart_series_set_error_bars_direction(bars, direction);
 	}
 
 	void setErrorBarsEndcap(lxw_series_error_bars* bars,
-			uint8_t endcap)
+			ubyte endcap) nothrow @nogc 
 	{
 		chart_series_set_error_bars_endcap(bars, endcap);
 	}
 
 	void setErrorBarsLine(lxw_series_error_bars* bars,
-			lxw_chart_line* line)
+			lxw_chart_line* line) nothrow @nogc 
 	{
 		chart_series_set_error_bars_line(bars, line);
 	}
