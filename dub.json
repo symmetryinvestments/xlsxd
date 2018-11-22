@@ -13,7 +13,11 @@
 		{
 			"name": "library",
 			"preGenerateCommands" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
-			"lflags-posix": ["$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a"]
+			"lflags-posix": [
+				"-L$PACKAGE_DIR/libxlsxwriter/build/",
+				"$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a",
+				"-lxlsxwriter"
+			]
 		},
 		{
 			"name": "externclib",
