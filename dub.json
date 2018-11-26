@@ -3,26 +3,15 @@
 	"authors": [
 		"Robert Schadek"
 	],
-	"dependencies" : {
-		"dpp": "~>0.0.5"
-	},
 	"description": "A thin wrapper around libxlsx to write excel spreadsheets",
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
-	"configurations": [
-		{
-			"name": "library",
-			"preGenerateCommands" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
-			"lflags-posix": [
-				"-L$PACKAGE_DIR/libxlsxwriter/build/",
-				"$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a",
-				"-lxlsxwriter"
-			]
-		},
-		{
-			"name": "externclib",
-			"preGenerateCommands" : ["make -C $PACKAGE_DIR"],
-			"lflags-posix" : ["-L-lxlsxwriter"]
-		}
-	]
+	"preGenerateCommands" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
+	"lflags-posix": [
+		"-L$PACKAGE_DIR/libxlsxwriter/build/",
+		"$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a",
+		"-lxlsxwriter"
+	],
+	"libs-windows": ["xlsxwriter", "libxlsxwriter.a"],
+	"lflags-windows": ["/LIBPATH:$PACKAGE_DIR\\libxlsxwriter\\build"]
 }
