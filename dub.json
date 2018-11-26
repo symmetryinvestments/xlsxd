@@ -7,11 +7,10 @@
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
 	"preGenerateCommands" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
+	"libs-posix" : ["xlsxwriter"],
 	"lflags-posix": [
-		"-L$PACKAGE_DIR/libxlsxwriter/build/",
-		"$PACKAGE_DIR/libxlsxwriter/build/libxlsxwriter.a",
-		"-lxlsxwriter"
+		"-L$PACKAGE_DIR/libxlsxwriter/build/"
 	],
-	"libs-windows": ["xlsxwriter", "libxlsxwriter.a"],
+	"libs-windows": ["xlsxwriter"],
 	"lflags-windows": ["/LIBPATH:$PACKAGE_DIR\\libxlsxwriter\\build"]
 }
