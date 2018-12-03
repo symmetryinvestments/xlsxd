@@ -2965,7 +2965,7 @@ extern(C)
     alias pthread_once_t = int;
     alias ptrdiff_t = c_long;
     alias pthread_key_t = uint;
-    alias size_t = c_ulong;
+    // alias size_t = c_ulong; TODO find a better way to auto comment this out
     alias wchar_t = int;
     union pthread_condattr_t
     {
