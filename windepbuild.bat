@@ -9,7 +9,8 @@ cd zlib
 mkdir build
 cd    build
 echo %cd%
-cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/zlib"
+Rem cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/zlib"
+cmake .. -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/zlib"
 
 cmake --build . --config Release  --target install
 
@@ -20,7 +21,8 @@ cd libxlsxwriter
 mkdir build
 cd    build
 echo %cd%
-cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/libxlsxwriter" -DZLIB_ROOT:STRING="%INSTALL_DIR%/zlib"
+Rem cmake .. -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/libxlsxwriter" -DZLIB_ROOT:STRING="%INSTALL_DIR%/zlib"
+cmake .. -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_DIR%/libxlsxwriter" -DZLIB_ROOT:STRING="%INSTALL_DIR%/zlib"
 
 cmake --build . --config Release --target install
 
