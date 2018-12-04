@@ -7,7 +7,10 @@
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
 	"preGenerateCommands-posix" : ["make -C $PACKAGE_DIR", "make -C $PACKAGE_DIR buildclib"],
-	"preGenerateCommands-windows" : ["windepbuild.bat"],
+	"preGenerateCommands-windows" : [
+		"$PACKAGE_DIR\\windepbuild.bat",
+		"cd $PACKAGE_DIR && dmd -run sizetdisable.d"
+	],
 	"libs-posix" : ["xlsxwriter"],
 	"lflags-posix": [
 		"-L$PACKAGE_DIR/libxlsxwriter/build/"
