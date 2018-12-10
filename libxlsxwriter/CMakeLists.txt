@@ -173,6 +173,11 @@ endif()
 # LIBRARY
 # -------
 
+if(MSVC)
+  set(CMAKE_EXE_LINKER_FLAGS
+      "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB")
+endif()
+
 list(APPEND LXW_PRIVATE_COMPILE_DEFINITIONS NOCRYPT NOUNCRYPT)
 
 # Fix for modified zconf.h on Gentoo.
