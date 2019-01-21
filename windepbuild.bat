@@ -1,11 +1,15 @@
+@echo off
 set    WORK_DIR=%~dp0
 set INSTALL_DIR=%~dp0\install_dir
-set ZLIB_PATH=%~dp0\zlib\build
 
 cd %WORK_DIR%
 
 Rem git clone https://github.com/madler/zlib.git
-if not exist "\install_dir\zlib\lib\zlibstatic.lib" (
+
+if exist "%INSTALL_DIR%\zlib\lib\zlibstatic.lib" (
+	echo "zlib already build"
+)  else (
+	echo "zlib does not exist"
 	cd zlib
 	mkdir build
 	cd    build
@@ -15,12 +19,14 @@ if not exist "\install_dir\zlib\lib\zlibstatic.lib" (
 	cmake --build . --config Release  --target install
 
 	cd %WORK_DIR%
-) else (
-	Rem "zlib already build"
 )
 
 Rem git clone https://github.com/jmcnamara/libxlsxwriter.git
-if not exist "\install_dir\libxlsxwriter\lib\x64\Release\xlsxwriter.lib" (
+
+if exist "%INSTALL_DIR%\libxlsxwriter\lib\x64\Release\xlsxwriter.lib" (
+	echo "libxlsxwriter already build"
+) else (
+	echo "libxlsxwriter does not exist"
 	cd libxlsxwriter
 	mkdir build
 	cd    build
@@ -30,6 +36,4 @@ if not exist "\install_dir\libxlsxwriter\lib\x64\Release\xlsxwriter.lib" (
 	cmake --build . --config Release --target install
 
 	cd %WORK_DIR%
-) else (
-	Rem "libxlsxwriter already build"
 )
