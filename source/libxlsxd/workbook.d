@@ -20,17 +20,34 @@ Workbook newWorkbook(string filename) {
 }
 
 struct WorkbookImpl {
+	WorkbookOpen workBook;
+
+	alias workBook this;
+
+	~this() {
+		this.workBook.close();
+	}
+}
+
+struct WorkbookOpen {
 	import std.exception : enforce;
 	lxw_workbook* handle;
 	string filename;
 
 	Format[string] formats;
 
+	static WorkbookOpen opCall(string filename) {
+		WorkbookOpen ret;
+		ret.filename = filename;
+		ret.open();
+		return ret;
+	}
+
 	void open() {
 		this.handle = workbook_new(this.filename.toStringz());
 	}
 
-	~this() {
+	void close() {
 		workbook_close(this.handle);
 	}
 
@@ -41,7 +58,7 @@ struct WorkbookImpl {
 	}
 
 	Chartsheet addChartsheet(string name) {
-		return Chartsheet(workbook_add_chartsheet(this.handle, 
+		return Chartsheet(workbook_add_chartsheet(this.handle,
 					name.toStringz())
 				);
 	}
@@ -65,7 +82,7 @@ struct WorkbookImpl {
 	}
 
 	void setProperties(DocProperties property) {
-		enforce(workbook_set_properties(this.handle, property.handle) 
+		enforce(workbook_set_properties(this.handle, property.handle)
 				== LXW_NO_ERROR
 			);
 	}
@@ -77,23 +94,23 @@ struct WorkbookImpl {
 		static if(is(T == bool)) {
 			enforce(workbook_set_custom_property_boolean(this.handle,
 						name.toStringz(), t
-					) 
+					)
 					== LXW_NO_ERROR
 				);
 		} else static if(isIntegral!T) {
 			enforce(workbook_set_custom_property_integer(this.handle,
 						name.toStringz(), to!int(t)
-					) 
+					)
 					== LXW_NO_ERROR
 				);
 		} else static if(isFloatingPoint!T) {
 			enforce(workbook_set_custom_property_number(this.handle,
 						name.toStringz(), to!double(t)
-					) 
+					)
 					== LXW_NO_ERROR
 				);
 		} else static if(is(T == Datetime)) {
-			enforce(workbook_set_custom_property_datetime(this.handle, 
+			enforce(workbook_set_custom_property_datetime(this.handle,
 						toStringz(name), &t.handle)
 					== LXW_NO_ERROR
 				);
@@ -126,7 +143,7 @@ struct WorkbookImpl {
 	}
 
 	bool validateSheetName(string name) {
-		return workbook_validate_sheet_name(this.handle, name.toStringz()) 
+		return workbook_validate_sheet_name(this.handle, name.toStringz())
 				== LXW_NO_ERROR;
 	}
 }
