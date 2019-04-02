@@ -7,7 +7,7 @@ import libxlsxd.chart;
 
 import libxlsxd.xlsxwrap;
 
-pure string genWriteOverloads() {
+private pure string genWriteOverloads() {
 	import std.array : empty;
 	import std.format : format;
 	string[3][] fun = [
@@ -65,8 +65,6 @@ pure string genWriteOverloads() {
 	}
 	return ret;
 }
-
-pragma(msg, genWriteOverloads());
 
 struct Worksheet {
 	import std.string : toStringz;
@@ -298,11 +296,25 @@ struct Worksheet {
 	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
 			lxw_row_col_options* options)
 	{
-		this.setColumnOpt(firstCol, lastCol, width, Format(null), options);
+		this.setColumnOptImpl(firstCol, lastCol, width, options, Format(null));
 	}
 
-	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
-			Format format, lxw_row_col_options* options)
+	version(No_Overloads_Or_Templates) {
+		void setColumnOptFormat(ColType firstCol, ColType lastCol, double width,
+				lxw_row_col_options* options, Format f)
+		{
+			this.setColumnOptImpl(firstCol, lastCol, width, options, f);
+		}
+	} else {
+		void setColumnOpt(ColType firstCol, ColType lastCol, double width,
+				lxw_row_col_options* options, Format f)
+		{
+			this.setColumnOptImpl(firstCol, lastCol, width, options, f);
+		}
+	}
+
+	private void setColumnOptImpl(ColType firstCol, ColType lastCol,
+			double width, lxw_row_col_options* options, Format format)
 	{
 		enforce(worksheet_set_column_opt(this.handle, firstCol, lastCol,
 					width, format.handle, options)
@@ -366,12 +378,28 @@ struct Worksheet {
 	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
 			ColType lastCol, string str)
 	{
-		this.mergeRange(firstRow, firstCol, lastRow,
+		this.mergeRangeImpl(firstRow, firstCol, lastRow,
 			lastCol, str, Format(null));
 	}
 
-	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol, string str, Format format)
+	version(No_Overloads_Or_Templates) {
+		void mergeRangeFormat(RowType firstRow, ColType firstCol,
+				RowType lastRow, ColType lastCol, string str, Format f)
+		{
+			this.mergeRangeImpl(firstRow, firstCol, lastRow,
+				lastCol, str, f);
+		}
+	} else {
+		void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
+				ColType lastCol, string str, Format f)
+		{
+			this.mergeRangeImpl(firstRow, firstCol, lastRow,
+				lastCol, str, f);
+		}
+	}
+
+	private void mergeRangeImpl(RowType firstRow, ColType firstCol,
+			RowType lastRow, ColType lastCol, string str, Format format)
 	{
 		enforce(worksheet_merge_range(this.handle, firstRow, firstCol,
 					lastRow, lastCol, toStringz(str), format.handle
