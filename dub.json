@@ -6,6 +6,7 @@
 	"description": "A thin wrapper around libxlsx to write excel spreadsheets",
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
+	"versions": ["No_Overloads_Or_Templates"],
 	"preGenerateCommands-posix" : [
 		"make -C $PACKAGE_DIR",
 		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"],

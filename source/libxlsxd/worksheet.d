@@ -7,6 +7,56 @@ import libxlsxd.chart;
 
 import libxlsxd.xlsxwrap;
 
+pure string genTypeOverloads() {
+	import std.array : empty;
+	import std.format : format;
+	string[3][] fun = [
+			["String", "string", ""],
+			["String", "string", "Format"],
+			["Int", "long", ""],
+			["Int", "long", "Format"],
+			["Boolean", "bool", ""],
+			["Boolean", "bool", "Format"],
+			["Number", "double", ""],
+			["Number", "double", "Format"],
+			["DateTime", "DateTime", ""],
+			["DateTime", "DateTime", "Format"],
+			["Formula", "string", ""],
+			["Formula", "string", "Format"],
+			["FormulaNum", "string", ""],
+			["FormulaNum", "string", "Format"],
+			["ArrayFormula", "string", ""],
+			["ArrayFormula", "string", "Format"],
+			["Datetime", "Datetime", ""],
+			["Datetime", "Datetime", "Format"],
+			["Url", "string", ""],
+			["Url", "string", "Format"],
+			["RichString", "lxw_rich_string_tuple**", ""],
+			["RichString", "lxw_rich_string_tuple**", "Format"],
+		];
+	string ret;
+	version(No_Overloads_Or_Templates) {
+		immutable overloads = false;
+	} else {
+		immutable overloads = true;
+	}
+
+	foreach(string[3] f; fun) {
+		bool addi = !f[2].empty;
+		ret ~= format("void write%s%s(RowType row, ColType col, %s value%s) {\n",
+				f[0],
+				!overloads && addi ? "Format" : "",
+				f[1], addi ? ", Format f" : ""
+			);
+		ret ~= format("\tthis.write%sImpl(row, col, value%s);\n}\n\n",
+				f[0], addi ? ", f": ", Format(null)"
+			);
+	}
+	return ret;
+}
+
+pragma(msg, genTypeOverloads());
+
 struct Worksheet {
 	import std.string : toStringz;
 	import std.exception : enforce;
@@ -24,11 +74,11 @@ struct Worksheet {
 		import std.traits : isIntegral, isFloatingPoint, isSomeString;
 		static if((isFloatingPoint!T || isIntegral!T) && !is(T == bool)) {
 			this.writeNumber(row, col, value, format);
-		} else static if(isSomeString!T) {	
+		} else static if(isSomeString!T) {
 			this.writeString(row, col, value, format);
-		} else static if(is(T == Datetime)) {	
+		} else static if(is(T == Datetime)) {
 			this.writeDatetime(row, col, value, format);
-		} else static if(is(T == bool)) {	
+		} else static if(is(T == bool)) {
 			this.writeBoolean(row, col, value, format);
 		} else {
 			static assert(false, "The function 'write' does not support type
@@ -40,18 +90,18 @@ struct Worksheet {
 		return writeAndGetWidth(row, col, value, Format(null));
 	}
 
-	size_t writeAndGetWidth(T)(RowType row, ColType col, T value, 
-			Format format) 
+	size_t writeAndGetWidth(T)(RowType row, ColType col, T value,
+			Format format)
 	{
 		import std.traits : isIntegral, isFloatingPoint, isSomeString;
 		import std.conv : to;
 		static if((isFloatingPoint!T || isIntegral!T) && !is(T == bool)) {
 			this.writeNumber(row, col, value, format);
 			return to!string(value).length;
-		} else static if(isSomeString!T) {	
+		} else static if(isSomeString!T) {
 			this.writeString(row, col, value, format);
 			return value.length;
-		} else static if(is(T == bool)) {	
+		} else static if(is(T == bool)) {
 			this.writeBoolean(row, col, value, format);
 			return value ? 4 : 5;
 		} else {
@@ -65,7 +115,7 @@ struct Worksheet {
 	}
 
 	void writeNumber(RowType row, ColType col, double num,
-			Format format) 
+			Format format)
 	{
 		enforce(worksheet_write_number(this.handle, row, col,
 					num, format.handle) == LXW_NO_ERROR);
@@ -83,14 +133,14 @@ struct Worksheet {
 	void writeFormula(RowType row, ColType col, string formula) {
 		this.writeFormula(row, col, formula, Format(null));
 	}
-	
+
 	void writeFormula(RowType row, ColType col, string formula, Format format) {
 		enforce(worksheet_write_formula(this.handle, row, col,
 					toStringz(formula), format.handle) == LXW_NO_ERROR);
 	}
-	
+
 	void writeArrayFormula(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, string formula) 
+			RowType lastRow, ColType lastCol, string formula)
 	{
 		this.writeArrayFormula(firstRow, firstCol, lastRow, lastCol, formula,
 				Format(null)
@@ -98,19 +148,19 @@ struct Worksheet {
 	}
 
 	void writeArrayFormula(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, string formula, Format format) 
+			RowType lastRow, ColType lastCol, string formula, Format format)
 	{
 		enforce(worksheet_write_array_formula(this.handle, firstRow,
 					firstCol, lastRow, lastCol, toStringz(formula),
 					format.handle) == LXW_NO_ERROR);
 	}
-	
+
 	void writeDatetime(RowType row, ColType col, Datetime datetime) {
 		this.writeDatetime(row, col, datetime, Format(null));
 	}
 
-	void writeDatetime(RowType row, ColType col, Datetime datetime, 
-			Format format) 
+	void writeDatetime(RowType row, ColType col, Datetime datetime,
+			Format format)
 	{
 		enforce(worksheet_write_datetime(this.handle, row, col,
 					&datetime.handle, format.handle) == LXW_NO_ERROR);
@@ -144,13 +194,13 @@ struct Worksheet {
 	}
 
 	void writeFormulaNum(RowType row, ColType col, string formula,
-			double value) 
+			double value)
 	{
 		this.writeFormulaNum(row, col, formula, Format(null), value);
 	}
 
 	void writeFormulaNum(RowType row, ColType col, string formula,
-			Format format, double value) 
+			Format format, double value)
 	{
 		enforce(worksheet_write_formula_num(this.handle, row,
 					col, toStringz(formula), format.handle, value
@@ -190,7 +240,7 @@ struct Worksheet {
 	}
 
 	void setRowOpt(RowType row, double height, Format format,
-			lxw_row_col_options* options) 
+			lxw_row_col_options* options)
 	{
 		enforce(worksheet_set_row_opt(this.handle, row, height,
 					format.handle, options) == LXW_NO_ERROR);
@@ -200,8 +250,8 @@ struct Worksheet {
 		this.setColumn(firstCol, lastCol, width, Format(null));
 	}
 
-	void setColumn(ColType firstCol, ColType lastCol, double width, 
-			Format format) 
+	void setColumn(ColType firstCol, ColType lastCol, double width,
+			Format format)
 	{
 		enforce(worksheet_set_column(this.handle, firstCol, lastCol,
 					width, format.handle
@@ -211,13 +261,13 @@ struct Worksheet {
 	}
 
 	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
-			lxw_row_col_options* options) 
+			lxw_row_col_options* options)
 	{
 		this.setColumnOpt(firstCol, lastCol, width, Format(null), options);
 	}
 
 	void setColumnOpt(ColType firstCol, ColType lastCol, double width,
-			Format format, lxw_row_col_options* options) 
+			Format format, lxw_row_col_options* options)
 	{
 		enforce(worksheet_set_column_opt(this.handle, firstCol, lastCol,
 					width, format.handle, options)
@@ -234,7 +284,7 @@ struct Worksheet {
 	}
 
 	void insertImageOpt(RowType row, ColType col, string filename,
-			lxw_image_options* options) 
+			lxw_image_options* options)
 	{
 		enforce(worksheet_insert_image_opt(this.handle, row, col,
 					toStringz(filename), options
@@ -244,7 +294,7 @@ struct Worksheet {
 	}
 
 	void insertImageBuffer(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize) 
+			size_t bufSize)
 	{
 		enforce(worksheet_insert_image_buffer(this.handle, row,
 					col, buf, bufSize
@@ -254,7 +304,7 @@ struct Worksheet {
 	}
 
 	void insertImageBufferOpt(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize, lxw_image_options* options) 
+			size_t bufSize, lxw_image_options* options)
 	{
 		enforce(worksheet_insert_image_buffer_opt(this.handle, row,
 					col, buf, bufSize, options
@@ -269,7 +319,7 @@ struct Worksheet {
 	}
 
 	void insertChartOpt(RowType row, ColType col, Chart chart,
-			lxw_image_options* options) 
+			lxw_image_options* options)
 	{
 		enforce(worksheet_insert_chart_opt(this.handle, row,
 					col, chart.handle, options
@@ -279,14 +329,14 @@ struct Worksheet {
 	}
 
 	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol, string str) 
+			ColType lastCol, string str)
 	{
 		this.mergeRange(firstRow, firstCol, lastRow,
 			lastCol, str, Format(null));
 	}
 
 	void mergeRange(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol, string str, Format format) 
+			ColType lastCol, string str, Format format)
 	{
 		enforce(worksheet_merge_range(this.handle, firstRow, firstCol,
 					lastRow, lastCol, toStringz(str), format.handle
@@ -302,7 +352,7 @@ struct Worksheet {
 	}
 
 	void dataValidationCell(RowType row, ColType col,
-			lxw_data_validation* validator) 
+			lxw_data_validation* validator)
 	{
 		enforce(worksheet_data_validation_cell(this.handle, row,
 					col, validator
@@ -312,7 +362,7 @@ struct Worksheet {
 	}
 
 	void dataValidationRange(RowType firstRow, ColType firstCol,
-			RowType lastRow, ColType lastCol, lxw_data_validation* validator) 
+			RowType lastRow, ColType lastCol, lxw_data_validation* validator)
 	{
 		enforce(worksheet_data_validation_range(this.handle, firstRow,
 					firstCol, lastRow, lastCol, validator
@@ -346,7 +396,7 @@ struct Worksheet {
 	}
 
 	void setSelection(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol) @nogc nothrow 
+			ColType lastCol) @nogc nothrow
 	{
 		worksheet_set_selection(this.handle, firstRow, firstCol, lastRow,
 				lastCol
@@ -370,7 +420,7 @@ struct Worksheet {
 	}
 
 	void setMargins(double left, double right, double top, double bottom)
-			@nogc nothrow 
+			@nogc nothrow
 	{
 		worksheet_set_margins(this.handle, left, right, top, bottom);
 	}
@@ -451,7 +501,7 @@ struct Worksheet {
 	}
 
 	void printArea(RowType firstRow, ColType firstCol, RowType lastRow,
-			ColType lastCol) 
+			ColType lastCol)
 	{
 		enforce(worksheet_print_area(this.handle, firstRow, firstCol, lastRow,
 					lastCol
@@ -489,7 +539,7 @@ struct Worksheet {
 	}
 
 	void outlineSettings(ubyte visible, ubyte symbolsBelow,
-			ubyte symbolsRight, ubyte autoStyle) @nogc nothrow 
+			ubyte symbolsRight, ubyte autoStyle) @nogc nothrow
 	{
 		worksheet_outline_settings(this.handle, visible, symbolsBelow,
 			symbolsRight, autoStyle);

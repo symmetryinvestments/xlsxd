@@ -50,7 +50,7 @@ unittest {
 		static lxw_rich_string_tuple*[2] ret;
 		tmp.format = null;
 		tmp.string = cast(char*)toStringz("Hello world");
-		
+
 		ret[0] = &tmp;
 		ret[1] = null;
 		return ret.ptr;
@@ -201,7 +201,7 @@ unittest {
 	void runner(T, alias exclude, S)(S obj) {
 		static foreach(mem; __traits(allMembers, T)) {{
 			static if(isFunction!(__traits(getMember, T, mem)) &&
-					!canFind(exclude, mem)) 
+					!canFind(exclude, mem))
 			{
 				alias Values = staticMap!(Identity,
 						Parameters!(__traits(getMember, T, mem))
@@ -224,7 +224,11 @@ unittest {
 					"insertImageBuffer", "insertImageBufferOpt"])(ws);
 
 	// testing Format methods
-	auto form = wb.addFormat("__theformat");
+	version(No_Overloads_Or_Templates) {
+		auto form = wb.addFormatNamed("__theformat");
+	} else {
+		auto form = wb.addFormat("__theformat");
+	}
 	runner!(Format, ["__ctor", "__dtor", "__xdtor", "opAssign"])(form);
 
 	auto chart = wb.addChart(2);
