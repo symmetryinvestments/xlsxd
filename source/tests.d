@@ -20,7 +20,13 @@ unittest {
     worksheet.writeString(0, 0, "Hello " ~ to!string(i));
 
     /* Text with formatting. */
-    worksheet.writeString(1, 0, "World", format);
+	version(No_Overloads_Or_Templates) {
+		worksheet.writeStringFormat(to!RowType(1), to!ColType(0), "World",
+				format
+			);
+	} else {
+		worksheet.writeString(to!RowType(1), to!ColType(0), "World", format);
+	}
 
     /* Write some numbers. */
     worksheet.writeNumber(2, 0, 123);
@@ -73,7 +79,11 @@ unittest {
     worksheet.writeString(0, 0, "Hello " ~ to!string(i));
 
     /* Text with formatting. */
-    worksheet.writeString(1, 0, "World", format);
+	version(No_Overloads_Or_Templates) {
+		worksheet.writeStringFormat(1, 0, "World", format);
+	} else {
+		worksheet.writeString(1, 0, "World", format);
+	}
 
     /* Write some numbers. */
     worksheet.writeNumber(2, 0, 123);

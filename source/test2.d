@@ -50,7 +50,7 @@ unittest {
 		static lxw_rich_string_tuple*[2] ret;
 		tmp.format = null;
 		tmp.string = cast(char*)toStringz("Hello world");
-		
+
 		ret[0] = &tmp;
 		ret[1] = null;
 		return ret.ptr;
@@ -129,6 +129,8 @@ unittest {
 				val = Datetime(dt);
 			} else static if(is(typeof(val) == DocProperties)) {
 				val = genDocProperties();
+			} else static if(is(typeof(val) == Format)) {
+				val = Format(null);
 			} else static if(is(typeof(val) == lxw_rich_string_tuple**)) {
 				val = genRichStringTuple();
 			} else static if(is(typeof(val) == lxw_row_col_options*)) {
@@ -200,8 +202,11 @@ unittest {
 
 	void runner(T, alias exclude, S)(S obj) {
 		static foreach(mem; __traits(allMembers, T)) {{
-			static if(isFunction!(__traits(getMember, T, mem)) &&
-					!canFind(exclude, mem)) 
+			static if(!canFind(exclude, mem)
+					&& __traits(getProtection, __traits(getMember, T, mem))
+						!= "private"
+					&& isFunction!(__traits(getMember, T, mem))
+				)
 			{
 				alias Values = staticMap!(Identity,
 						Parameters!(__traits(getMember, T, mem))
@@ -224,7 +229,11 @@ unittest {
 					"insertImageBuffer", "insertImageBufferOpt"])(ws);
 
 	// testing Format methods
-	auto form = wb.addFormat("__theformat");
+	version(No_Overloads_Or_Templates) {
+		auto form = wb.addFormatNamed("__theformat");
+	} else {
+		auto form = wb.addFormat("__theformat");
+	}
 	runner!(Format, ["__ctor", "__dtor", "__xdtor", "opAssign"])(form);
 
 	auto chart = wb.addChart(2);

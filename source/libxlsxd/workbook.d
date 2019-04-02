@@ -8,6 +8,7 @@ import libxlsxd.worksheet;
 import libxlsxd.format;
 import libxlsxd.chart;
 import libxlsxd.chartsheet;
+import libxlsxd.datetime;
 import libxlsxd.docproperties;
 
 alias Workbook = RefCounted!WorkbookImpl;
@@ -31,6 +32,7 @@ struct WorkbookImpl {
 
 struct WorkbookOpen {
 	import std.exception : enforce;
+	import std.datetime : DateTime;
 	lxw_workbook* handle;
 	string filename;
 
@@ -67,7 +69,17 @@ struct WorkbookOpen {
 		return Format(workbook_add_format(this.handle));
 	}
 
-	Format addFormat(string name) nothrow {
+	version(No_Overloads_Or_Templates) {
+		Format addFormatNamed(string name) nothrow {
+			return this.addFormatNamedImpl(name);
+		}
+	} else {
+		Format addFormat(string name) nothrow {
+			return this.addFormatNamedImpl(name);
+		}
+	}
+
+	private Format addFormatNamedImpl(string name) nothrow {
 		auto t = Format(workbook_add_format(this.handle));
 		this.formats[name] = t;
 		return t;
@@ -87,9 +99,26 @@ struct WorkbookOpen {
 			);
 	}
 
-	void setCustomProperties(T)(string name, T t) {
+	version(No_Overloads_Or_Templates) {
+		void setCustomPropertiesBool(string name, bool b) {
+			return this.setCustomPropertiesImpl(name, b);
+		}
+		void setCustomPropertiesInt(string name, long l) {
+			return this.setCustomPropertiesImpl(name, l);
+		}
+		void setCustomPropertiesNumber(string name, double d) {
+			return this.setCustomPropertiesImpl(name, d);
+		}
+		void setCustomPropertiesDateTime(string name, DateTime d) {
+			return this.setCustomPropertiesImpl(name, Datetime(d));
+		}
+	} else {
+		alias setCustomProperties = setCustomPropertiesImpl;
+	}
+
+	private void setCustomPropertiesImpl(T)(string name, T t) {
 		import std.traits : isIntegral, isFloatingPoint, isSomeString;
-		import std.datetime.datetime : DateTime;
+		import std.conv : to;
 
 		static if(is(T == bool)) {
 			enforce(workbook_set_custom_property_boolean(this.handle,
