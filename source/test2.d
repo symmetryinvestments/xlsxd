@@ -126,7 +126,11 @@ unittest {
 				val = to!bool(uniform(0, 1, rnd));
 			} else static if(is(typeof(val) == Datetime)) {
 				auto dt = DateTime(1337, 1, 3, 3, 7);
-				val = Datetime(dt);
+				version(No_Overloads_Or_Templates) {
+					val = Datetime.fromDateTime(dt);
+				} else {
+					val = Datetime(dt);
+				}
 			} else static if(is(typeof(val) == DocProperties)) {
 				val = genDocProperties();
 			} else static if(is(typeof(val) == Format)) {

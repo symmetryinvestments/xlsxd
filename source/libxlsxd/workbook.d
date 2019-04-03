@@ -110,7 +110,7 @@ struct WorkbookOpen {
 			return this.setCustomPropertiesImpl(name, d);
 		}
 		void setCustomPropertiesDateTime(string name, DateTime d) {
-			return this.setCustomPropertiesImpl(name, Datetime(d));
+			return this.setCustomPropertiesImpl(name, Datetime.fromDateTime(d));
 		}
 	} else {
 		alias setCustomProperties = setCustomPropertiesImpl;
