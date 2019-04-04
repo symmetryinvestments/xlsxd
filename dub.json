@@ -6,10 +6,10 @@
 	"description": "A thin wrapper around libxlsx to write excel spreadsheets",
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
-	"preGenerateCommands-posix" : [
+	"preBuildCommands-posix" : [
 		"make -C $PACKAGE_DIR",
 		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"],
-	"preGenerateCommands-windows" : [
+	"preBuildCommands-windows" : [
 		"$PACKAGE_DIR\\windepbuild.bat",
 		"cd $PACKAGE_DIR && dmd -run sizetdisable.d"
 	],
