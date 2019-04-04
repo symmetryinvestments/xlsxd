@@ -9,7 +9,7 @@ libxlsxwriter, which writes Excel spreadsheets.
 import libxlsxd;
 
 void main() {
-    /* Create a new workbook and add a worksheet. 
+    /* Create a new workbook and add a worksheet.
 	Workbook is RefCounted and will write the file
 	when it is released.
 	*/
@@ -62,6 +62,14 @@ lxw_format *f = workbook_add_format(workbook);
 So to find the documentation for the method "methodName" for the data structure
 "Datastructure", search for a C function "toLower(Datastructure)\_toSnakeCase(methodName)".
 In this example "datastructure\_method\_name".
+
+
+## Complementary Projects
+xlsxd can only write xlsx files, but there are more things to do
+
+* [xlsx](https://code.dlang.org/packages/xlsx) can read xlsx files
+* [excel-d](https://github.com/kaleidicassociates/excel-d) can create excel
+  plugins
 
 About Kaleidic Associates
 -------------------------
