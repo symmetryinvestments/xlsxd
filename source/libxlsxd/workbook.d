@@ -33,6 +33,7 @@ struct WorkbookImpl {
 struct WorkbookOpen {
 	import std.exception : enforce;
 	import std.datetime : DateTime;
+	import std.array : empty;
 	lxw_workbook* handle;
 	string filename;
 
@@ -55,13 +56,13 @@ struct WorkbookOpen {
 
 	Worksheet addWorksheet(string name) nothrow {
 		return Worksheet(workbook_add_worksheet(this.handle,
-					name.toStringz())
+					name.empty ? null : name.toStringz())
 				);
 	}
 
 	Chartsheet addChartsheet(string name) {
 		return Chartsheet(workbook_add_chartsheet(this.handle,
-					name.toStringz())
+					name.empty ? null : name.toStringz())
 				);
 	}
 
