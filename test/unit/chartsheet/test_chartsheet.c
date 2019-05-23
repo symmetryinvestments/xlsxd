@@ -1,7 +1,7 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -30,7 +30,7 @@ CTEST(chartsheet, chartsheet) {
 
     lxw_chartsheet *chartsheet = lxw_chartsheet_new(NULL);
     chartsheet->file = testfile;
-    chartsheet->worksheet->drawing = lxw_drawing_new(NULL);
+    chartsheet->worksheet->drawing = lxw_drawing_new();
 
     lxw_chartsheet_assemble_xml_file(chartsheet);
 

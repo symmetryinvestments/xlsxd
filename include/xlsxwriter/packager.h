@@ -1,7 +1,7 @@
 /*
  * libxlsxwriter
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  * packager - A libxlsxwriter library for creating Excel XLSX packager files.
  *
@@ -54,9 +54,6 @@ typedef struct lxw_packager {
     char *filename;
     char *buffer;
     char *tmpdir;
-
-    uint16_t chart_count;
-    uint16_t drawing_count;
 
 } lxw_packager;
 

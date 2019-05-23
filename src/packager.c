@@ -3,7 +3,7 @@
  *
  * Used in conjunction with the libxlsxwriter library.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  */
 
@@ -319,12 +319,27 @@ _write_chart_files(lxw_packager *self)
         err = _add_file_to_zip(self, chart->file, sheetname);
         RETURN_ON_ERROR(err);
 
-        self->chart_count++;
-
         fclose(chart->file);
     }
 
     return LXW_NO_ERROR;
+}
+
+/*
+ * Count the chart files.
+ */
+uint16_t
+_get_chart_count(lxw_packager *self)
+{
+    lxw_workbook *workbook = self->workbook;
+    lxw_chart *chart;
+    uint16_t chart_count = 0;
+
+    STAILQ_FOREACH(chart, workbook->ordered_charts, ordered_list_pointers) {
+        chart_count++;
+    }
+
+    return chart_count;
 }
 
 /*
@@ -362,12 +377,37 @@ _write_drawing_files(lxw_packager *self)
             RETURN_ON_ERROR(err);
 
             fclose(drawing->file);
-
-            self->drawing_count++;
         }
     }
 
     return LXW_NO_ERROR;
+}
+
+/*
+ * Count  the drawing files.
+ */
+uint16_t
+_get_drawing_count(lxw_packager *self)
+{
+    lxw_workbook *workbook = self->workbook;
+    lxw_sheet *sheet;
+    lxw_worksheet *worksheet;
+    lxw_drawing *drawing;
+    uint16_t drawing_count = 0;
+
+    STAILQ_FOREACH(sheet, workbook->sheets, list_pointers) {
+        if (sheet->is_chartsheet)
+            worksheet = sheet->u.chartsheet->worksheet;
+        else
+            worksheet = sheet->u.worksheet;
+
+        drawing = worksheet->drawing;
+
+        if (drawing)
+            drawing_count++;
+    }
+
+    return drawing_count;
 }
 
 /*
@@ -657,6 +697,8 @@ _write_content_types_file(lxw_packager *self)
     uint16_t index = 1;
     uint16_t worksheet_index = 1;
     uint16_t chartsheet_index = 1;
+    uint16_t drawing_count = _get_drawing_count(self);
+    uint16_t chart_count = _get_chart_count(self);
     lxw_error err = LXW_NO_ERROR;
 
     if (!content_types) {
@@ -692,13 +734,13 @@ _write_content_types_file(lxw_packager *self)
         }
     }
 
-    for (index = 1; index <= self->chart_count; index++) {
+    for (index = 1; index <= chart_count; index++) {
         lxw_snprintf(filename, LXW_FILENAME_LENGTH, "/xl/charts/chart%d.xml",
                      index);
         lxw_ct_add_chart_name(content_types, filename);
     }
 
-    for (index = 1; index <= self->drawing_count; index++) {
+    for (index = 1; index <= drawing_count; index++) {
         lxw_snprintf(filename, LXW_FILENAME_LENGTH,
                      "/xl/drawings/drawing%d.xml", index);
         lxw_ct_add_drawing_name(content_types, filename);
@@ -1056,15 +1098,10 @@ _add_file_to_zip(lxw_packager *self, FILE * file, const char *filename)
         size_read = fread(self->buffer, 1, self->buffer_size, file);
     }
 
-    if (error < 0) {
+    error = zipCloseFileInZip(self->zipfile);
+    if (error != ZIP_OK) {
+        LXW_ERROR("Error in closing member in the zipfile");
         RETURN_ON_ZIP_ERROR(error, LXW_ERROR_ZIP_FILE_ADD);
-    }
-    else {
-        error = zipCloseFileInZip(self->zipfile);
-        if (error != ZIP_OK) {
-            LXW_ERROR("Error in closing member in the zipfile");
-            RETURN_ON_ZIP_ERROR(error, LXW_ERROR_ZIP_FILE_ADD);
-        }
     }
 
     return LXW_NO_ERROR;
@@ -1097,15 +1134,10 @@ _add_buffer_to_zip(lxw_packager *self, unsigned char *buffer,
         RETURN_ON_ZIP_ERROR(error, LXW_ERROR_ZIP_FILE_ADD);
     }
 
-    if (error < 0) {
+    error = zipCloseFileInZip(self->zipfile);
+    if (error != ZIP_OK) {
+        LXW_ERROR("Error in closing member in the zipfile");
         RETURN_ON_ZIP_ERROR(error, LXW_ERROR_ZIP_FILE_ADD);
-    }
-    else {
-        error = zipCloseFileInZip(self->zipfile);
-        if (error != ZIP_OK) {
-            LXW_ERROR("Error in closing member in the zipfile");
-            RETURN_ON_ZIP_ERROR(error, LXW_ERROR_ZIP_FILE_ADD);
-        }
     }
 
     return LXW_NO_ERROR;
@@ -1119,6 +1151,15 @@ lxw_create_package(lxw_packager *self)
 {
     lxw_error error;
     int8_t zip_error;
+
+    error = _write_content_types_file(self);
+    RETURN_ON_ERROR(error);
+
+    error = _write_root_rels_file(self);
+    RETURN_ON_ERROR(error);
+
+    error = _write_workbook_rels_file(self);
+    RETURN_ON_ERROR(error);
 
     error = _write_worksheet_files(self);
     RETURN_ON_ERROR(error);
@@ -1138,12 +1179,6 @@ lxw_create_package(lxw_packager *self)
     error = _write_shared_strings_file(self);
     RETURN_ON_ERROR(error);
 
-    error = _write_app_file(self);
-    RETURN_ON_ERROR(error);
-
-    error = _write_core_file(self);
-    RETURN_ON_ERROR(error);
-
     error = _write_custom_file(self);
     RETURN_ON_ERROR(error);
 
@@ -1151,12 +1186,6 @@ lxw_create_package(lxw_packager *self)
     RETURN_ON_ERROR(error);
 
     error = _write_styles_file(self);
-    RETURN_ON_ERROR(error);
-
-    error = _write_content_types_file(self);
-    RETURN_ON_ERROR(error);
-
-    error = _write_workbook_rels_file(self);
     RETURN_ON_ERROR(error);
 
     error = _write_worksheet_rels_file(self);
@@ -1171,7 +1200,10 @@ lxw_create_package(lxw_packager *self)
     error = _write_image_files(self);
     RETURN_ON_ERROR(error);
 
-    error = _write_root_rels_file(self);
+    error = _write_core_file(self);
+    RETURN_ON_ERROR(error);
+
+    error = _write_app_file(self);
     RETURN_ON_ERROR(error);
 
     zip_error = zipClose(self->zipfile, NULL);
