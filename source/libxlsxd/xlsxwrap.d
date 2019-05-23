@@ -3746,7 +3746,7 @@ extern(C)
     alias __socklen_t = uint;
     alias __sig_atomic_t = int;
     alias FILE = _IO_FILE;
-    struct _IO_FILE
+    /*struct _IO_FILE
     {
         int _flags;
         char* _IO_read_ptr;
@@ -3777,7 +3777,8 @@ extern(C)
         c_ulong __pad5;
         int _mode;
         char[20] _unused2;
-    }
+    }*/
+	import core.stdc.stdio : _IO_FILE;
     alias __FILE = _IO_FILE;
     c_long labs(c_long) @nogc nothrow;
     alias __fpos64_t = _G_fpos64_t;
