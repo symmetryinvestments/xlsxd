@@ -1,7 +1,7 @@
 /*
  * libxlsxwriter
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  * content_types - A libxlsxwriter library for creating Excel XLSX
  *                 content_types files.
@@ -37,7 +37,7 @@ extern "C" {
 #endif
 /* *INDENT-ON* */
 
-lxw_content_types *lxw_content_types_new();
+lxw_content_types *lxw_content_types_new(void);
 void lxw_content_types_free(lxw_content_types *content_types);
 void lxw_content_types_assemble_xml_file(lxw_content_types *content_types);
 void lxw_ct_add_default(lxw_content_types *content_types, const char *key,

@@ -3,7 +3,7 @@
  *
  * Used in conjunction with the libxlsxwriter library.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  */
 
@@ -27,7 +27,7 @@
  * Create a new drawing collection.
  */
 lxw_drawing *
-lxw_drawing_new()
+lxw_drawing_new(void)
 {
     lxw_drawing *drawing = calloc(1, sizeof(lxw_drawing));
     GOTO_LABEL_ON_MEM_ERROR(drawing, mem_error);
