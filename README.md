@@ -1,5 +1,7 @@
 # libxlsxd
 
+![alt text](https://travis-ci.org/kaleidicassociates/xlsxd.svg)
+
 A small wrapper in the D programming language around the C library
 libxlsxwriter, which writes Excel spreadsheets.
 

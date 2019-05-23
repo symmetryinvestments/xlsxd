@@ -1,7 +1,7 @@
 /*
  * libxlsxwriter
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  * chartsheet - A libxlsxwriter library for creating Excel XLSX chartsheet files.
  *
@@ -524,7 +524,7 @@ lxw_error chartsheet_set_footer_opt(lxw_chartsheet *chartsheet,
                                     const char *string,
                                     lxw_header_footer_options *options);
 
-lxw_chartsheet *lxw_chartsheet_new();
+lxw_chartsheet *lxw_chartsheet_new(lxw_worksheet_init_data *init_data);
 void lxw_chartsheet_free(lxw_chartsheet *chartsheet);
 void lxw_chartsheet_assemble_xml_file(lxw_chartsheet *chartsheet);
 

@@ -3,7 +3,7 @@
  *
  * Used in conjunction with the libxlsxwriter library.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
+ * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org. See LICENSE.txt.
  *
  */
 
@@ -27,7 +27,7 @@ STATIC void _write_font(lxw_styles *self, lxw_format *format,
  * Create a new styles object.
  */
 lxw_styles *
-lxw_styles_new()
+lxw_styles_new(void)
 {
     lxw_styles *styles = calloc(1, sizeof(lxw_styles));
     GOTO_LABEL_ON_MEM_ERROR(styles, mem_error);
@@ -155,6 +155,7 @@ _write_num_fmts(lxw_styles *self)
     struct xml_attribute_list attributes;
     struct xml_attribute *attribute;
     lxw_format *format;
+    uint16_t last_format_index = 0;
 
     if (!self->num_format_count)
         return;
@@ -171,7 +172,13 @@ _write_num_fmts(lxw_styles *self)
         if (format->num_format_index < 164)
             continue;
 
+        /* Ignore duplicates which have an already used index. */
+        if (format->num_format_index <= last_format_index)
+            continue;
+
         _write_num_fmt(self, format->num_format_index, format->num_format);
+
+        last_format_index = format->num_format_index;
     }
 
     lxw_xml_end_tag(self->file, "numFmts");
