@@ -1,0 +1,17 @@
+language: d
+sudo: false
+
+os:
+  - windows
+  - linux
+  - osx
+
+d:
+  - dmd
+  - ldc
+
+script:
+  - dub test --compiler=${DC}
+
+notifications:
+  email: false
