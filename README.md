@@ -80,6 +80,10 @@ The command:
 git subtree pull --prefix=libxlsxwriter --squash https://github.com/jmcnamara/libxlsxwriter master
 ```
 will update that subtree to the current master of the libxlsxwriter repo.
+Then remove source/libxlsxd/xlsxwrap.d and then run
+```
+make source/libxlsxd/xlsxwrap.d
+```
 
 About Kaleidic Associates
 -------------------------
