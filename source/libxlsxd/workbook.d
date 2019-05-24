@@ -54,6 +54,10 @@ struct WorkbookOpen {
 		workbook_close(this.handle);
 	}
 
+	WorksheetFluent addFluentWorksheet(string name) {
+		return WorksheetFluent(&this, this.addWorksheet(name));
+	}
+
 	Worksheet addWorksheet(string name) nothrow {
 		return Worksheet(workbook_add_worksheet(this.handle,
 					name.empty ? null : name.toStringz())

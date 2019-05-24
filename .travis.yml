@@ -2,7 +2,7 @@ language: d
 sudo: false
 
 os:
-  - windows
+#- windows // no D on windows for now
   - linux
   - osx
 

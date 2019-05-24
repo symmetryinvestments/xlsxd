@@ -66,6 +66,124 @@ private pure string genWriteOverloads() {
 	return ret;
 }
 
+struct Column {
+	WorksheetFluent* wsf;
+
+	this(WorksheetFluent* wsf) {
+		this.wsf = wsf;
+	}
+
+	Column writeInt(long value) {
+		return this.writeIntFormatted(value, Format(null));
+	}
+
+	Column writeIntFormatted(long value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row++, this.wsf.pos.col, value,
+				format);
+		return this;
+	}
+
+	Column writeNumber(double value) {
+		return this.writeNumberFormatted(value, Format(null));
+	}
+
+	Column writeNumberFormatted(double value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row++, this.wsf.pos.col, value,
+				format);
+		return this;
+	}
+
+	Column writeString(string value) {
+		return this.writeStringFormatted(value, Format(null));
+	}
+
+	Column writeStringFormatted(string value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row++, this.wsf.pos.col, value,
+				format);
+		return this;
+	}
+
+	WorksheetFluent terminate() {
+		this.wsf.pos.row = 0;
+		this.wsf.pos.col++;
+		return *this.wsf;
+	}
+}
+
+struct Row {
+	WorksheetFluent* wsf;
+
+	this(WorksheetFluent* wsf) {
+		this.wsf = wsf;
+	}
+
+	Row writeInt(long value) {
+		return this.writeIntFormatted(value, Format(null));
+	}
+
+	Row writeIntFormatted(long value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row, this.wsf.pos.col++, value,
+				format);
+		return this;
+	}
+
+	Row writeNumber(double value) {
+		return this.writeNumberFormatted(value, Format(null));
+	}
+
+	Row writeNumberFormatted(double value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row, this.wsf.pos.col++, value,
+				format);
+		return this;
+	}
+
+	Row writeString(string value) {
+		return this.writeStringFormatted(value, Format(null));
+	}
+
+	Row writeStringFormatted(string value, Format format) {
+		this.wsf.ws.write(this.wsf.pos.row, this.wsf.pos.col++, value,
+				format);
+		return this;
+	}
+
+	WorksheetFluent terminate() {
+		this.wsf.pos.row++;
+		this.wsf.pos.col = 0;
+		return *this.wsf;
+	}
+}
+
+struct Position {
+	RowType row;
+	ColType col;
+}
+
+struct WorksheetFluent {
+	import libxlsxd.workbook : WorkbookOpen;
+	WorkbookOpen* wb;
+	Worksheet ws;
+
+	Position pos;
+
+	this(WorkbookOpen* wb, Worksheet ws) {
+		this.wb = wb;
+		this.ws = ws;
+	}
+
+	Row startRow() {
+		return Row(&this);
+	}
+
+	Column startColumn() {
+		return Column(&this);
+	}
+
+	WorkbookOpen terminate() {
+		return *this.wb;
+	}
+}
+
 struct Worksheet {
 	import std.string : toStringz;
 	import std.exception : enforce;
