@@ -4,7 +4,7 @@ sudo: false
 os:
 #- windows // no D on windows for now
   - linux
-  - osx
+	#- osx // not sure how to build zlib for darwin
 
 d:
   - dmd
