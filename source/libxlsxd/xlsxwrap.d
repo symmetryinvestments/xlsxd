@@ -4,17 +4,28 @@ module libxlsxd.xlsxwrap;
         import core.stdc.config;
         import core.stdc.stdarg: va_list;
         static import core.simd;
+        static import std.conv;
 
         struct Int128 { long lower; long upper; }
         struct UInt128 { ulong lower; ulong upper; }
 
         struct __locale_data { int dummy; }
 
+
+
 alias _Bool = bool;
 struct dpp {
+    static struct Opaque(int N) {
+        void[N] bytes;
+    }
+
+    static bool isEmpty(T)() {
+        return T.tupleof.length == 0;
+    }
     static struct Move(T) {
         T* ptr;
     }
+
 
     static auto move(T)(ref T value) {
         return Move!T(&value);
@@ -41,113 +52,80 @@ struct dpp {
 
 extern(C)
 {
-    int gzvprintf(gzFile, const(char)*, va_list) @nogc nothrow;
-    int deflateResetKeep(z_streamp) @nogc nothrow;
-    int inflateResetKeep(z_streamp) @nogc nothrow;
-    c_ulong inflateCodesUsed(z_streamp) @nogc nothrow;
-    int inflateValidate(z_streamp, int) @nogc nothrow;
-    int inflateUndermine(z_streamp, int) @nogc nothrow;
-    const(z_crc_t)* get_crc_table() @nogc nothrow;
-    int inflateSyncPoint(z_streamp) @nogc nothrow;
+    alias wchar_t = int;
+    alias size_t = c_ulong;
+    alias ptrdiff_t = c_long;
+    struct max_align_t
+    {
+        long __clang_max_align_nonce1;
+        real __clang_max_align_nonce2;
+    }
+    int gzvprintf(gzFile_s*, const(char)*, va_list*) @nogc nothrow;
+    int deflateResetKeep(z_stream_s*) @nogc nothrow;
+    int inflateResetKeep(z_stream_s*) @nogc nothrow;
+    c_ulong inflateCodesUsed(z_stream_s*) @nogc nothrow;
+    int inflateValidate(z_stream_s*, int) @nogc nothrow;
+    int inflateUndermine(z_stream_s*, int) @nogc nothrow;
+    const(uint)* get_crc_table() @nogc nothrow;
+    int inflateSyncPoint(z_stream_s*) @nogc nothrow;
     const(char)* zError(int) @nogc nothrow;
-    uLong crc32_combine(uLong, uLong, off_t) @nogc nothrow;
-    uLong adler32_combine(uLong, uLong, off_t) @nogc nothrow;
-    off_t gzoffset(gzFile) @nogc nothrow;
-    off_t gztell(gzFile) @nogc nothrow;
-    off_t gzseek(gzFile, off_t, int) @nogc nothrow;
-    gzFile gzopen(const(char)*, const(char)*) @nogc nothrow;
-    int gzgetc_(gzFile) @nogc nothrow;
-    int inflateBackInit_(z_streamp, int, ubyte*, const(char)*, int) @nogc nothrow;
-    int inflateInit2_(z_streamp, int, const(char)*, int) @nogc nothrow;
-    int deflateInit2_(z_streamp, int, int, int, int, int, const(char)*, int) @nogc nothrow;
-    int inflateInit_(z_streamp, const(char)*, int) @nogc nothrow;
-    int deflateInit_(z_streamp, int, const(char)*, int) @nogc nothrow;
-    uLong crc32_z(uLong, const(Bytef)*, z_size_t) @nogc nothrow;
-    uLong crc32(uLong, const(Bytef)*, uInt) @nogc nothrow;
-    uLong adler32_z(uLong, const(Bytef)*, z_size_t) @nogc nothrow;
-    uLong adler32(uLong, const(Bytef)*, uInt) @nogc nothrow;
-    void gzclearerr(gzFile) @nogc nothrow;
-    const(char)* gzerror(gzFile, int*) @nogc nothrow;
-    int gzclose_w(gzFile) @nogc nothrow;
-    int gzclose_r(gzFile) @nogc nothrow;
-    int gzclose(gzFile) @nogc nothrow;
-    int gzdirect(gzFile) @nogc nothrow;
-    int gzeof(gzFile) @nogc nothrow;
-    int gzrewind(gzFile) @nogc nothrow;
-    int gzflush(gzFile, int) @nogc nothrow;
-    int gzungetc(int, gzFile) @nogc nothrow;
-    pragma(mangle, "gzgetc") int gzgetc_(gzFile) @nogc nothrow;
-    int gzputc(gzFile, int) @nogc nothrow;
-    char* gzgets(gzFile, char*, int) @nogc nothrow;
-    int gzputs(gzFile, const(char)*) @nogc nothrow;
-    int gzprintf(gzFile, const(char)*, ...) @nogc nothrow;
-    z_size_t gzfwrite(voidpc, z_size_t, z_size_t, gzFile) @nogc nothrow;
-    int gzwrite(gzFile, voidpc, uint) @nogc nothrow;
-    z_size_t gzfread(voidp, z_size_t, z_size_t, gzFile) @nogc nothrow;
-    int gzread(gzFile, voidp, uint) @nogc nothrow;
-    int gzsetparams(gzFile, int, int) @nogc nothrow;
-    int gzbuffer(gzFile, uint) @nogc nothrow;
-    gzFile gzdopen(int, const(char)*) @nogc nothrow;
+    c_ulong crc32_combine(c_ulong, c_ulong, c_long) @nogc nothrow;
+    c_ulong adler32_combine(c_ulong, c_ulong, c_long) @nogc nothrow;
+    c_long gzoffset(gzFile_s*) @nogc nothrow;
+    c_long gztell(gzFile_s*) @nogc nothrow;
+    c_long gzseek(gzFile_s*, c_long, int) @nogc nothrow;
+    gzFile_s* gzopen(const(char)*, const(char)*) @nogc nothrow;
+    int gzgetc_(gzFile_s*) @nogc nothrow;
+    int inflateBackInit_(z_stream_s*, int, ubyte*, const(char)*, int) @nogc nothrow;
+    int inflateInit2_(z_stream_s*, int, const(char)*, int) @nogc nothrow;
+    int deflateInit2_(z_stream_s*, int, int, int, int, int, const(char)*, int) @nogc nothrow;
+    int inflateInit_(z_stream_s*, const(char)*, int) @nogc nothrow;
+    int deflateInit_(z_stream_s*, int, const(char)*, int) @nogc nothrow;
+    c_ulong crc32_z(c_ulong, const(ubyte)*, c_ulong) @nogc nothrow;
+    c_ulong crc32(c_ulong, const(ubyte)*, uint) @nogc nothrow;
+    c_ulong adler32_z(c_ulong, const(ubyte)*, c_ulong) @nogc nothrow;
+    c_ulong adler32(c_ulong, const(ubyte)*, uint) @nogc nothrow;
+    void gzclearerr(gzFile_s*) @nogc nothrow;
+    const(char)* gzerror(gzFile_s*, int*) @nogc nothrow;
+    int gzclose_w(gzFile_s*) @nogc nothrow;
+    int gzclose_r(gzFile_s*) @nogc nothrow;
+    int gzclose(gzFile_s*) @nogc nothrow;
+    int gzdirect(gzFile_s*) @nogc nothrow;
+    int gzeof(gzFile_s*) @nogc nothrow;
+    int gzrewind(gzFile_s*) @nogc nothrow;
+    int gzflush(gzFile_s*, int) @nogc nothrow;
+    int gzungetc(int, gzFile_s*) @nogc nothrow;
+    pragma(mangle, "gzgetc") int gzgetc_(gzFile_s*) @nogc nothrow;
+    int gzputc(gzFile_s*, int) @nogc nothrow;
+    char* gzgets(gzFile_s*, char*, int) @nogc nothrow;
+    int gzputs(gzFile_s*, const(char)*) @nogc nothrow;
+    int gzprintf(gzFile_s*, const(char)*, ...) @nogc nothrow;
+    c_ulong gzfwrite(const(void)*, c_ulong, c_ulong, gzFile_s*) @nogc nothrow;
+    int gzwrite(gzFile_s*, const(void)*, uint) @nogc nothrow;
+    c_ulong gzfread(void*, c_ulong, c_ulong, gzFile_s*) @nogc nothrow;
+    int gzread(gzFile_s*, void*, uint) @nogc nothrow;
+    int gzsetparams(gzFile_s*, int, int) @nogc nothrow;
+    int gzbuffer(gzFile_s*, uint) @nogc nothrow;
+    gzFile_s* gzdopen(int, const(char)*) @nogc nothrow;
     struct gzFile_s
     {
         uint have;
         ubyte* next;
-        off_t pos;
+        c_long pos;
     }
     alias gzFile = gzFile_s*;
-    int uncompress2(Bytef*, uLongf*, const(Bytef)*, uLong*) @nogc nothrow;
-    int uncompress(Bytef*, uLongf*, const(Bytef)*, uLong) @nogc nothrow;
-    uLong compressBound(uLong) @nogc nothrow;
-    int compress2(Bytef*, uLongf*, const(Bytef)*, uLong, int) @nogc nothrow;
-    int compress(Bytef*, uLongf*, const(Bytef)*, uLong) @nogc nothrow;
-    uLong zlibCompileFlags() @nogc nothrow;
-    int inflateBackEnd(z_streamp) @nogc nothrow;
-    int inflateBack(z_streamp, in_func, void*, out_func, void*) @nogc nothrow;
-    alias out_func = int function(void*, ubyte*, uint) @nogc nothrow;
-    alias in_func = uint function(void*, ubyte**) @nogc nothrow;
-    int inflateGetHeader(z_streamp, gz_headerp) @nogc nothrow;
-    c_long inflateMark(z_streamp) @nogc nothrow;
-    int inflatePrime(z_streamp, int, int) @nogc nothrow;
-    int inflateReset2(z_streamp, int) @nogc nothrow;
-    int inflateReset(z_streamp) @nogc nothrow;
-    int inflateCopy(z_streamp, z_streamp) @nogc nothrow;
-    int inflateSync(z_streamp) @nogc nothrow;
-    int inflateGetDictionary(z_streamp, Bytef*, uInt*) @nogc nothrow;
-    int inflateSetDictionary(z_streamp, const(Bytef)*, uInt) @nogc nothrow;
-    int deflateSetHeader(z_streamp, gz_headerp) @nogc nothrow;
-    int deflatePrime(z_streamp, int, int) @nogc nothrow;
-    int deflatePending(z_streamp, uint*, int*) @nogc nothrow;
-    uLong deflateBound(z_streamp, uLong) @nogc nothrow;
-    int deflateTune(z_streamp, int, int, int, int) @nogc nothrow;
-    int deflateParams(z_streamp, int, int) @nogc nothrow;
-    int deflateReset(z_streamp) @nogc nothrow;
-    int deflateCopy(z_streamp, z_streamp) @nogc nothrow;
-    int deflateGetDictionary(z_streamp, Bytef*, uInt*) @nogc nothrow;
-    int deflateSetDictionary(z_streamp, const(Bytef)*, uInt) @nogc nothrow;
-    int inflateEnd(z_streamp) @nogc nothrow;
-    int inflate(z_streamp, int) @nogc nothrow;
-    int deflateEnd(z_streamp) @nogc nothrow;
-    int deflate(z_streamp, int) @nogc nothrow;
-    const(char)* zlibVersion() @nogc nothrow;
-    alias gz_headerp = gz_header_s*;
-    struct gz_header_s
-    {
-        int text;
-        uLong time;
-        int xflags;
-        int os;
-        Bytef* extra;
-        uInt extra_len;
-        uInt extra_max;
-        Bytef* name;
-        uInt name_max;
-        Bytef* comment;
-        uInt comm_max;
-        int hcrc;
-        int done;
-    }
-    alias gz_header = gz_header_s;
-    alias z_streamp = z_stream_s*;
+    int uncompress2(ubyte*, c_ulong*, const(ubyte)*, c_ulong*) @nogc nothrow;
+    int uncompress(ubyte*, c_ulong*, const(ubyte)*, c_ulong) @nogc nothrow;
+    c_ulong compressBound(c_ulong) @nogc nothrow;
+    int compress2(ubyte*, c_ulong*, const(ubyte)*, c_ulong, int) @nogc nothrow;
+    int compress(ubyte*, c_ulong*, const(ubyte)*, c_ulong) @nogc nothrow;
+    c_ulong zlibCompileFlags() @nogc nothrow;
+    int inflateBackEnd(z_stream_s*) @nogc nothrow;
+    int inflateBack(z_stream_s*, uint function(void*, ubyte**), void*, int function(void*, ubyte*, uint), void*) @nogc nothrow;
+    alias out_func = int function(void*, ubyte*, uint);
+    alias in_func = uint function(void*, ubyte**);
+    int inflateGetHeader(z_stream_s*, gz_header_s*) @nogc nothrow;
+    c_long inflateMark(z_stream_s*) @nogc nothrow;
     struct lxw_heading_pair
     {
         char* key;
@@ -179,18 +157,23 @@ extern(C)
     }
     struct lxw_app
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_heading_pairs* heading_pairs;
         lxw_part_names* part_names;
         lxw_doc_properties* properties;
-        uint32_t num_heading_pairs;
-        uint32_t num_part_names;
+        uint num_heading_pairs;
+        uint num_part_names;
     }
     lxw_app* lxw_app_new() @nogc nothrow;
     void lxw_app_free(lxw_app*) @nogc nothrow;
     void lxw_app_assemble_xml_file(lxw_app*) @nogc nothrow;
     void lxw_app_add_part_name(lxw_app*, const(char)*) @nogc nothrow;
     void lxw_app_add_heading_pair(lxw_app*, const(char)*, const(char)*) @nogc nothrow;
+    struct lxw_chart_series_list
+    {
+        lxw_chart_series* stqh_first;
+        lxw_chart_series** stqh_last;
+    }
     struct lxw_chart_series
     {
         lxw_series_range* categories;
@@ -201,33 +184,33 @@ extern(C)
         lxw_chart_pattern* pattern;
         lxw_chart_marker* marker;
         lxw_chart_point* points;
-        uint16_t point_count;
-        uint8_t smooth;
-        uint8_t invert_if_negative;
-        uint8_t has_labels;
-        uint8_t show_labels_value;
-        uint8_t show_labels_category;
-        uint8_t show_labels_name;
-        uint8_t show_labels_leader;
-        uint8_t show_labels_legend;
-        uint8_t show_labels_percent;
-        uint8_t label_position;
-        uint8_t label_separator;
-        uint8_t default_label_position;
+        ushort point_count;
+        ubyte smooth;
+        ubyte invert_if_negative;
+        ubyte has_labels;
+        ubyte show_labels_value;
+        ubyte show_labels_category;
+        ubyte show_labels_name;
+        ubyte show_labels_leader;
+        ubyte show_labels_legend;
+        ubyte show_labels_percent;
+        ubyte label_position;
+        ubyte label_separator;
+        ubyte default_label_position;
         char* label_num_format;
         lxw_chart_font* label_font;
         lxw_series_error_bars* x_error_bars;
         lxw_series_error_bars* y_error_bars;
-        uint8_t has_trendline;
-        uint8_t has_trendline_forecast;
-        uint8_t has_trendline_equation;
-        uint8_t has_trendline_r_squared;
-        uint8_t has_trendline_intercept;
-        uint8_t trendline_type;
-        uint8_t trendline_value;
+        ubyte has_trendline;
+        ubyte has_trendline_forecast;
+        ubyte has_trendline_equation;
+        ubyte has_trendline_r_squared;
+        ubyte has_trendline_intercept;
+        ubyte trendline_type;
+        ubyte trendline_value;
         double trendline_forward;
         double trendline_backward;
-        uint8_t trendline_value_type;
+        ubyte trendline_value_type;
         char* trendline_name;
         lxw_chart_line* trendline_line;
         double trendline_intercept;
@@ -237,46 +220,24 @@ extern(C)
         }
         _Anonymous_2 list_pointers;
     }
-    struct lxw_chart_series_list
-    {
-        lxw_chart_series* stqh_first;
-        lxw_chart_series** stqh_last;
-    }
-    struct lxw_series_data_points
-    {
-        lxw_series_data_point* stqh_first;
-        lxw_series_data_point** stqh_last;
-    }
     struct lxw_series_data_point
     {
-        uint8_t is_string;
+        ubyte is_string;
         double number;
         char* string;
-        uint8_t no_data;
+        ubyte no_data;
         static struct _Anonymous_3
         {
             lxw_series_data_point* stqe_next;
         }
         _Anonymous_3 list_pointers;
     }
-    struct z_stream_s
+    struct lxw_series_data_points
     {
-        Bytef* next_in;
-        uInt avail_in;
-        uLong total_in;
-        Bytef* next_out;
-        uInt avail_out;
-        uLong total_out;
-        char* msg;
-        internal_state* state;
-        alloc_func zalloc;
-        free_func zfree;
-        voidpf opaque;
-        int data_type;
-        uLong adler;
-        uLong reserved;
+        lxw_series_data_point* stqh_first;
+        lxw_series_data_point** stqh_last;
     }
-    alias z_stream = z_stream_s;
+    int inflatePrime(z_stream_s*, int, int) @nogc nothrow;
     enum lxw_chart_type
     {
         LXW_CHART_NONE = 0,
@@ -627,57 +588,57 @@ extern(C)
     {
         char* formula;
         char* sheetname;
-        lxw_row_t first_row;
-        lxw_row_t last_row;
-        lxw_col_t first_col;
-        lxw_col_t last_col;
-        uint8_t ignore_cache;
-        uint8_t has_string_cache;
-        uint16_t num_data_points;
+        uint first_row;
+        uint last_row;
+        ushort first_col;
+        ushort last_col;
+        ubyte ignore_cache;
+        ubyte has_string_cache;
+        ushort num_data_points;
         lxw_series_data_points* data_cache;
     }
     struct lxw_chart_line
     {
-        lxw_color_t color;
-        uint8_t none;
+        int color;
+        ubyte none;
         float width;
-        uint8_t dash_type;
-        uint8_t transparency;
-        uint8_t has_color;
+        ubyte dash_type;
+        ubyte transparency;
+        ubyte has_color;
     }
     struct lxw_chart_fill
     {
-        lxw_color_t color;
-        uint8_t none;
-        uint8_t transparency;
-        uint8_t has_color;
+        int color;
+        ubyte none;
+        ubyte transparency;
+        ubyte has_color;
     }
     struct lxw_chart_pattern
     {
-        lxw_color_t fg_color;
-        lxw_color_t bg_color;
-        uint8_t type;
-        uint8_t has_fg_color;
-        uint8_t has_bg_color;
+        int fg_color;
+        int bg_color;
+        ubyte type;
+        ubyte has_fg_color;
+        ubyte has_bg_color;
     }
     struct lxw_chart_font
     {
         char* name;
         double size;
-        uint8_t bold;
-        uint8_t italic;
-        uint8_t underline;
-        int32_t rotation;
-        lxw_color_t color;
-        uint8_t pitch_family;
-        uint8_t charset;
-        int8_t baseline;
-        uint8_t has_color;
+        ubyte bold;
+        ubyte italic;
+        ubyte underline;
+        int rotation;
+        int color;
+        ubyte pitch_family;
+        ubyte charset;
+        byte baseline;
+        ubyte has_color;
     }
     struct lxw_chart_marker
     {
-        uint8_t type;
-        uint8_t size;
+        ubyte type;
+        ubyte size;
         lxw_chart_line* line;
         lxw_chart_fill* fill;
         lxw_chart_pattern* pattern;
@@ -685,17 +646,17 @@ extern(C)
     struct lxw_chart_legend
     {
         lxw_chart_font* font;
-        uint8_t position;
+        ubyte position;
     }
     struct lxw_chart_title
     {
         char* name;
-        lxw_row_t row;
-        lxw_col_t col;
+        uint row;
+        ushort col;
         lxw_chart_font* font;
-        uint8_t off;
-        uint8_t is_horizontal;
-        uint8_t ignore_cache;
+        ubyte off;
+        ubyte is_horizontal;
+        ubyte ignore_cache;
         lxw_series_range* range;
         lxw_series_data_point data_point;
     }
@@ -761,13 +722,13 @@ extern(C)
     enum LXW_CHART_ERROR_BAR_NO_CAP = lxw_chart_error_bar_cap.LXW_CHART_ERROR_BAR_NO_CAP;
     struct lxw_series_error_bars
     {
-        uint8_t type;
-        uint8_t direction;
-        uint8_t endcap;
-        uint8_t has_value;
-        uint8_t is_set;
-        uint8_t is_x;
-        uint8_t chart_group;
+        ubyte type;
+        ubyte direction;
+        ubyte endcap;
+        ubyte has_value;
+        ubyte is_set;
+        ubyte is_x;
+        ubyte chart_group;
         double value;
         lxw_chart_line* line;
     }
@@ -788,7 +749,7 @@ extern(C)
     enum LXW_CHART_TRENDLINE_TYPE_AVERAGE = lxw_chart_trendline_type.LXW_CHART_TRENDLINE_TYPE_AVERAGE;
     struct lxw_chart_gridline
     {
-        uint8_t visible;
+        ubyte visible;
         lxw_chart_line* line;
     }
     struct lxw_chart_axis
@@ -796,78 +757,78 @@ extern(C)
         lxw_chart_title title;
         char* num_format;
         char* default_num_format;
-        uint8_t source_linked;
-        uint8_t major_tick_mark;
-        uint8_t minor_tick_mark;
-        uint8_t is_horizontal;
+        ubyte source_linked;
+        ubyte major_tick_mark;
+        ubyte minor_tick_mark;
+        ubyte is_horizontal;
         lxw_chart_gridline major_gridlines;
         lxw_chart_gridline minor_gridlines;
         lxw_chart_font* num_font;
         lxw_chart_line* line;
         lxw_chart_fill* fill;
         lxw_chart_pattern* pattern;
-        uint8_t is_category;
-        uint8_t is_date;
-        uint8_t is_value;
-        uint8_t axis_position;
-        uint8_t position_axis;
-        uint8_t label_position;
-        uint8_t label_align;
-        uint8_t hidden;
-        uint8_t reverse;
-        uint8_t has_min;
+        ubyte is_category;
+        ubyte is_date;
+        ubyte is_value;
+        ubyte axis_position;
+        ubyte position_axis;
+        ubyte label_position;
+        ubyte label_align;
+        ubyte hidden;
+        ubyte reverse;
+        ubyte has_min;
         double min;
-        uint8_t has_max;
+        ubyte has_max;
         double max;
-        uint8_t has_major_unit;
+        ubyte has_major_unit;
         double major_unit;
-        uint8_t has_minor_unit;
+        ubyte has_minor_unit;
         double minor_unit;
-        uint16_t interval_unit;
-        uint16_t interval_tick;
-        uint16_t log_base;
-        uint8_t display_units;
-        uint8_t display_units_visible;
-        uint8_t has_crossing;
-        uint8_t crossing_max;
+        ushort interval_unit;
+        ushort interval_tick;
+        ushort log_base;
+        ubyte display_units;
+        ubyte display_units_visible;
+        ubyte has_crossing;
+        ubyte crossing_max;
         double crossing;
     }
     struct lxw_chart
     {
-        FILE* file;
-        uint8_t type;
-        uint8_t subtype;
-        uint16_t series_index;
+        _IO_FILE* file;
+        ubyte type;
+        ubyte subtype;
+        ushort series_index;
         void function(lxw_chart*) write_chart_type;
         void function(lxw_chart*) write_plot_area;
         lxw_chart_axis* x_axis;
         lxw_chart_axis* y_axis;
         lxw_chart_title title;
-        uint32_t id;
-        uint32_t axis_id_1;
-        uint32_t axis_id_2;
-        uint32_t axis_id_3;
-        uint32_t axis_id_4;
-        uint8_t in_use;
-        uint8_t chart_group;
-        uint8_t cat_has_num_fmt;
-        uint8_t is_chartsheet;
-        uint8_t has_horiz_cat_axis;
-        uint8_t has_horiz_val_axis;
-        uint8_t style_id;
-        uint16_t rotation;
-        uint16_t hole_size;
-        uint8_t no_title;
-        uint8_t has_overlap;
-        int8_t overlap_y1;
-        int8_t overlap_y2;
-        uint16_t gap_y1;
-        uint16_t gap_y2;
-        uint8_t grouping;
-        uint8_t default_cross_between;
+        uint id;
+        uint axis_id_1;
+        uint axis_id_2;
+        uint axis_id_3;
+        uint axis_id_4;
+        ubyte in_use;
+        ubyte chart_group;
+        ubyte cat_has_num_fmt;
+        ubyte is_chartsheet;
+        ubyte has_horiz_cat_axis;
+        ubyte has_horiz_val_axis;
+        ubyte style_id;
+        ushort rotation;
+        ushort hole_size;
+        ubyte no_title;
+        ubyte has_overlap;
+        byte overlap_y1;
+        byte overlap_y2;
+        ushort gap_y1;
+        ushort gap_y2;
+        ubyte grouping;
+        ubyte default_cross_between;
         lxw_chart_legend legend;
-        int16_t* delete_series;
-        uint16_t delete_series_count;
+        short* delete_series;
+        ushort delete_series_count;
         lxw_chart_marker* default_marker;
         lxw_chart_line* chartarea_line;
         lxw_chart_fill* chartarea_fill;
@@ -875,26 +836,26 @@ extern(C)
         lxw_chart_line* plotarea_line;
         lxw_chart_fill* plotarea_fill;
         lxw_chart_pattern* plotarea_pattern;
-        uint8_t has_drop_lines;
+        ubyte has_drop_lines;
         lxw_chart_line* drop_lines_line;
-        uint8_t has_high_low_lines;
+        ubyte has_high_low_lines;
         lxw_chart_line* high_low_lines_line;
         lxw_chart_series_list* series_list;
-        uint8_t has_table;
-        uint8_t has_table_vertical;
-        uint8_t has_table_horizontal;
-        uint8_t has_table_outline;
-        uint8_t has_table_legend_keys;
+        ubyte has_table;
+        ubyte has_table_vertical;
+        ubyte has_table_horizontal;
+        ubyte has_table_outline;
+        ubyte has_table_legend_keys;
         lxw_chart_font* table_font;
-        uint8_t show_blanks_as;
-        uint8_t show_hidden_data;
-        uint8_t has_up_down_bars;
+        ubyte show_blanks_as;
+        ubyte show_hidden_data;
+        ubyte has_up_down_bars;
         lxw_chart_line* up_bar_line;
         lxw_chart_line* down_bar_line;
         lxw_chart_fill* up_bar_fill;
         lxw_chart_fill* down_bar_fill;
-        uint8_t default_label_position;
-        uint8_t is_protected;
+        ubyte default_label_position;
+        ubyte is_protected;
         static struct _Anonymous_4
         {
             lxw_chart* stqe_next;
@@ -906,35 +867,35 @@ extern(C)
         }
         _Anonymous_5 list_pointers;
     }
-    lxw_chart* lxw_chart_new(uint8_t) @nogc nothrow;
+    lxw_chart* lxw_chart_new(ubyte) @nogc nothrow;
     void lxw_chart_free(lxw_chart*) @nogc nothrow;
     void lxw_chart_assemble_xml_file(lxw_chart*) @nogc nothrow;
     lxw_chart_series* chart_add_series(lxw_chart*, const(char)*, const(char)*) @nogc nothrow;
-    void chart_series_set_categories(lxw_chart_series*, const(char)*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void chart_series_set_values(lxw_chart_series*, const(char)*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void chart_series_set_categories(lxw_chart_series*, const(char)*, uint, ushort, uint, ushort) @nogc nothrow;
+    void chart_series_set_values(lxw_chart_series*, const(char)*, uint, ushort, uint, ushort) @nogc nothrow;
     void chart_series_set_name(lxw_chart_series*, const(char)*) @nogc nothrow;
-    void chart_series_set_name_range(lxw_chart_series*, const(char)*, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void chart_series_set_name_range(lxw_chart_series*, const(char)*, uint, ushort) @nogc nothrow;
     void chart_series_set_line(lxw_chart_series*, lxw_chart_line*) @nogc nothrow;
     void chart_series_set_fill(lxw_chart_series*, lxw_chart_fill*) @nogc nothrow;
     void chart_series_set_invert_if_negative(lxw_chart_series*) @nogc nothrow;
     void chart_series_set_pattern(lxw_chart_series*, lxw_chart_pattern*) @nogc nothrow;
-    void chart_series_set_marker_type(lxw_chart_series*, uint8_t) @nogc nothrow;
-    void chart_series_set_marker_size(lxw_chart_series*, uint8_t) @nogc nothrow;
+    void chart_series_set_marker_type(lxw_chart_series*, ubyte) @nogc nothrow;
+    void chart_series_set_marker_size(lxw_chart_series*, ubyte) @nogc nothrow;
     void chart_series_set_marker_line(lxw_chart_series*, lxw_chart_line*) @nogc nothrow;
     void chart_series_set_marker_fill(lxw_chart_series*, lxw_chart_fill*) @nogc nothrow;
     void chart_series_set_marker_pattern(lxw_chart_series*, lxw_chart_pattern*) @nogc nothrow;
     lxw_error chart_series_set_points(lxw_chart_series*, lxw_chart_point**) @nogc nothrow;
-    void chart_series_set_smooth(lxw_chart_series*, uint8_t) @nogc nothrow;
+    void chart_series_set_smooth(lxw_chart_series*, ubyte) @nogc nothrow;
     void chart_series_set_labels(lxw_chart_series*) @nogc nothrow;
-    void chart_series_set_labels_options(lxw_chart_series*, uint8_t, uint8_t, uint8_t) @nogc nothrow;
-    void chart_series_set_labels_separator(lxw_chart_series*, uint8_t) @nogc nothrow;
-    void chart_series_set_labels_position(lxw_chart_series*, uint8_t) @nogc nothrow;
+    void chart_series_set_labels_options(lxw_chart_series*, ubyte, ubyte, ubyte) @nogc nothrow;
+    void chart_series_set_labels_separator(lxw_chart_series*, ubyte) @nogc nothrow;
+    void chart_series_set_labels_position(lxw_chart_series*, ubyte) @nogc nothrow;
     void chart_series_set_labels_leader_line(lxw_chart_series*) @nogc nothrow;
     void chart_series_set_labels_legend(lxw_chart_series*) @nogc nothrow;
     void chart_series_set_labels_percentage(lxw_chart_series*) @nogc nothrow;
     void chart_series_set_labels_num_format(lxw_chart_series*, const(char)*) @nogc nothrow;
     void chart_series_set_labels_font(lxw_chart_series*, lxw_chart_font*) @nogc nothrow;
-    void chart_series_set_trendline(lxw_chart_series*, uint8_t, uint8_t) @nogc nothrow;
+    void chart_series_set_trendline(lxw_chart_series*, ubyte, ubyte) @nogc nothrow;
     void chart_series_set_trendline_forecast(lxw_chart_series*, double, double) @nogc nothrow;
     void chart_series_set_trendline_equation(lxw_chart_series*) @nogc nothrow;
     void chart_series_set_trendline_r_squared(lxw_chart_series*) @nogc nothrow;
@@ -942,13 +903,13 @@ extern(C)
     void chart_series_set_trendline_name(lxw_chart_series*, const(char)*) @nogc nothrow;
     void chart_series_set_trendline_line(lxw_chart_series*, lxw_chart_line*) @nogc nothrow;
     lxw_series_error_bars* chart_series_get_error_bars(lxw_chart_series*, lxw_chart_error_bar_axis) @nogc nothrow;
-    void chart_series_set_error_bars(lxw_series_error_bars*, uint8_t, double) @nogc nothrow;
-    void chart_series_set_error_bars_direction(lxw_series_error_bars*, uint8_t) @nogc nothrow;
-    void chart_series_set_error_bars_endcap(lxw_series_error_bars*, uint8_t) @nogc nothrow;
+    void chart_series_set_error_bars(lxw_series_error_bars*, ubyte, double) @nogc nothrow;
+    void chart_series_set_error_bars_direction(lxw_series_error_bars*, ubyte) @nogc nothrow;
+    void chart_series_set_error_bars_endcap(lxw_series_error_bars*, ubyte) @nogc nothrow;
     void chart_series_set_error_bars_line(lxw_series_error_bars*, lxw_chart_line*) @nogc nothrow;
     lxw_chart_axis* chart_axis_get(lxw_chart*, lxw_chart_axis_type) @nogc nothrow;
     void chart_axis_set_name(lxw_chart_axis*, const(char)*) @nogc nothrow;
-    void chart_axis_set_name_range(lxw_chart_axis*, const(char)*, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void chart_axis_set_name_range(lxw_chart_axis*, const(char)*, uint, ushort) @nogc nothrow;
     void chart_axis_set_name_font(lxw_chart_axis*, lxw_chart_font*) @nogc nothrow;
     void chart_axis_set_num_font(lxw_chart_axis*, lxw_chart_font*) @nogc nothrow;
     void chart_axis_set_num_format(lxw_chart_axis*, const(char)*) @nogc nothrow;
@@ -959,70 +920,69 @@ extern(C)
     void chart_axis_set_crossing(lxw_chart_axis*, double) @nogc nothrow;
     void chart_axis_set_crossing_max(lxw_chart_axis*) @nogc nothrow;
     void chart_axis_off(lxw_chart_axis*) @nogc nothrow;
-    void chart_axis_set_position(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_set_label_position(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_set_label_align(lxw_chart_axis*, uint8_t) @nogc nothrow;
+    void chart_axis_set_position(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_set_label_position(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_set_label_align(lxw_chart_axis*, ubyte) @nogc nothrow;
     void chart_axis_set_min(lxw_chart_axis*, double) @nogc nothrow;
     void chart_axis_set_max(lxw_chart_axis*, double) @nogc nothrow;
-    void chart_axis_set_log_base(lxw_chart_axis*, uint16_t) @nogc nothrow;
-    void chart_axis_set_major_tick_mark(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_set_minor_tick_mark(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_set_interval_unit(lxw_chart_axis*, uint16_t) @nogc nothrow;
-    void chart_axis_set_interval_tick(lxw_chart_axis*, uint16_t) @nogc nothrow;
+    void chart_axis_set_log_base(lxw_chart_axis*, ushort) @nogc nothrow;
+    void chart_axis_set_major_tick_mark(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_set_minor_tick_mark(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_set_interval_unit(lxw_chart_axis*, ushort) @nogc nothrow;
+    void chart_axis_set_interval_tick(lxw_chart_axis*, ushort) @nogc nothrow;
     void chart_axis_set_major_unit(lxw_chart_axis*, double) @nogc nothrow;
     void chart_axis_set_minor_unit(lxw_chart_axis*, double) @nogc nothrow;
-    void chart_axis_set_display_units(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_set_display_units_visible(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_major_gridlines_set_visible(lxw_chart_axis*, uint8_t) @nogc nothrow;
-    void chart_axis_minor_gridlines_set_visible(lxw_chart_axis*, uint8_t) @nogc nothrow;
+    void chart_axis_set_display_units(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_set_display_units_visible(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_major_gridlines_set_visible(lxw_chart_axis*, ubyte) @nogc nothrow;
+    void chart_axis_minor_gridlines_set_visible(lxw_chart_axis*, ubyte) @nogc nothrow;
     void chart_axis_major_gridlines_set_line(lxw_chart_axis*, lxw_chart_line*) @nogc nothrow;
     void chart_axis_minor_gridlines_set_line(lxw_chart_axis*, lxw_chart_line*) @nogc nothrow;
     void chart_title_set_name(lxw_chart*, const(char)*) @nogc nothrow;
-    void chart_title_set_name_range(lxw_chart*, const(char)*, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void chart_title_set_name_range(lxw_chart*, const(char)*, uint, ushort) @nogc nothrow;
     void chart_title_set_name_font(lxw_chart*, lxw_chart_font*) @nogc nothrow;
     void chart_title_off(lxw_chart*) @nogc nothrow;
-    void chart_legend_set_position(lxw_chart*, uint8_t) @nogc nothrow;
+    void chart_legend_set_position(lxw_chart*, ubyte) @nogc nothrow;
     void chart_legend_set_font(lxw_chart*, lxw_chart_font*) @nogc nothrow;
-    lxw_error chart_legend_delete_series(lxw_chart*, int16_t*) @nogc nothrow;
+    lxw_error chart_legend_delete_series(lxw_chart*, short*) @nogc nothrow;
     void chart_chartarea_set_line(lxw_chart*, lxw_chart_line*) @nogc nothrow;
     void chart_chartarea_set_fill(lxw_chart*, lxw_chart_fill*) @nogc nothrow;
     void chart_chartarea_set_pattern(lxw_chart*, lxw_chart_pattern*) @nogc nothrow;
     void chart_plotarea_set_line(lxw_chart*, lxw_chart_line*) @nogc nothrow;
     void chart_plotarea_set_fill(lxw_chart*, lxw_chart_fill*) @nogc nothrow;
     void chart_plotarea_set_pattern(lxw_chart*, lxw_chart_pattern*) @nogc nothrow;
-    void chart_set_style(lxw_chart*, uint8_t) @nogc nothrow;
+    void chart_set_style(lxw_chart*, ubyte) @nogc nothrow;
     void chart_set_table(lxw_chart*) @nogc nothrow;
-    void chart_set_table_grid(lxw_chart*, uint8_t, uint8_t, uint8_t, uint8_t) @nogc nothrow;
+    void chart_set_table_grid(lxw_chart*, ubyte, ubyte, ubyte, ubyte) @nogc nothrow;
     void chart_set_table_font(lxw_chart*, lxw_chart_font*) @nogc nothrow;
     void chart_set_up_down_bars(lxw_chart*) @nogc nothrow;
     void chart_set_up_down_bars_format(lxw_chart*, lxw_chart_line*, lxw_chart_fill*, lxw_chart_line*, lxw_chart_fill*) @nogc nothrow;
     void chart_set_drop_lines(lxw_chart*, lxw_chart_line*) @nogc nothrow;
     void chart_set_high_low_lines(lxw_chart*, lxw_chart_line*) @nogc nothrow;
-    void chart_set_series_overlap(lxw_chart*, int8_t) @nogc nothrow;
-    void chart_set_series_gap(lxw_chart*, uint16_t) @nogc nothrow;
-    void chart_show_blanks_as(lxw_chart*, uint8_t) @nogc nothrow;
+    void chart_set_series_overlap(lxw_chart*, byte) @nogc nothrow;
+    void chart_set_series_gap(lxw_chart*, ushort) @nogc nothrow;
+    void chart_show_blanks_as(lxw_chart*, ubyte) @nogc nothrow;
     void chart_show_hidden_data(lxw_chart*) @nogc nothrow;
-    void chart_set_rotation(lxw_chart*, uint16_t) @nogc nothrow;
-    void chart_set_hole_size(lxw_chart*, uint8_t) @nogc nothrow;
-    lxw_error lxw_chart_add_data_cache(lxw_series_range*, uint8_t*, uint16_t, uint8_t, uint8_t) @nogc nothrow;
-    struct internal_state;
+    void chart_set_rotation(lxw_chart*, ushort) @nogc nothrow;
+    void chart_set_hole_size(lxw_chart*, ubyte) @nogc nothrow;
+    lxw_error lxw_chart_add_data_cache(lxw_series_range*, ubyte*, ushort, ubyte, ubyte) @nogc nothrow;
     struct lxw_chartsheet
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_worksheet* worksheet;
         lxw_chart* chart;
         lxw_protection protection;
-        uint8_t is_protected;
+        ubyte is_protected;
         char* name;
         char* quoted_name;
         char* tmpdir;
-        uint32_t index;
-        uint8_t active;
-        uint8_t selected;
-        uint8_t hidden;
-        uint16_t* active_sheet;
-        uint16_t* first_sheet;
-        uint16_t rel_count;
+        uint index;
+        ubyte active;
+        ubyte selected;
+        ubyte hidden;
+        ushort* active_sheet;
+        ushort* first_sheet;
+        ushort rel_count;
         static struct _Anonymous_6
         {
             lxw_chartsheet* stqe_next;
@@ -1035,12 +995,12 @@ extern(C)
     void chartsheet_select(lxw_chartsheet*) @nogc nothrow;
     void chartsheet_hide(lxw_chartsheet*) @nogc nothrow;
     void chartsheet_set_first_sheet(lxw_chartsheet*) @nogc nothrow;
-    void chartsheet_set_tab_color(lxw_chartsheet*, lxw_color_t) @nogc nothrow;
+    void chartsheet_set_tab_color(lxw_chartsheet*, int) @nogc nothrow;
     void chartsheet_protect(lxw_chartsheet*, const(char)*, lxw_protection*) @nogc nothrow;
-    void chartsheet_set_zoom(lxw_chartsheet*, uint16_t) @nogc nothrow;
+    void chartsheet_set_zoom(lxw_chartsheet*, ushort) @nogc nothrow;
     void chartsheet_set_landscape(lxw_chartsheet*) @nogc nothrow;
     void chartsheet_set_portrait(lxw_chartsheet*) @nogc nothrow;
-    void chartsheet_set_paper(lxw_chartsheet*, uint8_t) @nogc nothrow;
+    void chartsheet_set_paper(lxw_chartsheet*, ubyte) @nogc nothrow;
     void chartsheet_set_margins(lxw_chartsheet*, double, double, double, double) @nogc nothrow;
     lxw_error chartsheet_set_header(lxw_chartsheet*, const(char)*) @nogc nothrow;
     lxw_error chartsheet_set_footer(lxw_chartsheet*, const(char)*) @nogc nothrow;
@@ -1049,7 +1009,7 @@ extern(C)
     lxw_chartsheet* lxw_chartsheet_new() @nogc nothrow;
     void lxw_chartsheet_free(lxw_chartsheet*) @nogc nothrow;
     void lxw_chartsheet_assemble_xml_file(lxw_chartsheet*) @nogc nothrow;
-    alias free_func = void function(voidpf, voidpf) @nogc nothrow;
+    int inflateReset2(z_stream_s*, int) @nogc nothrow;
     alias lxw_row_t = uint;
     alias lxw_col_t = ushort;
     enum lxw_boolean
@@ -1130,94 +1090,96 @@ extern(C)
     enum LXW_CUSTOM_INTEGER = lxw_custom_property_types.LXW_CUSTOM_INTEGER;
     enum LXW_CUSTOM_BOOLEAN = lxw_custom_property_types.LXW_CUSTOM_BOOLEAN;
     enum LXW_CUSTOM_DATETIME = lxw_custom_property_types.LXW_CUSTOM_DATETIME;
-    alias alloc_func = void* function(voidpf, uInt, uInt) @nogc nothrow;
-    alias z_crc_t = uint;
-    alias voidp = void*;
-    alias voidpf = void*;
-    alias voidpc = const(void)*;
-    alias uLongf = c_ulong;
-    alias uIntf = uint;
-    alias intf = int;
-    alias charf = char;
-    alias Bytef = ubyte;
-    alias uLong = c_ulong;
-    alias uInt = uint;
-    alias Byte = ubyte;
+    int inflateReset(z_stream_s*) @nogc nothrow;
+    int inflateCopy(z_stream_s*, z_stream_s*) @nogc nothrow;
+    int inflateSync(z_stream_s*) @nogc nothrow;
+    int inflateGetDictionary(z_stream_s*, ubyte*, uint*) @nogc nothrow;
+    int inflateSetDictionary(z_stream_s*, const(ubyte)*, uint) @nogc nothrow;
+    int deflateSetHeader(z_stream_s*, gz_header_s*) @nogc nothrow;
+    int deflatePrime(z_stream_s*, int, int) @nogc nothrow;
+    int deflatePending(z_stream_s*, uint*, int*) @nogc nothrow;
+    c_ulong deflateBound(z_stream_s*, c_ulong) @nogc nothrow;
+    int deflateTune(z_stream_s*, int, int, int, int) @nogc nothrow;
+    struct lxw_formats
+    {
+        lxw_format* stqh_first;
+        lxw_format** stqh_last;
+    }
     struct lxw_format
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_hash_table* xf_format_indices;
-        uint16_t* num_xf_formats;
-        int32_t xf_index;
-        int32_t dxf_index;
+        ushort* num_xf_formats;
+        int xf_index;
+        int dxf_index;
         char[128] num_format;
         char[128] font_name;
         char[128] font_scheme;
-        uint16_t num_format_index;
-        uint16_t font_index;
-        uint8_t has_font;
-        uint8_t has_dxf_font;
+        ushort num_format_index;
+        ushort font_index;
+        ubyte has_font;
+        ubyte has_dxf_font;
         double font_size;
-        uint8_t bold;
-        uint8_t italic;
-        lxw_color_t font_color;
-        uint8_t underline;
-        uint8_t font_strikeout;
-        uint8_t font_outline;
-        uint8_t font_shadow;
-        uint8_t font_script;
-        uint8_t font_family;
-        uint8_t font_charset;
-        uint8_t font_condense;
-        uint8_t font_extend;
-        uint8_t theme;
-        uint8_t hyperlink;
-        uint8_t hidden;
-        uint8_t locked;
-        uint8_t text_h_align;
-        uint8_t text_wrap;
-        uint8_t text_v_align;
-        uint8_t text_justlast;
-        int16_t rotation;
-        lxw_color_t fg_color;
-        lxw_color_t bg_color;
-        uint8_t pattern;
-        uint8_t has_fill;
-        uint8_t has_dxf_fill;
-        int32_t fill_index;
-        int32_t fill_count;
-        int32_t border_index;
-        uint8_t has_border;
-        uint8_t has_dxf_border;
-        int32_t border_count;
-        uint8_t bottom;
-        uint8_t diag_border;
-        uint8_t diag_type;
-        uint8_t left;
-        uint8_t right;
-        uint8_t top;
-        lxw_color_t bottom_color;
-        lxw_color_t diag_color;
-        lxw_color_t left_color;
-        lxw_color_t right_color;
-        lxw_color_t top_color;
-        uint8_t indent;
-        uint8_t shrink;
-        uint8_t merge_range;
-        uint8_t reading_order;
-        uint8_t just_distrib;
-        uint8_t color_indexed;
-        uint8_t font_only;
+        ubyte bold;
+        ubyte italic;
+        int font_color;
+        ubyte underline;
+        ubyte font_strikeout;
+        ubyte font_outline;
+        ubyte font_shadow;
+        ubyte font_script;
+        ubyte font_family;
+        ubyte font_charset;
+        ubyte font_condense;
+        ubyte font_extend;
+        ubyte theme;
+        ubyte hyperlink;
+        ubyte hidden;
+        ubyte locked;
+        ubyte text_h_align;
+        ubyte text_wrap;
+        ubyte text_v_align;
+        ubyte text_justlast;
+        short rotation;
+        int fg_color;
+        int bg_color;
+        ubyte pattern;
+        ubyte has_fill;
+        ubyte has_dxf_fill;
+        int fill_index;
+        int fill_count;
+        int border_index;
+        ubyte has_border;
+        ubyte has_dxf_border;
+        int border_count;
+        ubyte bottom;
+        ubyte diag_border;
+        ubyte diag_type;
+        ubyte left;
+        ubyte right;
+        ubyte top;
+        int bottom_color;
+        int diag_color;
+        int left_color;
+        int right_color;
+        int top_color;
+        ubyte indent;
+        ubyte shrink;
+        ubyte merge_range;
+        ubyte reading_order;
+        ubyte just_distrib;
+        ubyte color_indexed;
+        ubyte font_only;
         static struct _Anonymous_7
         {
             lxw_format* stqe_next;
         }
         _Anonymous_7 list_pointers;
     }
-    struct lxw_formats
+    struct lxw_tuples
     {
-        lxw_format* stqh_first;
-        lxw_format** stqh_last;
+        lxw_tuple* stqh_first;
+        lxw_tuple** stqh_last;
     }
     struct lxw_tuple
     {
@@ -1229,10 +1191,10 @@ extern(C)
         }
         _Anonymous_8 list_pointers;
     }
-    struct lxw_tuples
+    struct lxw_custom_properties
     {
-        lxw_tuple* stqh_first;
-        lxw_tuple** stqh_last;
+        lxw_custom_property* stqh_first;
+        lxw_custom_property** stqh_last;
     }
     struct lxw_custom_property
     {
@@ -1242,8 +1204,8 @@ extern(C)
         {
             char* string;
             double number;
-            int32_t integer;
-            uint8_t boolean;
+            int integer;
+            ubyte boolean;
             lxw_datetime datetime;
         }
         _Anonymous_9 u;
@@ -1253,15 +1215,10 @@ extern(C)
         }
         _Anonymous_10 list_pointers;
     }
-    struct lxw_custom_properties
-    {
-        lxw_custom_property* stqh_first;
-        lxw_custom_property** stqh_last;
-    }
-    alias z_size_t = c_ulong;
+    int deflateParams(z_stream_s*, int, int) @nogc nothrow;
     struct lxw_content_types
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_tuples* default_types;
         lxw_tuples* overrides;
     }
@@ -1279,7 +1236,7 @@ extern(C)
     void lxw_ct_add_custom_properties(lxw_content_types*) @nogc nothrow;
     struct lxw_core
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_doc_properties* properties;
     }
     lxw_core* lxw_core_new() @nogc nothrow;
@@ -1287,29 +1244,25 @@ extern(C)
     void lxw_core_assemble_xml_file(lxw_core*) @nogc nothrow;
     struct lxw_custom
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_custom_properties* custom_properties;
-        uint32_t pid;
+        uint pid;
     }
     lxw_custom* lxw_custom_new() @nogc nothrow;
     void lxw_custom_free(lxw_custom*) @nogc nothrow;
     void lxw_custom_assemble_xml_file(lxw_custom*) @nogc nothrow;
-    struct lxw_drawing_objects
-    {
-        lxw_drawing_object* stqh_first;
-        lxw_drawing_object** stqh_last;
-    }
+    int deflateReset(z_stream_s*) @nogc nothrow;
     struct lxw_drawing_object
     {
-        uint8_t anchor_type;
-        uint8_t edit_as;
+        ubyte anchor_type;
+        ubyte edit_as;
         lxw_drawing_coords from;
         lxw_drawing_coords to;
-        uint32_t col_absolute;
-        uint32_t row_absolute;
-        uint32_t width;
-        uint32_t height;
-        uint8_t shape;
+        uint col_absolute;
+        uint row_absolute;
+        uint width;
+        uint height;
+        ubyte shape;
         char* description;
         char* url;
         char* tip;
@@ -1318,6 +1271,11 @@ extern(C)
             lxw_drawing_object* stqe_next;
         }
         _Anonymous_11 list_pointers;
+    }
+    struct lxw_drawing_objects
+    {
+        lxw_drawing_object* stqh_first;
+        lxw_drawing_object** stqh_last;
     }
     enum lxw_drawing_types
     {
@@ -1363,16 +1321,16 @@ extern(C)
     enum LXW_IMAGE_BMP = image_types.LXW_IMAGE_BMP;
     struct lxw_drawing_coords
     {
-        uint32_t col;
-        uint32_t row;
+        uint col;
+        uint row;
         double col_offset;
         double row_offset;
     }
     struct lxw_drawing
     {
-        FILE* file;
-        uint8_t embedded;
-        uint8_t orientation;
+        _IO_FILE* file;
+        ubyte embedded;
+        ubyte orientation;
         lxw_drawing_objects* drawing_objects;
     }
     lxw_drawing* lxw_drawing_new() @nogc nothrow;
@@ -1381,6 +1339,8 @@ extern(C)
     void lxw_free_drawing_object(lxw_drawing_object*) @nogc nothrow;
     void lxw_add_drawing_object(lxw_drawing*, lxw_drawing_object*) @nogc nothrow;
     alias lxw_color_t = int;
+    int deflateCopy(z_stream_s*, z_stream_s*) @nogc nothrow;
+    int deflateGetDictionary(z_stream_s*, ubyte*, uint*) @nogc nothrow;
     enum lxw_format_underlines
     {
         LXW_UNDERLINE_SINGLE = 1,
@@ -1548,94 +1508,89 @@ extern(C)
     {
         char[128] font_name;
         double font_size;
-        uint8_t bold;
-        uint8_t italic;
-        uint8_t underline;
-        uint8_t font_strikeout;
-        uint8_t font_outline;
-        uint8_t font_shadow;
-        uint8_t font_script;
-        uint8_t font_family;
-        uint8_t font_charset;
-        uint8_t font_condense;
-        uint8_t font_extend;
-        lxw_color_t font_color;
+        ubyte bold;
+        ubyte italic;
+        ubyte underline;
+        ubyte font_strikeout;
+        ubyte font_outline;
+        ubyte font_shadow;
+        ubyte font_script;
+        ubyte font_family;
+        ubyte font_charset;
+        ubyte font_condense;
+        ubyte font_extend;
+        int font_color;
     }
     struct lxw_border
     {
-        uint8_t bottom;
-        uint8_t diag_border;
-        uint8_t diag_type;
-        uint8_t left;
-        uint8_t right;
-        uint8_t top;
-        lxw_color_t bottom_color;
-        lxw_color_t diag_color;
-        lxw_color_t left_color;
-        lxw_color_t right_color;
-        lxw_color_t top_color;
+        ubyte bottom;
+        ubyte diag_border;
+        ubyte diag_type;
+        ubyte left;
+        ubyte right;
+        ubyte top;
+        int bottom_color;
+        int diag_color;
+        int left_color;
+        int right_color;
+        int top_color;
     }
     struct lxw_fill
     {
-        lxw_color_t fg_color;
-        lxw_color_t bg_color;
-        uint8_t pattern;
+        int fg_color;
+        int bg_color;
+        ubyte pattern;
     }
     lxw_format* lxw_format_new() @nogc nothrow;
     void lxw_format_free(lxw_format*) @nogc nothrow;
-    int32_t lxw_format_get_xf_index(lxw_format*) @nogc nothrow;
+    int lxw_format_get_xf_index(lxw_format*) @nogc nothrow;
     lxw_font* lxw_format_get_font_key(lxw_format*) @nogc nothrow;
     lxw_border* lxw_format_get_border_key(lxw_format*) @nogc nothrow;
     lxw_fill* lxw_format_get_fill_key(lxw_format*) @nogc nothrow;
-    lxw_color_t lxw_format_check_color(lxw_color_t) @nogc nothrow;
+    int lxw_format_check_color(int) @nogc nothrow;
     void format_set_font_name(lxw_format*, const(char)*) @nogc nothrow;
     void format_set_font_size(lxw_format*, double) @nogc nothrow;
-    void format_set_font_color(lxw_format*, lxw_color_t) @nogc nothrow;
+    void format_set_font_color(lxw_format*, int) @nogc nothrow;
     void format_set_bold(lxw_format*) @nogc nothrow;
     void format_set_italic(lxw_format*) @nogc nothrow;
-    void format_set_underline(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_underline(lxw_format*, ubyte) @nogc nothrow;
     void format_set_font_strikeout(lxw_format*) @nogc nothrow;
-    void format_set_font_script(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_font_script(lxw_format*, ubyte) @nogc nothrow;
     void format_set_num_format(lxw_format*, const(char)*) @nogc nothrow;
-    void format_set_num_format_index(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_num_format_index(lxw_format*, ubyte) @nogc nothrow;
     void format_set_unlocked(lxw_format*) @nogc nothrow;
     void format_set_hidden(lxw_format*) @nogc nothrow;
-    void format_set_align(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_align(lxw_format*, ubyte) @nogc nothrow;
     void format_set_text_wrap(lxw_format*) @nogc nothrow;
-    void format_set_rotation(lxw_format*, int16_t) @nogc nothrow;
-    void format_set_indent(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_rotation(lxw_format*, short) @nogc nothrow;
+    void format_set_indent(lxw_format*, ubyte) @nogc nothrow;
     void format_set_shrink(lxw_format*) @nogc nothrow;
-    void format_set_pattern(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_bg_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_fg_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_border(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_bottom(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_top(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_left(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_right(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_border_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_bottom_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_top_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_left_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_right_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_diag_type(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_diag_color(lxw_format*, lxw_color_t) @nogc nothrow;
-    void format_set_diag_border(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_pattern(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_bg_color(lxw_format*, int) @nogc nothrow;
+    void format_set_fg_color(lxw_format*, int) @nogc nothrow;
+    void format_set_border(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_bottom(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_top(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_left(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_right(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_border_color(lxw_format*, int) @nogc nothrow;
+    void format_set_bottom_color(lxw_format*, int) @nogc nothrow;
+    void format_set_top_color(lxw_format*, int) @nogc nothrow;
+    void format_set_left_color(lxw_format*, int) @nogc nothrow;
+    void format_set_right_color(lxw_format*, int) @nogc nothrow;
+    void format_set_diag_type(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_diag_color(lxw_format*, int) @nogc nothrow;
+    void format_set_diag_border(lxw_format*, ubyte) @nogc nothrow;
     void format_set_font_outline(lxw_format*) @nogc nothrow;
     void format_set_font_shadow(lxw_format*) @nogc nothrow;
-    void format_set_font_family(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_font_charset(lxw_format*, uint8_t) @nogc nothrow;
+    void format_set_font_family(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_font_charset(lxw_format*, ubyte) @nogc nothrow;
     void format_set_font_scheme(lxw_format*, const(char)*) @nogc nothrow;
     void format_set_font_condense(lxw_format*) @nogc nothrow;
     void format_set_font_extend(lxw_format*) @nogc nothrow;
-    void format_set_reading_order(lxw_format*, uint8_t) @nogc nothrow;
-    void format_set_theme(lxw_format*, uint8_t) @nogc nothrow;
-    alias fsfilcnt_t = c_ulong;
-    struct lxw_hash_order_list
-    {
-        lxw_hash_element* stqh_first;
-        lxw_hash_element** stqh_last;
-    }
+    void format_set_reading_order(lxw_format*, ubyte) @nogc nothrow;
+    void format_set_theme(lxw_format*, ubyte) @nogc nothrow;
+    int deflateSetDictionary(z_stream_s*, const(ubyte)*, uint) @nogc nothrow;
     struct lxw_hash_element
     {
         void* key;
@@ -1651,43 +1606,46 @@ extern(C)
         }
         _Anonymous_13 lxw_hash_list_pointers;
     }
+    struct lxw_hash_order_list
+    {
+        lxw_hash_element* stqh_first;
+        lxw_hash_element** stqh_last;
+    }
     struct lxw_hash_bucket_list
     {
         lxw_hash_element* slh_first;
     }
     struct lxw_hash_table
     {
-        uint32_t num_buckets;
-        uint32_t used_buckets;
-        uint32_t unique_count;
-        uint8_t free_key;
-        uint8_t free_value;
+        uint num_buckets;
+        uint used_buckets;
+        uint unique_count;
+        ubyte free_key;
+        ubyte free_value;
         lxw_hash_order_list* order_list;
         lxw_hash_bucket_list** buckets;
     }
-    lxw_hash_element* lxw_hash_key_exists(lxw_hash_table*, void*, size_t) @nogc nothrow;
-    lxw_hash_element* lxw_insert_hash_element(lxw_hash_table*, void*, void*, size_t) @nogc nothrow;
-    lxw_hash_table* lxw_hash_new(uint32_t, uint8_t, uint8_t) @nogc nothrow;
+    lxw_hash_element* lxw_hash_key_exists(lxw_hash_table*, void*, c_ulong) @nogc nothrow;
+    lxw_hash_element* lxw_insert_hash_element(lxw_hash_table*, void*, void*, c_ulong) @nogc nothrow;
+    lxw_hash_table* lxw_hash_new(uint, ubyte, ubyte) @nogc nothrow;
     void lxw_hash_free(lxw_hash_table*) @nogc nothrow;
-    alias fsblkcnt_t = c_ulong;
-    alias blkcnt_t = c_long;
-    alias blksize_t = c_long;
     struct lxw_packager
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_workbook* workbook;
-        size_t buffer_size;
-        zipFile zipfile;
+        c_ulong buffer_size;
+        void* zipfile;
         zip_fileinfo zipfile_info;
         char* filename;
         char* buffer;
         char* tmpdir;
-        uint16_t chart_count;
-        uint16_t drawing_count;
+        ushort chart_count;
+        ushort drawing_count;
     }
     lxw_packager* lxw_packager_new(const(char)*, char*) @nogc nothrow;
     void lxw_packager_free(lxw_packager*) @nogc nothrow;
     lxw_error lxw_create_package(lxw_packager*) @nogc nothrow;
+    int inflateEnd(z_stream_s*) @nogc nothrow;
     struct lxw_rel_tuple
     {
         char* type;
@@ -1701,8 +1659,8 @@ extern(C)
     }
     struct lxw_relationships
     {
-        FILE* file;
-        uint32_t rel_id;
+        _IO_FILE* file;
+        uint rel_id;
         lxw_rel_tuples* relationships;
     }
     lxw_relationships* lxw_relationships_new() @nogc nothrow;
@@ -1712,11 +1670,15 @@ extern(C)
     void lxw_add_package_relationship(lxw_relationships*, const(char)*, const(char)*) @nogc nothrow;
     void lxw_add_ms_package_relationship(lxw_relationships*, const(char)*, const(char)*) @nogc nothrow;
     void lxw_add_worksheet_relationship(lxw_relationships*, const(char)*, const(char)*, const(char)*) @nogc nothrow;
+    struct sst_rb_tree
+    {
+        sst_element* rbh_root;
+    }
     struct sst_element
     {
-        uint32_t index;
+        uint index;
         char* string;
-        uint8_t is_rich_string;
+        ubyte is_rich_string;
         static struct _Anonymous_15
         {
             sst_element* stqe_next;
@@ -1731,10 +1693,6 @@ extern(C)
         }
         _Anonymous_16 sst_tree_pointers;
     }
-    struct sst_rb_tree
-    {
-        sst_element* rbh_root;
-    }
     struct sst_order_list
     {
         sst_element* stqh_first;
@@ -1742,25 +1700,26 @@ extern(C)
     }
     struct lxw_sst
     {
-        FILE* file;
-        uint32_t string_count;
-        uint32_t unique_count;
+        _IO_FILE* file;
+        uint string_count;
+        uint unique_count;
         sst_order_list* order_list;
         sst_rb_tree* rb_tree;
     }
     lxw_sst* lxw_sst_new() @nogc nothrow;
     void lxw_sst_free(lxw_sst*) @nogc nothrow;
-    sst_element* lxw_get_sst_index(lxw_sst*, const(char)*, uint8_t) @nogc nothrow;
+    sst_element* lxw_get_sst_index(lxw_sst*, const(char)*, ubyte) @nogc nothrow;
     void lxw_sst_assemble_xml_file(lxw_sst*) @nogc nothrow;
+    int inflate(z_stream_s*, int) @nogc nothrow;
     struct lxw_styles
     {
-        FILE* file;
-        uint32_t font_count;
-        uint32_t xf_count;
-        uint32_t dxf_count;
-        uint32_t num_format_count;
-        uint32_t border_count;
-        uint32_t fill_count;
+        _IO_FILE* file;
+        uint font_count;
+        uint xf_count;
+        uint dxf_count;
+        uint num_format_count;
+        uint border_count;
+        uint fill_count;
         lxw_formats* xf_formats;
         lxw_formats* dxf_formats;
     }
@@ -1771,314 +1730,267 @@ extern(C)
     void lxw_styles_write_rich_font(lxw_styles*, lxw_format*) @nogc nothrow;
     struct lxw_theme
     {
-        FILE* file;
+        _IO_FILE* file;
     }
     lxw_theme* lxw_theme_new() @nogc nothrow;
     void lxw_theme_free(lxw_theme*) @nogc nothrow;
     void lxw_theme_xml_declaration(lxw_theme*) @nogc nothrow;
     void lxw_theme_assemble_xml_file(lxw_theme*) @nogc nothrow;
-    alias register_t = c_long;
-    alias u_int64_t = c_ulong;
-    alias u_int32_t = uint;
+    int deflateEnd(z_stream_s*) @nogc nothrow;
     alias ZPOS64_T = ulong;
-    alias u_int16_t = ushort;
-    alias u_int8_t = ubyte;
-    alias open_file_func = void* function(voidpf, const(char)*, int) @nogc nothrow;
-    alias read_file_func = c_ulong function(voidpf, voidpf, void*, uLong) @nogc nothrow;
-    alias write_file_func = c_ulong function(voidpf, voidpf, const(void)*, uLong) @nogc nothrow;
-    alias close_file_func = int function(voidpf, voidpf) @nogc nothrow;
-    alias testerror_file_func = int function(voidpf, voidpf) @nogc nothrow;
-    alias tell_file_func = c_long function(voidpf, voidpf) @nogc nothrow;
-    alias seek_file_func = c_long function(voidpf, voidpf, uLong, int) @nogc nothrow;
+    int deflate(z_stream_s*, int) @nogc nothrow;
+    const(char)* zlibVersion() @nogc nothrow;
+    alias gz_headerp = gz_header_s*;
+    struct gz_header_s
+    {
+        int text;
+        c_ulong time;
+        int xflags;
+        int os;
+        ubyte* extra;
+        uint extra_len;
+        uint extra_max;
+        ubyte* name;
+        uint name_max;
+        ubyte* comment;
+        uint comm_max;
+        int hcrc;
+        int done;
+    }
+    alias open_file_func = void* function(void*, const(char)*, int);
+    alias read_file_func = c_ulong function(void*, void*, void*, c_ulong);
+    alias write_file_func = c_ulong function(void*, void*, const(void)*, c_ulong);
+    alias close_file_func = int function(void*, void*);
+    alias testerror_file_func = int function(void*, void*);
+    alias tell_file_func = c_long function(void*, void*);
+    alias seek_file_func = c_long function(void*, void*, c_ulong, int);
     alias zlib_filefunc_def = zlib_filefunc_def_s;
     struct zlib_filefunc_def_s
     {
-        open_file_func zopen_file;
-        read_file_func zread_file;
-        write_file_func zwrite_file;
-        tell_file_func ztell_file;
-        seek_file_func zseek_file;
-        close_file_func zclose_file;
-        testerror_file_func zerror_file;
-        voidpf opaque;
+        void* function(void*, const(char)*, int) zopen_file;
+        c_ulong function(void*, void*, void*, c_ulong) zread_file;
+        c_ulong function(void*, void*, const(void)*, c_ulong) zwrite_file;
+        c_long function(void*, void*) ztell_file;
+        c_long function(void*, void*, c_ulong, int) zseek_file;
+        int function(void*, void*) zclose_file;
+        int function(void*, void*) zerror_file;
+        void* opaque;
     }
-    alias tell64_file_func = ulong function(voidpf, voidpf) @nogc nothrow;
-    alias seek64_file_func = c_long function(voidpf, voidpf, ZPOS64_T, int) @nogc nothrow;
-    alias open64_file_func = void* function(voidpf, const(void)*, int) @nogc nothrow;
+    alias tell64_file_func = ulong function(void*, void*);
+    alias seek64_file_func = c_long function(void*, void*, ulong, int);
+    alias open64_file_func = void* function(void*, const(void)*, int);
     alias zlib_filefunc64_def = zlib_filefunc64_def_s;
     struct zlib_filefunc64_def_s
     {
-        open64_file_func zopen64_file;
-        read_file_func zread_file;
-        write_file_func zwrite_file;
-        tell64_file_func ztell64_file;
-        seek64_file_func zseek64_file;
-        close_file_func zclose_file;
-        testerror_file_func zerror_file;
-        voidpf opaque;
+        void* function(void*, const(void)*, int) zopen64_file;
+        c_ulong function(void*, void*, void*, c_ulong) zread_file;
+        c_ulong function(void*, void*, const(void)*, c_ulong) zwrite_file;
+        ulong function(void*, void*) ztell64_file;
+        c_long function(void*, void*, ulong, int) zseek64_file;
+        int function(void*, void*) zclose_file;
+        int function(void*, void*) zerror_file;
+        void* opaque;
     }
-    void fill_fopen64_filefunc(zlib_filefunc64_def*) @nogc nothrow;
-    void fill_fopen_filefunc(zlib_filefunc_def*) @nogc nothrow;
+    void fill_fopen64_filefunc(zlib_filefunc64_def_s*) @nogc nothrow;
+    void fill_fopen_filefunc(zlib_filefunc_def_s*) @nogc nothrow;
     alias zlib_filefunc64_32_def = zlib_filefunc64_32_def_s;
     struct zlib_filefunc64_32_def_s
     {
-        zlib_filefunc64_def zfile_func64;
-        open_file_func zopen32_file;
-        tell_file_func ztell32_file;
-        seek_file_func zseek32_file;
+        zlib_filefunc64_def_s zfile_func64;
+        void* function(void*, const(char)*, int) zopen32_file;
+        c_long function(void*, void*) ztell32_file;
+        c_long function(void*, void*, c_ulong, int) zseek32_file;
     }
-    voidpf call_zopen64(const(zlib_filefunc64_32_def)*, const(void)*, int) @nogc nothrow;
-    c_long call_zseek64(const(zlib_filefunc64_32_def)*, voidpf, ZPOS64_T, int) @nogc nothrow;
-    ZPOS64_T call_ztell64(const(zlib_filefunc64_32_def)*, voidpf) @nogc nothrow;
-    void fill_zlib_filefunc64_32_def_from_filefunc32(zlib_filefunc64_32_def*, const(zlib_filefunc_def)*) @nogc nothrow;
-    alias key_t = int;
-    alias caddr_t = char*;
-    alias daddr_t = int;
-    alias id_t = uint;
-    alias pid_t = int;
-    alias uid_t = uint;
-    alias nlink_t = c_ulong;
-    alias mode_t = uint;
-    alias gid_t = uint;
-    alias dev_t = c_ulong;
-    alias ino_t = c_ulong;
-    alias loff_t = c_long;
-    alias fsid_t = __fsid_t;
-    alias u_quad_t = c_ulong;
-    alias quad_t = c_long;
-    alias u_long = c_ulong;
-    alias u_int = uint;
-    alias u_short = ushort;
-    alias u_char = ubyte;
-    __dev_t gnu_dev_makedev(uint, uint) @nogc nothrow;
-    uint gnu_dev_minor(__dev_t) @nogc nothrow;
-    uint gnu_dev_major(__dev_t) @nogc nothrow;
-    int pselect(int, fd_set*, fd_set*, fd_set*, const(timespec)*, const(__sigset_t)*) @nogc nothrow;
-    int select(int, fd_set*, fd_set*, fd_set*, timeval*) @nogc nothrow;
-    alias fd_mask = c_long;
-    struct fd_set
+    alias gz_header = gz_header_s;
+    alias z_streamp = z_stream_s*;
+    void* call_zopen64(const(zlib_filefunc64_32_def_s)*, const(void)*, int) @nogc nothrow;
+    c_long call_zseek64(const(zlib_filefunc64_32_def_s)*, void*, ulong, int) @nogc nothrow;
+    ulong call_ztell64(const(zlib_filefunc64_32_def_s)*, void*) @nogc nothrow;
+    void fill_zlib_filefunc64_32_def_from_filefunc32(zlib_filefunc64_32_def_s*, const(zlib_filefunc_def_s)*) @nogc nothrow;
+    struct z_stream_s
     {
-        __fd_mask[16] __fds_bits;
+        ubyte* next_in;
+        uint avail_in;
+        c_ulong total_in;
+        ubyte* next_out;
+        uint avail_out;
+        c_ulong total_out;
+        char* msg;
+        internal_state* state;
+        void* function(void*, uint, uint) zalloc;
+        void function(void*, void*) zfree;
+        void* opaque;
+        int data_type;
+        c_ulong adler;
+        c_ulong reserved;
     }
-    alias __fd_mask = c_long;
-    alias suseconds_t = c_long;
-    enum _Anonymous_17
-    {
-        P_ALL = 0,
-        P_PID = 1,
-        P_PGID = 2,
-    }
-    enum P_ALL = _Anonymous_17.P_ALL;
-    enum P_PID = _Anonymous_17.P_PID;
-    enum P_PGID = _Anonymous_17.P_PGID;
-    alias idtype_t = _Anonymous_17;
-    static __uint64_t __uint64_identity(__uint64_t) @nogc nothrow;
-    static __uint32_t __uint32_identity(__uint32_t) @nogc nothrow;
-    static __uint16_t __uint16_identity(__uint16_t) @nogc nothrow;
-    alias timer_t = void*;
-    alias time_t = c_long;
-    struct tm
-    {
-        int tm_sec;
-        int tm_min;
-        int tm_hour;
-        int tm_mday;
-        int tm_mon;
-        int tm_year;
-        int tm_wday;
-        int tm_yday;
-        int tm_isdst;
-        c_long tm_gmtoff;
-        const(char)* tm_zone;
-    }
-    struct timeval
-    {
-        __time_t tv_sec;
-        __suseconds_t tv_usec;
-    }
-    struct timespec
-    {
-        __time_t tv_sec;
-        __syscall_slong_t tv_nsec;
-    }
-    struct itimerspec
-    {
-        timespec it_interval;
-        timespec it_value;
-    }
-    alias sigset_t = __sigset_t;
-    alias locale_t = __locale_struct*;
-    alias clockid_t = int;
-    alias clock_t = c_long;
+    alias z_stream = z_stream_s;
+    struct internal_state;
+    alias free_func = void function(void*, void*);
+    alias alloc_func = void* function(void*, uint, uint);
+    alias z_crc_t = uint;
+    alias voidp = void*;
+    alias voidpf = void*;
+    alias voidpc = const(void)*;
+    alias uLongf = c_ulong;
+    alias uIntf = uint;
+    alias intf = int;
+    alias charf = char;
+    alias Bytef = ubyte;
+    alias uLong = c_ulong;
+    alias uInt = uint;
+    alias Byte = ubyte;
+    alias z_size_t = c_ulong;
+    int getentropy(void*, c_ulong) @nogc nothrow;
+    char* crypt(const(char)*, const(char)*) @nogc nothrow;
+    int fdatasync(int) @nogc nothrow;
+    int lockf(int, int, c_long) @nogc nothrow;
+    c_long syscall(c_long, ...) @nogc nothrow;
+    void* sbrk(c_long) @nogc nothrow;
+    int brk(void*) @nogc nothrow;
+    int ftruncate(int, c_long) @nogc nothrow;
+    int truncate(const(char)*, c_long) @nogc nothrow;
+    int getdtablesize() @nogc nothrow;
+    int getpagesize() @nogc nothrow;
+    void sync() @nogc nothrow;
+    c_long gethostid() @nogc nothrow;
+    int fsync(int) @nogc nothrow;
+    char* getpass(const(char)*) @nogc nothrow;
+    int chroot(const(char)*) @nogc nothrow;
+    int daemon(int, int) @nogc nothrow;
+    void setusershell() @nogc nothrow;
+    void endusershell() @nogc nothrow;
+    char* getusershell() @nogc nothrow;
+    int acct(const(char)*) @nogc nothrow;
+    int profil(ushort*, c_ulong, c_ulong, uint) @nogc nothrow;
+    int revoke(const(char)*) @nogc nothrow;
+    int vhangup() @nogc nothrow;
+    int setdomainname(const(char)*, c_ulong) @nogc nothrow;
+    int getdomainname(char*, c_ulong) @nogc nothrow;
+    int sethostid(c_long) @nogc nothrow;
+    int sethostname(const(char)*, c_ulong) @nogc nothrow;
+    int gethostname(char*, c_ulong) @nogc nothrow;
+    int setlogin(const(char)*) @nogc nothrow;
+    int getlogin_r(char*, c_ulong) @nogc nothrow;
+    char* getlogin() @nogc nothrow;
+    int tcsetpgrp(int, int) @nogc nothrow;
+    int tcgetpgrp(int) @nogc nothrow;
+    int rmdir(const(char)*) @nogc nothrow;
+    int unlinkat(int, const(char)*, int) @nogc nothrow;
     alias zipFile = void*;
-    struct __sigset_t
-    {
-        c_ulong[16] __val;
-    }
-    struct __mbstate_t
-    {
-        int __count;
-        static union _Anonymous_18
-        {
-            uint __wch;
-            char[4] __wchb;
-        }
-        _Anonymous_18 __value;
-    }
+    int unlink(const(char)*) @nogc nothrow;
+    c_long readlinkat(int, const(char)*, char*, c_ulong) @nogc nothrow;
     alias tm_zip = tm_zip_s;
     struct tm_zip_s
     {
-        uInt tm_sec;
-        uInt tm_min;
-        uInt tm_hour;
-        uInt tm_mday;
-        uInt tm_mon;
-        uInt tm_year;
+        uint tm_sec;
+        uint tm_min;
+        uint tm_hour;
+        uint tm_mday;
+        uint tm_mon;
+        uint tm_year;
     }
     struct zip_fileinfo
     {
-        tm_zip tmz_date;
-        uLong dosDate;
-        uLong internal_fa;
-        uLong external_fa;
+        tm_zip_s tmz_date;
+        c_ulong dosDate;
+        c_ulong internal_fa;
+        c_ulong external_fa;
     }
     alias zipcharpc = const(char)*;
-    alias __locale_t = __locale_struct*;
-    struct __locale_struct
-    {
-        __locale_data*[13] __locales;
-        const(ushort)* __ctype_b;
-        const(int)* __ctype_tolower;
-        const(int)* __ctype_toupper;
-        const(char)*[13] __names;
-    }
-    alias __FILE = _IO_FILE;
-    zipFile zipOpen(const(char)*, int) @nogc nothrow;
-    zipFile zipOpen64(const(void)*, int) @nogc nothrow;
-    zipFile zipOpen2(const(char)*, int, zipcharpc*, zlib_filefunc_def*) @nogc nothrow;
-    zipFile zipOpen2_64(const(void)*, int, zipcharpc*, zlib_filefunc64_def*) @nogc nothrow;
-    int zipOpenNewFileInZip(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int) @nogc nothrow;
-    int zipOpenNewFileInZip64(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int) @nogc nothrow;
-    int zipOpenNewFileInZip2(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int) @nogc nothrow;
-    int zipOpenNewFileInZip2_64(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int, int) @nogc nothrow;
-    int zipOpenNewFileInZip3(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int, int, int, int, const(char)*, uLong) @nogc nothrow;
-    int zipOpenNewFileInZip3_64(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int, int, int, int, const(char)*, uLong, int) @nogc nothrow;
-    int zipOpenNewFileInZip4(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int, int, int, int, const(char)*, uLong, uLong, uLong) @nogc nothrow;
-    int zipOpenNewFileInZip4_64(zipFile, const(char)*, const(zip_fileinfo)*, const(void)*, uInt, const(void)*, uInt, const(char)*, int, int, int, int, int, int, const(char)*, uLong, uLong, uLong, int) @nogc nothrow;
-    int zipWriteInFileInZip(zipFile, const(void)*, uint) @nogc nothrow;
-    int zipCloseFileInZip(zipFile) @nogc nothrow;
-    int zipCloseFileInZipRaw(zipFile, uLong, uLong) @nogc nothrow;
-    int zipCloseFileInZipRaw64(zipFile, ZPOS64_T, uLong) @nogc nothrow;
-    int zipClose(zipFile, const(char)*) @nogc nothrow;
+    int symlinkat(const(char)*, int, const(char)*) @nogc nothrow;
+    void* zipOpen(const(char)*, int) @nogc nothrow;
+    void* zipOpen64(const(void)*, int) @nogc nothrow;
+    void* zipOpen2(const(char)*, int, const(char)**, zlib_filefunc_def_s*) @nogc nothrow;
+    void* zipOpen2_64(const(void)*, int, const(char)**, zlib_filefunc64_def_s*) @nogc nothrow;
+    int zipOpenNewFileInZip(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int) @nogc nothrow;
+    int zipOpenNewFileInZip64(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int) @nogc nothrow;
+    int zipOpenNewFileInZip2(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int) @nogc nothrow;
+    int zipOpenNewFileInZip2_64(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int, int) @nogc nothrow;
+    int zipOpenNewFileInZip3(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int, int, int, int, const(char)*, c_ulong) @nogc nothrow;
+    int zipOpenNewFileInZip3_64(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int, int, int, int, const(char)*, c_ulong, int) @nogc nothrow;
+    int zipOpenNewFileInZip4(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int, int, int, int, const(char)*, c_ulong, c_ulong, c_ulong) @nogc nothrow;
+    int zipOpenNewFileInZip4_64(void*, const(char)*, const(zip_fileinfo)*, const(void)*, uint, const(void)*, uint, const(char)*, int, int, int, int, int, int, const(char)*, c_ulong, c_ulong, c_ulong, int) @nogc nothrow;
+    int zipWriteInFileInZip(void*, const(void)*, uint) @nogc nothrow;
+    int zipCloseFileInZip(void*) @nogc nothrow;
+    int zipCloseFileInZipRaw(void*, c_ulong, c_ulong) @nogc nothrow;
+    int zipCloseFileInZipRaw64(void*, ulong, c_ulong) @nogc nothrow;
+    int zipClose(void*, const(char)*) @nogc nothrow;
     int zipRemoveExtraInfoBlock(char*, int*, short) @nogc nothrow;
-    struct _IO_FILE
-    {
-        int _flags;
-        char* _IO_read_ptr;
-        char* _IO_read_end;
-        char* _IO_read_base;
-        char* _IO_write_base;
-        char* _IO_write_ptr;
-        char* _IO_write_end;
-        char* _IO_buf_base;
-        char* _IO_buf_end;
-        char* _IO_save_base;
-        char* _IO_backup_base;
-        char* _IO_save_end;
-        _IO_marker* _markers;
-        _IO_FILE* _chain;
-        int _fileno;
-        int _flags2;
-        __off_t _old_offset;
-        ushort _cur_column;
-        byte _vtable_offset;
-        char[1] _shortbuf;
-        _IO_lock_t* _lock;
-        __off64_t _offset;
-        void* __pad1;
-        void* __pad2;
-        void* __pad3;
-        void* __pad4;
-        size_t __pad5;
-        int _mode;
-        char[20] _unused2;
-    }
-    alias FILE = _IO_FILE;
-    alias __sig_atomic_t = int;
     const(char)* lxw_version() @nogc nothrow;
     char* lxw_strerror(lxw_error) @nogc nothrow;
     char* lxw_quote_sheetname(const(char)*) @nogc nothrow;
-    void lxw_col_to_name(char*, lxw_col_t, uint8_t) @nogc nothrow;
-    void lxw_rowcol_to_cell(char*, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void lxw_rowcol_to_cell_abs(char*, lxw_row_t, lxw_col_t, uint8_t, uint8_t) @nogc nothrow;
-    void lxw_rowcol_to_range(char*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void lxw_rowcol_to_range_abs(char*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void lxw_rowcol_to_formula_abs(char*, const(char)*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    uint32_t lxw_name_to_row(const(char)*) @nogc nothrow;
-    uint16_t lxw_name_to_col(const(char)*) @nogc nothrow;
-    uint32_t lxw_name_to_row_2(const(char)*) @nogc nothrow;
-    uint16_t lxw_name_to_col_2(const(char)*) @nogc nothrow;
-    double lxw_datetime_to_excel_date(lxw_datetime*, uint8_t) @nogc nothrow;
+    void lxw_col_to_name(char*, ushort, ubyte) @nogc nothrow;
+    void lxw_rowcol_to_cell(char*, uint, ushort) @nogc nothrow;
+    void lxw_rowcol_to_cell_abs(char*, uint, ushort, ubyte, ubyte) @nogc nothrow;
+    void lxw_rowcol_to_range(char*, uint, ushort, uint, ushort) @nogc nothrow;
+    void lxw_rowcol_to_range_abs(char*, uint, ushort, uint, ushort) @nogc nothrow;
+    void lxw_rowcol_to_formula_abs(char*, const(char)*, uint, ushort, uint, ushort) @nogc nothrow;
+    uint lxw_name_to_row(const(char)*) @nogc nothrow;
+    ushort lxw_name_to_col(const(char)*) @nogc nothrow;
+    uint lxw_name_to_row_2(const(char)*) @nogc nothrow;
+    ushort lxw_name_to_col_2(const(char)*) @nogc nothrow;
+    double lxw_datetime_to_excel_date(lxw_datetime*, ubyte) @nogc nothrow;
     char* lxw_strdup(const(char)*) @nogc nothrow;
     char* lxw_strdup_formula(const(char)*) @nogc nothrow;
-    size_t lxw_utf8_strlen(const(char)*) @nogc nothrow;
+    c_ulong lxw_utf8_strlen(const(char)*) @nogc nothrow;
     void lxw_str_tolower(char*) @nogc nothrow;
-    FILE* lxw_tmpfile(char*) @nogc nothrow;
-    uint16_t lxw_hash_password(const(char)*) @nogc nothrow;
-    alias __socklen_t = uint;
-    struct lxw_worksheet_names
-    {
-        lxw_worksheet_name* rbh_root;
-    }
+    _IO_FILE* lxw_tmpfile(char*) @nogc nothrow;
+    c_long readlink(const(char)*, char*, c_ulong) @nogc nothrow;
+    ushort lxw_hash_password(const(char)*) @nogc nothrow;
     struct lxw_worksheet_name
     {
         const(char)* name;
         lxw_worksheet* worksheet;
-        static struct _Anonymous_19
+        static struct _Anonymous_17
         {
             lxw_worksheet_name* rbe_left;
             lxw_worksheet_name* rbe_right;
             lxw_worksheet_name* rbe_parent;
             int rbe_color;
         }
-        _Anonymous_19 tree_pointers;
+        _Anonymous_17 tree_pointers;
     }
-    struct lxw_chartsheet_names
+    struct lxw_worksheet_names
     {
-        lxw_chartsheet_name* rbh_root;
+        lxw_worksheet_name* rbh_root;
     }
     struct lxw_chartsheet_name
     {
         const(char)* name;
         lxw_chartsheet* chartsheet;
-        static struct _Anonymous_20
+        static struct _Anonymous_18
         {
             lxw_chartsheet_name* rbe_left;
             lxw_chartsheet_name* rbe_right;
             lxw_chartsheet_name* rbe_parent;
             int rbe_color;
         }
-        _Anonymous_20 tree_pointers;
+        _Anonymous_18 tree_pointers;
+    }
+    struct lxw_chartsheet_names
+    {
+        lxw_chartsheet_name* rbh_root;
+    }
+    struct lxw_sheet
+    {
+        ubyte is_chartsheet;
+        static union _Anonymous_19
+        {
+            lxw_worksheet* worksheet;
+            lxw_chartsheet* chartsheet;
+        }
+        _Anonymous_19 u;
+        static struct _Anonymous_20
+        {
+            lxw_sheet* stqe_next;
+        }
+        _Anonymous_20 list_pointers;
     }
     struct lxw_sheets
     {
         lxw_sheet* stqh_first;
         lxw_sheet** stqh_last;
-    }
-    struct lxw_sheet
-    {
-        uint8_t is_chartsheet;
-        static union _Anonymous_21
-        {
-            lxw_worksheet* worksheet;
-            lxw_chartsheet* chartsheet;
-        }
-        _Anonymous_21 u;
-        static struct _Anonymous_22
-        {
-            lxw_sheet* stqe_next;
-        }
-        _Anonymous_22 list_pointers;
     }
     struct lxw_worksheets
     {
@@ -2095,29 +2007,28 @@ extern(C)
         lxw_chart* stqh_first;
         lxw_chart** stqh_last;
     }
-    struct lxw_defined_name
-    {
-        int16_t index;
-        uint8_t hidden;
-        char[128] name;
-        char[128] app_name;
-        char[128] formula;
-        char[128] normalised_name;
-        char[128] normalised_sheetname;
-        static struct _Anonymous_23
-        {
-            lxw_defined_name* tqe_next;
-            lxw_defined_name** tqe_prev;
-        }
-        _Anonymous_23 list_pointers;
-    }
     struct lxw_defined_names
     {
         lxw_defined_name* tqh_first;
         lxw_defined_name** tqh_last;
     }
-    alias __intptr_t = c_long;
-    alias __caddr_t = char*;
+    struct lxw_defined_name
+    {
+        short index;
+        ubyte hidden;
+        char[128] name;
+        char[128] app_name;
+        char[128] formula;
+        char[128] normalised_name;
+        char[128] normalised_sheetname;
+        static struct _Anonymous_21
+        {
+            lxw_defined_name* tqe_next;
+            lxw_defined_name** tqe_prev;
+        }
+        _Anonymous_21 list_pointers;
+    }
+    int symlink(const(char)*, const(char)*) @nogc nothrow;
     struct lxw_doc_properties
     {
         char* title;
@@ -2130,16 +2041,16 @@ extern(C)
         char* comments;
         char* status;
         char* hyperlink_base;
-        time_t created;
+        c_long created;
     }
     struct lxw_workbook_options
     {
-        uint8_t constant_memory;
+        ubyte constant_memory;
         char* tmpdir;
     }
     struct lxw_workbook
     {
-        FILE* file;
+        _IO_FILE* file;
         lxw_sheets* sheets;
         lxw_worksheets* worksheets;
         lxw_chartsheets* chartsheets;
@@ -2154,21 +2065,21 @@ extern(C)
         lxw_custom_properties* custom_properties;
         char* filename;
         lxw_workbook_options options;
-        uint16_t num_sheets;
-        uint16_t num_worksheets;
-        uint16_t num_chartsheets;
-        uint16_t first_sheet;
-        uint16_t active_sheet;
-        uint16_t num_xf_formats;
-        uint16_t num_format_count;
-        uint16_t drawing_count;
-        uint16_t font_count;
-        uint16_t border_count;
-        uint16_t fill_count;
-        uint8_t optimize;
-        uint8_t has_png;
-        uint8_t has_jpeg;
-        uint8_t has_bmp;
+        ushort num_sheets;
+        ushort num_worksheets;
+        ushort num_chartsheets;
+        ushort first_sheet;
+        ushort active_sheet;
+        ushort num_xf_formats;
+        ushort num_format_count;
+        ushort drawing_count;
+        ushort font_count;
+        ushort border_count;
+        ushort fill_count;
+        ubyte optimize;
+        ubyte has_png;
+        ubyte has_jpeg;
+        ubyte has_bmp;
         lxw_hash_table* used_xf_formats;
     }
     lxw_workbook* workbook_new(const(char)*) @nogc nothrow;
@@ -2178,13 +2089,13 @@ extern(C)
     lxw_worksheet* workbook_add_worksheet(lxw_workbook*, const(char)*) @nogc nothrow;
     lxw_chartsheet* workbook_add_chartsheet(lxw_workbook*, const(char)*) @nogc nothrow;
     lxw_format* workbook_add_format(lxw_workbook*) @nogc nothrow;
-    lxw_chart* workbook_add_chart(lxw_workbook*, uint8_t) @nogc nothrow;
+    lxw_chart* workbook_add_chart(lxw_workbook*, ubyte) @nogc nothrow;
     lxw_error workbook_close(lxw_workbook*) @nogc nothrow;
     lxw_error workbook_set_properties(lxw_workbook*, lxw_doc_properties*) @nogc nothrow;
     lxw_error workbook_set_custom_property_string(lxw_workbook*, const(char)*, const(char)*) @nogc nothrow;
     lxw_error workbook_set_custom_property_number(lxw_workbook*, const(char)*, double) @nogc nothrow;
-    lxw_error workbook_set_custom_property_integer(lxw_workbook*, const(char)*, int32_t) @nogc nothrow;
-    lxw_error workbook_set_custom_property_boolean(lxw_workbook*, const(char)*, uint8_t) @nogc nothrow;
+    lxw_error workbook_set_custom_property_integer(lxw_workbook*, const(char)*, int) @nogc nothrow;
+    lxw_error workbook_set_custom_property_boolean(lxw_workbook*, const(char)*, ubyte) @nogc nothrow;
     lxw_error workbook_set_custom_property_datetime(lxw_workbook*, const(char)*, lxw_datetime*) @nogc nothrow;
     lxw_error workbook_define_name(lxw_workbook*, const(char)*, const(char)*) @nogc nothrow;
     lxw_worksheet* workbook_get_worksheet_by_name(lxw_workbook*, const(char)*) @nogc nothrow;
@@ -2193,10 +2104,8 @@ extern(C)
     void lxw_workbook_free(lxw_workbook*) @nogc nothrow;
     void lxw_workbook_assemble_xml_file(lxw_workbook*) @nogc nothrow;
     void lxw_workbook_set_default_xf_indices(lxw_workbook*) @nogc nothrow;
-    alias __loff_t = c_long;
-    alias __syscall_ulong_t = c_ulong;
-    alias __syscall_slong_t = c_long;
-    alias __ssize_t = c_long;
+    int linkat(int, const(char)*, int, const(char)*, int) @nogc nothrow;
+    int link(const(char)*, const(char)*) @nogc nothrow;
     enum lxw_gridlines
     {
         LXW_HIDE_ALL_GRIDLINES = 0,
@@ -2320,64 +2229,64 @@ extern(C)
     enum FREEZE_PANES = pane_types.FREEZE_PANES;
     enum SPLIT_PANES = pane_types.SPLIT_PANES;
     enum FREEZE_SPLIT_PANES = pane_types.FREEZE_SPLIT_PANES;
-    struct lxw_table_cells
-    {
-        lxw_cell* rbh_root;
-    }
     struct lxw_cell
     {
-        lxw_row_t row_num;
-        lxw_col_t col_num;
+        uint row_num;
+        ushort col_num;
         cell_types type;
         lxw_format* format;
-        static union _Anonymous_24
+        static union _Anonymous_22
         {
             double number;
-            int32_t string_id;
+            int string_id;
             char* string;
         }
-        _Anonymous_24 u;
+        _Anonymous_22 u;
         double formula_result;
         char* user_data1;
         char* user_data2;
         char* sst_string;
-        static struct _Anonymous_25
+        static struct _Anonymous_23
         {
             lxw_cell* rbe_left;
             lxw_cell* rbe_right;
             lxw_cell* rbe_parent;
             int rbe_color;
         }
-        _Anonymous_25 tree_pointers;
+        _Anonymous_23 tree_pointers;
+    }
+    struct lxw_table_cells
+    {
+        lxw_cell* rbh_root;
     }
     struct lxw_table_rows
     {
         lxw_row* rbh_root;
         lxw_row* cached_row;
-        lxw_row_t cached_row_num;
+        uint cached_row_num;
     }
     struct lxw_row
     {
-        lxw_row_t row_num;
+        uint row_num;
         double height;
         lxw_format* format;
-        uint8_t hidden;
-        uint8_t level;
-        uint8_t collapsed;
-        uint8_t row_changed;
-        uint8_t data_changed;
-        uint8_t height_changed;
+        ubyte hidden;
+        ubyte level;
+        ubyte collapsed;
+        ubyte row_changed;
+        ubyte data_changed;
+        ubyte height_changed;
         lxw_table_cells* cells;
-        static struct _Anonymous_26
+        static struct _Anonymous_24
         {
             lxw_row* rbe_left;
             lxw_row* rbe_right;
             lxw_row* rbe_parent;
             int rbe_color;
         }
-        _Anonymous_26 tree_pointers;
+        _Anonymous_24 tree_pointers;
     }
-    alias __fsword_t = c_long;
+    int ttyslot() @nogc nothrow;
     struct lxw_merged_ranges
     {
         lxw_merged_range* stqh_first;
@@ -2385,31 +2294,31 @@ extern(C)
     }
     struct lxw_merged_range
     {
-        lxw_row_t first_row;
-        lxw_row_t last_row;
-        lxw_col_t first_col;
-        lxw_col_t last_col;
-        static struct _Anonymous_27
+        uint first_row;
+        uint last_row;
+        ushort first_col;
+        ushort last_col;
+        static struct _Anonymous_25
         {
             lxw_merged_range* stqe_next;
         }
-        _Anonymous_27 list_pointers;
+        _Anonymous_25 list_pointers;
+    }
+    struct lxw_selections
+    {
+        lxw_selection* stqh_first;
+        lxw_selection** stqh_last;
     }
     struct lxw_selection
     {
         char[12] pane;
         char[28] active_cell;
         char[28] sqref;
-        static struct _Anonymous_28
+        static struct _Anonymous_26
         {
             lxw_selection* stqe_next;
         }
-        _Anonymous_28 list_pointers;
-    }
-    struct lxw_selections
-    {
-        lxw_selection* stqh_first;
-        lxw_selection** stqh_last;
+        _Anonymous_26 list_pointers;
     }
     struct lxw_data_validations
     {
@@ -2418,14 +2327,14 @@ extern(C)
     }
     struct lxw_data_validation
     {
-        uint8_t validate;
-        uint8_t criteria;
-        uint8_t ignore_blank;
-        uint8_t show_input;
-        uint8_t show_error;
-        uint8_t error_type;
-        uint8_t dropdown;
-        uint8_t is_between;
+        ubyte validate;
+        ubyte criteria;
+        ubyte ignore_blank;
+        ubyte show_input;
+        ubyte show_error;
+        ubyte error_type;
+        ubyte dropdown;
+        ubyte is_between;
         double value_number;
         char* value_formula;
         char** value_list;
@@ -2441,46 +2350,46 @@ extern(C)
         char* error_title;
         char* error_message;
         char[28] sqref;
-        static struct _Anonymous_29
+        static struct _Anonymous_27
         {
             lxw_data_validation* stqe_next;
         }
-        _Anonymous_29 list_pointers;
-    }
-    struct lxw_image_data
-    {
-        lxw_image_options* stqh_first;
-        lxw_image_options** stqh_last;
+        _Anonymous_27 list_pointers;
     }
     struct lxw_image_options
     {
-        int32_t x_offset;
-        int32_t y_offset;
+        int x_offset;
+        int y_offset;
         double x_scale;
         double y_scale;
-        lxw_row_t row;
-        lxw_col_t col;
+        uint row;
+        ushort col;
         char* filename;
         char* description;
         char* url;
         char* tip;
-        uint8_t anchor;
-        FILE* stream;
-        uint8_t image_type;
-        uint8_t is_image_buffer;
+        ubyte anchor;
+        _IO_FILE* stream;
+        ubyte image_type;
+        ubyte is_image_buffer;
         ubyte* image_buffer;
-        size_t image_buffer_size;
+        c_ulong image_buffer_size;
         double width;
         double height;
         char* extension;
         double x_dpi;
         double y_dpi;
         lxw_chart* chart;
-        static struct _Anonymous_30
+        static struct _Anonymous_28
         {
             lxw_image_options* stqe_next;
         }
-        _Anonymous_30 list_pointers;
+        _Anonymous_28 list_pointers;
+    }
+    struct lxw_image_data
+    {
+        lxw_image_options* stqh_first;
+        lxw_image_options** stqh_last;
     }
     struct lxw_chart_data
     {
@@ -2489,55 +2398,55 @@ extern(C)
     }
     struct lxw_row_col_options
     {
-        uint8_t hidden;
-        uint8_t level;
-        uint8_t collapsed;
+        ubyte hidden;
+        ubyte level;
+        ubyte collapsed;
     }
     struct lxw_col_options
     {
-        lxw_col_t firstcol;
-        lxw_col_t lastcol;
+        ushort firstcol;
+        ushort lastcol;
         double width;
         lxw_format* format;
-        uint8_t hidden;
-        uint8_t level;
-        uint8_t collapsed;
+        ubyte hidden;
+        ubyte level;
+        ubyte collapsed;
     }
     struct lxw_repeat_rows
     {
-        uint8_t in_use;
-        lxw_row_t first_row;
-        lxw_row_t last_row;
+        ubyte in_use;
+        uint first_row;
+        uint last_row;
     }
     struct lxw_repeat_cols
     {
-        uint8_t in_use;
-        lxw_col_t first_col;
-        lxw_col_t last_col;
+        ubyte in_use;
+        ushort first_col;
+        ushort last_col;
     }
     struct lxw_print_area
     {
-        uint8_t in_use;
-        lxw_row_t first_row;
-        lxw_row_t last_row;
-        lxw_col_t first_col;
-        lxw_col_t last_col;
+        ubyte in_use;
+        uint first_row;
+        uint last_row;
+        ushort first_col;
+        ushort last_col;
     }
     struct lxw_autofilter
     {
-        uint8_t in_use;
-        lxw_row_t first_row;
-        lxw_row_t last_row;
-        lxw_col_t first_col;
-        lxw_col_t last_col;
+        ubyte in_use;
+        uint first_row;
+        uint last_row;
+        ushort first_col;
+        ushort last_col;
     }
     struct lxw_panes
     {
-        uint8_t type;
-        lxw_row_t first_row;
-        lxw_col_t first_col;
-        lxw_row_t top_row;
-        lxw_col_t left_col;
+        ubyte type;
+        uint first_row;
+        ushort first_col;
+        uint top_row;
+        ushort left_col;
         double x_split;
         double y_split;
     }
@@ -2547,25 +2456,25 @@ extern(C)
     }
     struct lxw_protection
     {
-        uint8_t no_select_locked_cells;
-        uint8_t no_select_unlocked_cells;
-        uint8_t format_cells;
-        uint8_t format_columns;
-        uint8_t format_rows;
-        uint8_t insert_columns;
-        uint8_t insert_rows;
-        uint8_t insert_hyperlinks;
-        uint8_t delete_columns;
-        uint8_t delete_rows;
-        uint8_t sort;
-        uint8_t autofilter;
-        uint8_t pivot_tables;
-        uint8_t scenarios;
-        uint8_t objects;
-        uint8_t no_content;
-        uint8_t no_objects;
-        uint8_t no_sheet;
-        uint8_t is_configured;
+        ubyte no_select_locked_cells;
+        ubyte no_select_unlocked_cells;
+        ubyte format_cells;
+        ubyte format_columns;
+        ubyte format_rows;
+        ubyte insert_columns;
+        ubyte insert_rows;
+        ubyte insert_hyperlinks;
+        ubyte delete_columns;
+        ubyte delete_rows;
+        ubyte sort;
+        ubyte autofilter;
+        ubyte pivot_tables;
+        ubyte scenarios;
+        ubyte objects;
+        ubyte no_content;
+        ubyte no_objects;
+        ubyte no_sheet;
+        ubyte is_configured;
         char[5] hash;
     }
     struct lxw_rich_string_tuple
@@ -2575,8 +2484,8 @@ extern(C)
     }
     struct lxw_worksheet
     {
-        FILE* file;
-        FILE* optimize_tmpfile;
+        _IO_FILE* file;
+        _IO_FILE* optimize_tmpfile;
         lxw_table_rows* table;
         lxw_table_rows* hyperlinks;
         lxw_cell** array;
@@ -2585,64 +2494,64 @@ extern(C)
         lxw_data_validations* data_validations;
         lxw_image_data* image_data;
         lxw_chart_data* chart_data;
-        lxw_row_t dim_rowmin;
-        lxw_row_t dim_rowmax;
-        lxw_col_t dim_colmin;
-        lxw_col_t dim_colmax;
+        uint dim_rowmin;
+        uint dim_rowmax;
+        ushort dim_colmin;
+        ushort dim_colmax;
         lxw_sst* sst;
         char* name;
         char* quoted_name;
         char* tmpdir;
-        uint32_t index;
-        uint8_t active;
-        uint8_t selected;
-        uint8_t hidden;
-        uint16_t* active_sheet;
-        uint16_t* first_sheet;
-        uint8_t is_chartsheet;
+        uint index;
+        ubyte active;
+        ubyte selected;
+        ubyte hidden;
+        ushort* active_sheet;
+        ushort* first_sheet;
+        ubyte is_chartsheet;
         lxw_col_options** col_options;
-        uint16_t col_options_max;
+        ushort col_options_max;
         double* col_sizes;
-        uint16_t col_sizes_max;
+        ushort col_sizes_max;
         lxw_format** col_formats;
-        uint16_t col_formats_max;
-        uint8_t col_size_changed;
-        uint8_t row_size_changed;
-        uint8_t optimize;
+        ushort col_formats_max;
+        ubyte col_size_changed;
+        ubyte row_size_changed;
+        ubyte optimize;
         lxw_row* optimize_row;
-        uint16_t fit_height;
-        uint16_t fit_width;
-        uint16_t horizontal_dpi;
-        uint16_t hlink_count;
-        uint16_t page_start;
-        uint16_t print_scale;
-        uint16_t rel_count;
-        uint16_t vertical_dpi;
-        uint16_t zoom;
-        uint8_t filter_on;
-        uint8_t fit_page;
-        uint8_t hcenter;
-        uint8_t orientation;
-        uint8_t outline_changed;
-        uint8_t outline_on;
-        uint8_t outline_style;
-        uint8_t outline_below;
-        uint8_t outline_right;
-        uint8_t page_order;
-        uint8_t page_setup_changed;
-        uint8_t page_view;
-        uint8_t paper_size;
-        uint8_t print_gridlines;
-        uint8_t print_headers;
-        uint8_t print_options_changed;
-        uint8_t right_to_left;
-        uint8_t screen_gridlines;
-        uint8_t show_zeros;
-        uint8_t vba_codename;
-        uint8_t vcenter;
-        uint8_t zoom_scale_normal;
-        uint8_t num_validations;
-        lxw_color_t tab_color;
+        ushort fit_height;
+        ushort fit_width;
+        ushort horizontal_dpi;
+        ushort hlink_count;
+        ushort page_start;
+        ushort print_scale;
+        ushort rel_count;
+        ushort vertical_dpi;
+        ushort zoom;
+        ubyte filter_on;
+        ubyte fit_page;
+        ubyte hcenter;
+        ubyte orientation;
+        ubyte outline_changed;
+        ubyte outline_on;
+        ubyte outline_style;
+        ubyte outline_below;
+        ubyte outline_right;
+        ubyte page_order;
+        ubyte page_setup_changed;
+        ubyte page_view;
+        ubyte paper_size;
+        ubyte print_gridlines;
+        ubyte print_headers;
+        ubyte print_options_changed;
+        ubyte right_to_left;
+        ubyte screen_gridlines;
+        ubyte show_zeros;
+        ubyte vba_codename;
+        ubyte vcenter;
+        ubyte zoom_scale_normal;
+        ubyte num_validations;
+        int tab_color;
         double margin_left;
         double margin_right;
         double margin_top;
@@ -2650,35 +2559,35 @@ extern(C)
         double margin_header;
         double margin_footer;
         double default_row_height;
-        uint32_t default_row_pixels;
-        uint32_t default_col_pixels;
-        uint8_t default_row_zeroed;
-        uint8_t default_row_set;
-        uint8_t outline_row_level;
-        uint8_t outline_col_level;
-        uint8_t header_footer_changed;
+        uint default_row_pixels;
+        uint default_col_pixels;
+        ubyte default_row_zeroed;
+        ubyte default_row_set;
+        ubyte outline_row_level;
+        ubyte outline_col_level;
+        ubyte header_footer_changed;
         char[255] header;
         char[255] footer;
         lxw_repeat_rows repeat_rows;
         lxw_repeat_cols repeat_cols;
         lxw_print_area print_area;
         lxw_autofilter autofilter;
-        uint16_t merged_range_count;
-        lxw_row_t* hbreaks;
-        lxw_col_t* vbreaks;
-        uint16_t hbreaks_count;
-        uint16_t vbreaks_count;
+        ushort merged_range_count;
+        uint* hbreaks;
+        ushort* vbreaks;
+        ushort hbreaks_count;
+        ushort vbreaks_count;
         lxw_rel_tuples* external_hyperlinks;
         lxw_rel_tuples* external_drawing_links;
         lxw_rel_tuples* drawing_links;
         lxw_panes panes;
         lxw_protection protection;
         lxw_drawing* drawing;
-        static struct _Anonymous_31
+        static struct _Anonymous_29
         {
             lxw_worksheet* stqe_next;
         }
-        _Anonymous_31 list_pointers;
+        _Anonymous_29 list_pointers;
     }
     struct lxw_rel_tuples
     {
@@ -2687,88 +2596,88 @@ extern(C)
     }
     struct lxw_worksheet_init_data
     {
-        uint32_t index;
-        uint8_t hidden;
-        uint8_t optimize;
-        uint16_t* active_sheet;
-        uint16_t* first_sheet;
+        uint index;
+        ubyte hidden;
+        ubyte optimize;
+        ushort* active_sheet;
+        ushort* first_sheet;
         lxw_sst* sst;
         char* name;
         char* quoted_name;
         char* tmpdir;
     }
-    lxw_error worksheet_write_number(lxw_worksheet*, lxw_row_t, lxw_col_t, double, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_string(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_formula(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_array_formula(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t, const(char)*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_array_formula_num(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t, const(char)*, lxw_format*, double) @nogc nothrow;
-    lxw_error worksheet_write_datetime(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_datetime*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_url_opt(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_format*, const(char)*, const(char)*) @nogc nothrow;
-    lxw_error worksheet_write_url(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_boolean(lxw_worksheet*, lxw_row_t, lxw_col_t, int, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_blank(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_write_formula_num(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_format*, double) @nogc nothrow;
-    lxw_error worksheet_write_rich_string(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_rich_string_tuple**, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_set_row(lxw_worksheet*, lxw_row_t, double, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_set_row_opt(lxw_worksheet*, lxw_row_t, double, lxw_format*, lxw_row_col_options*) @nogc nothrow;
-    lxw_error worksheet_set_column(lxw_worksheet*, lxw_col_t, lxw_col_t, double, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_set_column_opt(lxw_worksheet*, lxw_col_t, lxw_col_t, double, lxw_format*, lxw_row_col_options*) @nogc nothrow;
-    lxw_error worksheet_insert_image(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*) @nogc nothrow;
-    lxw_error worksheet_insert_image_opt(lxw_worksheet*, lxw_row_t, lxw_col_t, const(char)*, lxw_image_options*) @nogc nothrow;
-    lxw_error worksheet_insert_image_buffer(lxw_worksheet*, lxw_row_t, lxw_col_t, const(ubyte)*, size_t) @nogc nothrow;
-    lxw_error worksheet_insert_image_buffer_opt(lxw_worksheet*, lxw_row_t, lxw_col_t, const(ubyte)*, size_t, lxw_image_options*) @nogc nothrow;
-    lxw_error worksheet_insert_chart(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_chart*) @nogc nothrow;
-    lxw_error worksheet_insert_chart_opt(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_chart*, lxw_image_options*) @nogc nothrow;
-    lxw_error worksheet_merge_range(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t, const(char)*, lxw_format*) @nogc nothrow;
-    lxw_error worksheet_autofilter(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    lxw_error worksheet_data_validation_cell(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_data_validation*) @nogc nothrow;
-    lxw_error worksheet_data_validation_range(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t, lxw_data_validation*) @nogc nothrow;
+    lxw_error worksheet_write_number(lxw_worksheet*, uint, ushort, double, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_string(lxw_worksheet*, uint, ushort, const(char)*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_formula(lxw_worksheet*, uint, ushort, const(char)*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_array_formula(lxw_worksheet*, uint, ushort, uint, ushort, const(char)*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_array_formula_num(lxw_worksheet*, uint, ushort, uint, ushort, const(char)*, lxw_format*, double) @nogc nothrow;
+    lxw_error worksheet_write_datetime(lxw_worksheet*, uint, ushort, lxw_datetime*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_url_opt(lxw_worksheet*, uint, ushort, const(char)*, lxw_format*, const(char)*, const(char)*) @nogc nothrow;
+    lxw_error worksheet_write_url(lxw_worksheet*, uint, ushort, const(char)*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_boolean(lxw_worksheet*, uint, ushort, int, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_blank(lxw_worksheet*, uint, ushort, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_write_formula_num(lxw_worksheet*, uint, ushort, const(char)*, lxw_format*, double) @nogc nothrow;
+    lxw_error worksheet_write_rich_string(lxw_worksheet*, uint, ushort, lxw_rich_string_tuple**, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_set_row(lxw_worksheet*, uint, double, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_set_row_opt(lxw_worksheet*, uint, double, lxw_format*, lxw_row_col_options*) @nogc nothrow;
+    lxw_error worksheet_set_column(lxw_worksheet*, ushort, ushort, double, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_set_column_opt(lxw_worksheet*, ushort, ushort, double, lxw_format*, lxw_row_col_options*) @nogc nothrow;
+    lxw_error worksheet_insert_image(lxw_worksheet*, uint, ushort, const(char)*) @nogc nothrow;
+    lxw_error worksheet_insert_image_opt(lxw_worksheet*, uint, ushort, const(char)*, lxw_image_options*) @nogc nothrow;
+    lxw_error worksheet_insert_image_buffer(lxw_worksheet*, uint, ushort, const(ubyte)*, c_ulong) @nogc nothrow;
+    lxw_error worksheet_insert_image_buffer_opt(lxw_worksheet*, uint, ushort, const(ubyte)*, c_ulong, lxw_image_options*) @nogc nothrow;
+    lxw_error worksheet_insert_chart(lxw_worksheet*, uint, ushort, lxw_chart*) @nogc nothrow;
+    lxw_error worksheet_insert_chart_opt(lxw_worksheet*, uint, ushort, lxw_chart*, lxw_image_options*) @nogc nothrow;
+    lxw_error worksheet_merge_range(lxw_worksheet*, uint, ushort, uint, ushort, const(char)*, lxw_format*) @nogc nothrow;
+    lxw_error worksheet_autofilter(lxw_worksheet*, uint, ushort, uint, ushort) @nogc nothrow;
+    lxw_error worksheet_data_validation_cell(lxw_worksheet*, uint, ushort, lxw_data_validation*) @nogc nothrow;
+    lxw_error worksheet_data_validation_range(lxw_worksheet*, uint, ushort, uint, ushort, lxw_data_validation*) @nogc nothrow;
     void worksheet_activate(lxw_worksheet*) @nogc nothrow;
     void worksheet_select(lxw_worksheet*) @nogc nothrow;
     void worksheet_hide(lxw_worksheet*) @nogc nothrow;
     void worksheet_set_first_sheet(lxw_worksheet*) @nogc nothrow;
-    void worksheet_freeze_panes(lxw_worksheet*, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void worksheet_freeze_panes(lxw_worksheet*, uint, ushort) @nogc nothrow;
     void worksheet_split_panes(lxw_worksheet*, double, double) @nogc nothrow;
-    void worksheet_freeze_panes_opt(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t, uint8_t) @nogc nothrow;
-    void worksheet_split_panes_opt(lxw_worksheet*, double, double, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void worksheet_set_selection(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
+    void worksheet_freeze_panes_opt(lxw_worksheet*, uint, ushort, uint, ushort, ubyte) @nogc nothrow;
+    void worksheet_split_panes_opt(lxw_worksheet*, double, double, uint, ushort) @nogc nothrow;
+    void worksheet_set_selection(lxw_worksheet*, uint, ushort, uint, ushort) @nogc nothrow;
     void worksheet_set_landscape(lxw_worksheet*) @nogc nothrow;
     void worksheet_set_portrait(lxw_worksheet*) @nogc nothrow;
     void worksheet_set_page_view(lxw_worksheet*) @nogc nothrow;
-    void worksheet_set_paper(lxw_worksheet*, uint8_t) @nogc nothrow;
+    void worksheet_set_paper(lxw_worksheet*, ubyte) @nogc nothrow;
     void worksheet_set_margins(lxw_worksheet*, double, double, double, double) @nogc nothrow;
     lxw_error worksheet_set_header(lxw_worksheet*, const(char)*) @nogc nothrow;
     lxw_error worksheet_set_footer(lxw_worksheet*, const(char)*) @nogc nothrow;
     lxw_error worksheet_set_header_opt(lxw_worksheet*, const(char)*, lxw_header_footer_options*) @nogc nothrow;
     lxw_error worksheet_set_footer_opt(lxw_worksheet*, const(char)*, lxw_header_footer_options*) @nogc nothrow;
-    lxw_error worksheet_set_h_pagebreaks(lxw_worksheet*, lxw_row_t*) @nogc nothrow;
-    lxw_error worksheet_set_v_pagebreaks(lxw_worksheet*, lxw_col_t*) @nogc nothrow;
+    lxw_error worksheet_set_h_pagebreaks(lxw_worksheet*, uint*) @nogc nothrow;
+    lxw_error worksheet_set_v_pagebreaks(lxw_worksheet*, ushort*) @nogc nothrow;
     void worksheet_print_across(lxw_worksheet*) @nogc nothrow;
-    void worksheet_set_zoom(lxw_worksheet*, uint16_t) @nogc nothrow;
-    void worksheet_gridlines(lxw_worksheet*, uint8_t) @nogc nothrow;
+    void worksheet_set_zoom(lxw_worksheet*, ushort) @nogc nothrow;
+    void worksheet_gridlines(lxw_worksheet*, ubyte) @nogc nothrow;
     void worksheet_center_horizontally(lxw_worksheet*) @nogc nothrow;
     void worksheet_center_vertically(lxw_worksheet*) @nogc nothrow;
     void worksheet_print_row_col_headers(lxw_worksheet*) @nogc nothrow;
-    lxw_error worksheet_repeat_rows(lxw_worksheet*, lxw_row_t, lxw_row_t) @nogc nothrow;
-    lxw_error worksheet_repeat_columns(lxw_worksheet*, lxw_col_t, lxw_col_t) @nogc nothrow;
-    lxw_error worksheet_print_area(lxw_worksheet*, lxw_row_t, lxw_col_t, lxw_row_t, lxw_col_t) @nogc nothrow;
-    void worksheet_fit_to_pages(lxw_worksheet*, uint16_t, uint16_t) @nogc nothrow;
-    void worksheet_set_start_page(lxw_worksheet*, uint16_t) @nogc nothrow;
-    void worksheet_set_print_scale(lxw_worksheet*, uint16_t) @nogc nothrow;
+    lxw_error worksheet_repeat_rows(lxw_worksheet*, uint, uint) @nogc nothrow;
+    lxw_error worksheet_repeat_columns(lxw_worksheet*, ushort, ushort) @nogc nothrow;
+    lxw_error worksheet_print_area(lxw_worksheet*, uint, ushort, uint, ushort) @nogc nothrow;
+    void worksheet_fit_to_pages(lxw_worksheet*, ushort, ushort) @nogc nothrow;
+    void worksheet_set_start_page(lxw_worksheet*, ushort) @nogc nothrow;
+    void worksheet_set_print_scale(lxw_worksheet*, ushort) @nogc nothrow;
     void worksheet_right_to_left(lxw_worksheet*) @nogc nothrow;
     void worksheet_hide_zero(lxw_worksheet*) @nogc nothrow;
-    void worksheet_set_tab_color(lxw_worksheet*, lxw_color_t) @nogc nothrow;
+    void worksheet_set_tab_color(lxw_worksheet*, int) @nogc nothrow;
     void worksheet_protect(lxw_worksheet*, const(char)*, lxw_protection*) @nogc nothrow;
-    void worksheet_outline_settings(lxw_worksheet*, uint8_t, uint8_t, uint8_t, uint8_t) @nogc nothrow;
-    void worksheet_set_default_row(lxw_worksheet*, double, uint8_t) @nogc nothrow;
+    void worksheet_outline_settings(lxw_worksheet*, ubyte, ubyte, ubyte, ubyte) @nogc nothrow;
+    void worksheet_set_default_row(lxw_worksheet*, double, ubyte) @nogc nothrow;
     lxw_worksheet* lxw_worksheet_new(lxw_worksheet_init_data*) @nogc nothrow;
     void lxw_worksheet_free(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_assemble_xml_file(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_single_row(lxw_worksheet*) @nogc nothrow;
-    void lxw_worksheet_prepare_image(lxw_worksheet*, uint16_t, uint16_t, lxw_image_options*) @nogc nothrow;
-    void lxw_worksheet_prepare_chart(lxw_worksheet*, uint16_t, uint16_t, lxw_image_options*, uint8_t) @nogc nothrow;
-    lxw_row* lxw_worksheet_find_row(lxw_worksheet*, lxw_row_t) @nogc nothrow;
-    lxw_cell* lxw_worksheet_find_cell(lxw_row*, lxw_col_t) @nogc nothrow;
+    void lxw_worksheet_prepare_image(lxw_worksheet*, ushort, ushort, lxw_image_options*) @nogc nothrow;
+    void lxw_worksheet_prepare_chart(lxw_worksheet*, ushort, ushort, lxw_image_options*, ubyte) @nogc nothrow;
+    lxw_row* lxw_worksheet_find_row(lxw_worksheet*, uint) @nogc nothrow;
+    lxw_cell* lxw_worksheet_find_cell(lxw_row*, ushort) @nogc nothrow;
     void lxw_worksheet_write_sheet_views(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_page_margins(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_drawings(lxw_worksheet*) @nogc nothrow;
@@ -2776,16 +2685,16 @@ extern(C)
     void lxw_worksheet_write_sheet_pr(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_page_setup(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_header_footer(lxw_worksheet*) @nogc nothrow;
-    alias __fsfilcnt64_t = c_ulong;
+    int isatty(int) @nogc nothrow;
     struct xml_attribute
     {
         char[256] key;
         char[256] value;
-        static struct _Anonymous_32
+        static struct _Anonymous_30
         {
             xml_attribute* stqe_next;
         }
-        _Anonymous_32 list_entries;
+        _Anonymous_30 list_entries;
     }
     struct xml_attribute_list
     {
@@ -2793,474 +2702,128 @@ extern(C)
         xml_attribute** stqh_last;
     }
     xml_attribute* lxw_new_attribute_str(const(char)*, const(char)*) @nogc nothrow;
-    xml_attribute* lxw_new_attribute_int(const(char)*, uint32_t) @nogc nothrow;
+    xml_attribute* lxw_new_attribute_int(const(char)*, uint) @nogc nothrow;
     xml_attribute* lxw_new_attribute_dbl(const(char)*, double) @nogc nothrow;
-    alias __fsfilcnt_t = c_ulong;
-    void lxw_xml_declaration(FILE*) @nogc nothrow;
-    void lxw_xml_start_tag(FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
-    void lxw_xml_start_tag_unencoded(FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
-    void lxw_xml_end_tag(FILE*, const(char)*) @nogc nothrow;
-    void lxw_xml_empty_tag(FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
-    void lxw_xml_empty_tag_unencoded(FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
-    void lxw_xml_data_element(FILE*, const(char)*, const(char)*, xml_attribute_list*) @nogc nothrow;
-    void lxw_xml_rich_si_element(FILE*, const(char)*) @nogc nothrow;
+    int ttyname_r(int, char*, c_ulong) @nogc nothrow;
+    char* ttyname(int) @nogc nothrow;
+    void lxw_xml_declaration(_IO_FILE*) @nogc nothrow;
+    void lxw_xml_start_tag(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
+    void lxw_xml_start_tag_unencoded(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
+    void lxw_xml_end_tag(_IO_FILE*, const(char)*) @nogc nothrow;
+    void lxw_xml_empty_tag(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
+    void lxw_xml_empty_tag_unencoded(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
+    void lxw_xml_data_element(_IO_FILE*, const(char)*, const(char)*, xml_attribute_list*) @nogc nothrow;
+    void lxw_xml_rich_si_element(_IO_FILE*, const(char)*) @nogc nothrow;
     char* lxw_escape_control_characters(const(char)*) @nogc nothrow;
     char* lxw_escape_data(const(char)*) @nogc nothrow;
-    alias __fsblkcnt64_t = c_ulong;
-    pragma(mangle, "alloca") void* alloca_(size_t) @nogc nothrow;
-    alias __fsblkcnt_t = c_ulong;
-    alias __blkcnt64_t = c_long;
-    alias __blkcnt_t = c_long;
-    alias __blksize_t = c_long;
-    alias __timer_t = void*;
-    alias __clockid_t = int;
-    alias __key_t = int;
-    alias __daddr_t = int;
-    alias __suseconds_t = c_long;
-    alias __useconds_t = uint;
-    alias __time_t = c_long;
-    alias __id_t = uint;
-    alias __rlim64_t = c_ulong;
-    alias __rlim_t = c_ulong;
-    alias __clock_t = c_long;
-    struct __fsid_t
+    int vfork() @nogc nothrow;
+    pragma(mangle, "alloca") void* alloca_(c_ulong) @nogc nothrow;
+    int fork() @nogc nothrow;
+    int setegid(uint) @nogc nothrow;
+    int setregid(uint, uint) @nogc nothrow;
+    int setgid(uint) @nogc nothrow;
+    int seteuid(uint) @nogc nothrow;
+    int setreuid(uint, uint) @nogc nothrow;
+    int setuid(uint) @nogc nothrow;
+    int getgroups(int, uint*) @nogc nothrow;
+    uint getegid() @nogc nothrow;
+    uint getgid() @nogc nothrow;
+    uint geteuid() @nogc nothrow;
+    uint getuid() @nogc nothrow;
+    int getsid(int) @nogc nothrow;
+    int setsid() @nogc nothrow;
+    int setpgrp() @nogc nothrow;
+    int setpgid(int, int) @nogc nothrow;
+    int getpgid(int) @nogc nothrow;
+    int __getpgid(int) @nogc nothrow;
+    int getpgrp() @nogc nothrow;
+    int getppid() @nogc nothrow;
+    int getpid() @nogc nothrow;
+    c_ulong confstr(int, char*, c_ulong) @nogc nothrow;
+    c_long sysconf(int) @nogc nothrow;
+    c_long fpathconf(int, int) @nogc nothrow;
+    c_long pathconf(const(char)*, int) @nogc nothrow;
+    void _exit(int) @nogc nothrow;
+    int nice(int) @nogc nothrow;
+    int execlp(const(char)*, const(char)*, ...) @nogc nothrow;
+    int execvp(const(char)*, char**) @nogc nothrow;
+    int execl(const(char)*, const(char)*, ...) @nogc nothrow;
+    int execle(const(char)*, const(char)*, ...) @nogc nothrow;
+    int execv(const(char)*, char**) @nogc nothrow;
+    int fexecve(int, char**, char**) @nogc nothrow;
+    int execve(const(char)*, char**, char**) @nogc nothrow;
+    extern __gshared char** __environ;
+    int dup2(int, int) @nogc nothrow;
+    int dup(int) @nogc nothrow;
+    char* getwd(char*) @nogc nothrow;
+    char* getcwd(char*, c_ulong) @nogc nothrow;
+    int fchdir(int) @nogc nothrow;
+    int chdir(const(char)*) @nogc nothrow;
+    int fchownat(int, const(char)*, uint, uint, int) @nogc nothrow;
+    int lchown(const(char)*, uint, uint) @nogc nothrow;
+    int fchown(int, uint, uint) @nogc nothrow;
+    int chown(const(char)*, uint, uint) @nogc nothrow;
+    int pause() @nogc nothrow;
+    int usleep(uint) @nogc nothrow;
+    static ushort __bswap_16(ushort) @nogc nothrow;
+    static uint __bswap_32(uint) @nogc nothrow;
+    uint ualarm(uint, uint) @nogc nothrow;
+    static c_ulong __bswap_64(c_ulong) @nogc nothrow;
+    enum _Anonymous_31
     {
-        int[2] __val;
+        _PC_LINK_MAX = 0,
+        _PC_MAX_CANON = 1,
+        _PC_MAX_INPUT = 2,
+        _PC_NAME_MAX = 3,
+        _PC_PATH_MAX = 4,
+        _PC_PIPE_BUF = 5,
+        _PC_CHOWN_RESTRICTED = 6,
+        _PC_NO_TRUNC = 7,
+        _PC_VDISABLE = 8,
+        _PC_SYNC_IO = 9,
+        _PC_ASYNC_IO = 10,
+        _PC_PRIO_IO = 11,
+        _PC_SOCK_MAXBUF = 12,
+        _PC_FILESIZEBITS = 13,
+        _PC_REC_INCR_XFER_SIZE = 14,
+        _PC_REC_MAX_XFER_SIZE = 15,
+        _PC_REC_MIN_XFER_SIZE = 16,
+        _PC_REC_XFER_ALIGN = 17,
+        _PC_ALLOC_SIZE_MIN = 18,
+        _PC_SYMLINK_MAX = 19,
+        _PC_2_SYMLINKS = 20,
     }
-    alias __pid_t = int;
-    alias __off64_t = c_long;
-    alias __off_t = c_long;
-    alias __nlink_t = c_ulong;
-    alias __mode_t = uint;
-    alias __ino64_t = c_ulong;
-    alias __ino_t = c_ulong;
-    alias __gid_t = uint;
-    alias __uid_t = uint;
-    alias __dev_t = c_ulong;
-    alias __uintmax_t = c_ulong;
-    alias __intmax_t = c_long;
-    alias __u_quad_t = c_ulong;
-    alias __quad_t = c_long;
-    alias __uint64_t = c_ulong;
-    alias __int64_t = c_long;
-    alias __uint32_t = uint;
-    alias __int32_t = int;
-    alias __uint16_t = ushort;
-    alias __int16_t = short;
-    alias __uint8_t = ubyte;
-    alias __int8_t = byte;
-    alias __u_long = c_ulong;
-    alias __u_int = uint;
-    alias __u_short = ushort;
-    alias __u_char = ubyte;
-    struct __pthread_cond_s
-    {
-        static union _Anonymous_33
-        {
-            ulong __wseq;
-            static struct _Anonymous_34
-            {
-                uint __low;
-                uint __high;
-            }
-            _Anonymous_34 __wseq32;
-        }
-        _Anonymous_33 _anonymous_35;
-        auto __wseq() @property @nogc pure nothrow { return _anonymous_35.__wseq; }
-        void __wseq(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_35.__wseq = val; }
-        auto __wseq32() @property @nogc pure nothrow { return _anonymous_35.__wseq32; }
-        void __wseq32(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_35.__wseq32 = val; }
-        static union _Anonymous_36
-        {
-            ulong __g1_start;
-            static struct _Anonymous_37
-            {
-                uint __low;
-                uint __high;
-            }
-            _Anonymous_37 __g1_start32;
-        }
-        _Anonymous_36 _anonymous_38;
-        auto __g1_start() @property @nogc pure nothrow { return _anonymous_38.__g1_start; }
-        void __g1_start(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_38.__g1_start = val; }
-        auto __g1_start32() @property @nogc pure nothrow { return _anonymous_38.__g1_start32; }
-        void __g1_start32(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_38.__g1_start32 = val; }
-        uint[2] __g_refs;
-        uint[2] __g_size;
-        uint __g1_orig_size;
-        uint __wrefs;
-        uint[2] __g_signals;
-    }
-    struct __pthread_mutex_s
-    {
-        int __lock;
-        uint __count;
-        int __owner;
-        uint __nusers;
-        int __kind;
-        short __spins;
-        short __elision;
-        __pthread_list_t __list;
-    }
-    struct __pthread_internal_list
-    {
-        __pthread_internal_list* __prev;
-        __pthread_internal_list* __next;
-    }
-    alias __pthread_list_t = __pthread_internal_list;
-    extern __gshared const(const(char)*)[0] sys_errlist;
-    extern __gshared int sys_nerr;
-    alias uint64_t = c_ulong;
-    alias uint32_t = uint;
-    alias uint16_t = ushort;
-    alias uint8_t = ubyte;
-    alias int64_t = c_long;
-    struct max_align_t
-    {
-        long __clang_max_align_nonce1;
-        real __clang_max_align_nonce2;
-    }
-    alias int32_t = int;
-    alias int16_t = short;
-    alias int8_t = byte;
-    union pthread_barrierattr_t
-    {
-        char[4] __size;
-        int __align;
-    }
-    union pthread_barrier_t
-    {
-        char[32] __size;
-        c_long __align;
-    }
-    alias pthread_spinlock_t = int;
-    union pthread_rwlockattr_t
-    {
-        char[8] __size;
-        c_long __align;
-    }
-    union pthread_rwlock_t
-    {
-        __pthread_rwlock_arch_t __data;
-        char[56] __size;
-        c_long __align;
-    }
-    union pthread_cond_t
-    {
-        __pthread_cond_s __data;
-        char[48] __size;
-        long __align;
-    }
-    union pthread_mutex_t
-    {
-        __pthread_mutex_s __data;
-        char[40] __size;
-        c_long __align;
-    }
-    union pthread_attr_t
-    {
-        char[56] __size;
-        c_long __align;
-    }
-    alias pthread_once_t = int;
-    alias ptrdiff_t = c_long;
-    alias pthread_key_t = uint;
-    alias size_t = c_ulong;
-    alias wchar_t = int;
-    union pthread_condattr_t
-    {
-        char[4] __size;
-        int __align;
-    }
-    union pthread_mutexattr_t
-    {
-        char[4] __size;
-        int __align;
-    }
-    alias pthread_t = c_ulong;
-    struct __pthread_rwlock_arch_t
-    {
-        uint __readers;
-        uint __writers;
-        uint __wrphase_futex;
-        uint __writers_futex;
-        uint __pad3;
-        uint __pad4;
-        int __cur_writer;
-        int __shared;
-        byte __rwelision;
-        ubyte[7] __pad1;
-        c_ulong __pad2;
-        uint __flags;
-    }
-    enum _Anonymous_39
-    {
-        _ISupper = 256,
-        _ISlower = 512,
-        _ISalpha = 1024,
-        _ISdigit = 2048,
-        _ISxdigit = 4096,
-        _ISspace = 8192,
-        _ISprint = 16384,
-        _ISgraph = 32768,
-        _ISblank = 1,
-        _IScntrl = 2,
-        _ISpunct = 4,
-        _ISalnum = 8,
-    }
-    enum _ISupper = _Anonymous_39._ISupper;
-    enum _ISlower = _Anonymous_39._ISlower;
-    enum _ISalpha = _Anonymous_39._ISalpha;
-    enum _ISdigit = _Anonymous_39._ISdigit;
-    enum _ISxdigit = _Anonymous_39._ISxdigit;
-    enum _ISspace = _Anonymous_39._ISspace;
-    enum _ISprint = _Anonymous_39._ISprint;
-    enum _ISgraph = _Anonymous_39._ISgraph;
-    enum _ISblank = _Anonymous_39._ISblank;
-    enum _IScntrl = _Anonymous_39._IScntrl;
-    enum _ISpunct = _Anonymous_39._ISpunct;
-    enum _ISalnum = _Anonymous_39._ISalnum;
-    const(ushort)** __ctype_b_loc() @nogc nothrow;
-    const(__int32_t)** __ctype_tolower_loc() @nogc nothrow;
-    const(__int32_t)** __ctype_toupper_loc() @nogc nothrow;
-    pragma(mangle, "isalnum") int isalnum_(int) @nogc nothrow;
-    pragma(mangle, "isalpha") int isalpha_(int) @nogc nothrow;
-    pragma(mangle, "iscntrl") int iscntrl_(int) @nogc nothrow;
-    pragma(mangle, "isdigit") int isdigit_(int) @nogc nothrow;
-    pragma(mangle, "islower") int islower_(int) @nogc nothrow;
-    pragma(mangle, "isgraph") int isgraph_(int) @nogc nothrow;
-    pragma(mangle, "isprint") int isprint_(int) @nogc nothrow;
-    pragma(mangle, "ispunct") int ispunct_(int) @nogc nothrow;
-    pragma(mangle, "isspace") int isspace_(int) @nogc nothrow;
-    pragma(mangle, "isupper") int isupper_(int) @nogc nothrow;
-    pragma(mangle, "isxdigit") int isxdigit_(int) @nogc nothrow;
-    int tolower(int) @nogc nothrow;
-    int toupper(int) @nogc nothrow;
-    pragma(mangle, "isblank") int isblank_(int) @nogc nothrow;
-    pragma(mangle, "isascii") int isascii_(int) @nogc nothrow;
-    pragma(mangle, "toascii") int toascii_(int) @nogc nothrow;
-    pragma(mangle, "_toupper") int _toupper_(int) @nogc nothrow;
-    pragma(mangle, "_tolower") int _tolower_(int) @nogc nothrow;
-    void _IO_free_backup_area(_IO_FILE*) @nogc nothrow;
-    __off64_t _IO_seekpos(_IO_FILE*, __off64_t, int) @nogc nothrow;
-    pragma(mangle, "isalnum_l") int isalnum_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isalpha_l") int isalpha_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "iscntrl_l") int iscntrl_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isdigit_l") int isdigit_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "islower_l") int islower_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isgraph_l") int isgraph_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isprint_l") int isprint_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "ispunct_l") int ispunct_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isspace_l") int isspace_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isupper_l") int isupper_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isxdigit_l") int isxdigit_l_(int, locale_t) @nogc nothrow;
-    pragma(mangle, "isblank_l") int isblank_l_(int, locale_t) @nogc nothrow;
-    int __tolower_l(int, locale_t) @nogc nothrow;
-    int tolower_l(int, locale_t) @nogc nothrow;
-    int __toupper_l(int, locale_t) @nogc nothrow;
-    int toupper_l(int, locale_t) @nogc nothrow;
-    __off64_t _IO_seekoff(_IO_FILE*, __off64_t, int, int) @nogc nothrow;
-    size_t _IO_sgetn(_IO_FILE*, void*, size_t) @nogc nothrow;
-    __ssize_t _IO_padn(_IO_FILE*, int, __ssize_t) @nogc nothrow;
-    int _IO_vfprintf(_IO_FILE*, const(char)*, va_list) @nogc nothrow;
-    int _IO_vfscanf(_IO_FILE*, const(char)*, va_list, int*) @nogc nothrow;
-    pragma(mangle, "_IO_ftrylockfile") int _IO_ftrylockfile_(_IO_FILE*) @nogc nothrow;
-    pragma(mangle, "_IO_funlockfile") void _IO_funlockfile_(_IO_FILE*) @nogc nothrow;
-    pragma(mangle, "_IO_flockfile") void _IO_flockfile_(_IO_FILE*) @nogc nothrow;
-    int _IO_peekc_locked(_IO_FILE*) @nogc nothrow;
-    int _IO_ferror(_IO_FILE*) @nogc nothrow;
-    int _IO_feof(_IO_FILE*) @nogc nothrow;
-    int _IO_putc(int, _IO_FILE*) @nogc nothrow;
-    int _IO_getc(_IO_FILE*) @nogc nothrow;
-    int __overflow(_IO_FILE*, int) @nogc nothrow;
-    int __uflow(_IO_FILE*) @nogc nothrow;
-    int __underflow(_IO_FILE*) @nogc nothrow;
-    alias __io_close_fn = int function(void*) @nogc nothrow;
-    alias __io_seek_fn = int function(void*, __off64_t*, int) @nogc nothrow;
-    alias __io_write_fn = c_long function(void*, const(char)*, size_t) @nogc nothrow;
-    alias __io_read_fn = c_long function(void*, char*, size_t) @nogc nothrow;
-    struct _IO_FILE_plus;
-    enum __codecvt_result
-    {
-        __codecvt_ok = 0,
-        __codecvt_partial = 1,
-        __codecvt_error = 2,
-        __codecvt_noconv = 3,
-    }
-    enum __codecvt_ok = __codecvt_result.__codecvt_ok;
-    enum __codecvt_partial = __codecvt_result.__codecvt_partial;
-    enum __codecvt_error = __codecvt_result.__codecvt_error;
-    enum __codecvt_noconv = __codecvt_result.__codecvt_noconv;
-    struct _IO_marker
-    {
-        _IO_marker* _next;
-        _IO_FILE* _sbuf;
-        int _pos;
-    }
-    alias _IO_lock_t = void;
-    struct _IO_jump_t;
-    int* __errno_location() @nogc nothrow;
-    int getopt(int, char**, const(char)*) @nogc nothrow;
-    extern __gshared int optopt;
-    extern __gshared int opterr;
-    extern __gshared int optind;
-    extern __gshared char* optarg;
-    alias _Float64x = real;
-    alias _Float32x = double;
-    alias _Float64 = double;
-    alias _Float32 = float;
-    alias int_least8_t = byte;
-    alias int_least16_t = short;
-    alias int_least32_t = int;
-    alias int_least64_t = c_long;
-    alias uint_least8_t = ubyte;
-    alias uint_least16_t = ushort;
-    alias uint_least32_t = uint;
-    alias uint_least64_t = c_ulong;
-    alias int_fast8_t = byte;
-    alias int_fast16_t = c_long;
-    alias int_fast32_t = c_long;
-    alias int_fast64_t = c_long;
-    alias uint_fast8_t = ubyte;
-    alias uint_fast16_t = c_ulong;
-    alias uint_fast32_t = c_ulong;
-    alias uint_fast64_t = c_ulong;
-    alias intptr_t = c_long;
-    alias uintptr_t = c_ulong;
-    alias intmax_t = c_long;
-    alias uintmax_t = c_ulong;
-    enum _Anonymous_40
-    {
-        _CS_PATH = 0,
-        _CS_V6_WIDTH_RESTRICTED_ENVS = 1,
-        _CS_GNU_LIBC_VERSION = 2,
-        _CS_GNU_LIBPTHREAD_VERSION = 3,
-        _CS_V5_WIDTH_RESTRICTED_ENVS = 4,
-        _CS_V7_WIDTH_RESTRICTED_ENVS = 5,
-        _CS_LFS_CFLAGS = 1000,
-        _CS_LFS_LDFLAGS = 1001,
-        _CS_LFS_LIBS = 1002,
-        _CS_LFS_LINTFLAGS = 1003,
-        _CS_LFS64_CFLAGS = 1004,
-        _CS_LFS64_LDFLAGS = 1005,
-        _CS_LFS64_LIBS = 1006,
-        _CS_LFS64_LINTFLAGS = 1007,
-        _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
-        _CS_XBS5_ILP32_OFF32_LDFLAGS = 1101,
-        _CS_XBS5_ILP32_OFF32_LIBS = 1102,
-        _CS_XBS5_ILP32_OFF32_LINTFLAGS = 1103,
-        _CS_XBS5_ILP32_OFFBIG_CFLAGS = 1104,
-        _CS_XBS5_ILP32_OFFBIG_LDFLAGS = 1105,
-        _CS_XBS5_ILP32_OFFBIG_LIBS = 1106,
-        _CS_XBS5_ILP32_OFFBIG_LINTFLAGS = 1107,
-        _CS_XBS5_LP64_OFF64_CFLAGS = 1108,
-        _CS_XBS5_LP64_OFF64_LDFLAGS = 1109,
-        _CS_XBS5_LP64_OFF64_LIBS = 1110,
-        _CS_XBS5_LP64_OFF64_LINTFLAGS = 1111,
-        _CS_XBS5_LPBIG_OFFBIG_CFLAGS = 1112,
-        _CS_XBS5_LPBIG_OFFBIG_LDFLAGS = 1113,
-        _CS_XBS5_LPBIG_OFFBIG_LIBS = 1114,
-        _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS = 1115,
-        _CS_POSIX_V6_ILP32_OFF32_CFLAGS = 1116,
-        _CS_POSIX_V6_ILP32_OFF32_LDFLAGS = 1117,
-        _CS_POSIX_V6_ILP32_OFF32_LIBS = 1118,
-        _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS = 1119,
-        _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS = 1120,
-        _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS = 1121,
-        _CS_POSIX_V6_ILP32_OFFBIG_LIBS = 1122,
-        _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS = 1123,
-        _CS_POSIX_V6_LP64_OFF64_CFLAGS = 1124,
-        _CS_POSIX_V6_LP64_OFF64_LDFLAGS = 1125,
-        _CS_POSIX_V6_LP64_OFF64_LIBS = 1126,
-        _CS_POSIX_V6_LP64_OFF64_LINTFLAGS = 1127,
-        _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS = 1128,
-        _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS = 1129,
-        _CS_POSIX_V6_LPBIG_OFFBIG_LIBS = 1130,
-        _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS = 1131,
-        _CS_POSIX_V7_ILP32_OFF32_CFLAGS = 1132,
-        _CS_POSIX_V7_ILP32_OFF32_LDFLAGS = 1133,
-        _CS_POSIX_V7_ILP32_OFF32_LIBS = 1134,
-        _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS = 1135,
-        _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS = 1136,
-        _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS = 1137,
-        _CS_POSIX_V7_ILP32_OFFBIG_LIBS = 1138,
-        _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS = 1139,
-        _CS_POSIX_V7_LP64_OFF64_CFLAGS = 1140,
-        _CS_POSIX_V7_LP64_OFF64_LDFLAGS = 1141,
-        _CS_POSIX_V7_LP64_OFF64_LIBS = 1142,
-        _CS_POSIX_V7_LP64_OFF64_LINTFLAGS = 1143,
-        _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS = 1144,
-        _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS = 1145,
-        _CS_POSIX_V7_LPBIG_OFFBIG_LIBS = 1146,
-        _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS = 1147,
-        _CS_V6_ENV = 1148,
-        _CS_V7_ENV = 1149,
-    }
-    enum _CS_PATH = _Anonymous_40._CS_PATH;
-    enum _CS_V6_WIDTH_RESTRICTED_ENVS = _Anonymous_40._CS_V6_WIDTH_RESTRICTED_ENVS;
-    enum _CS_GNU_LIBC_VERSION = _Anonymous_40._CS_GNU_LIBC_VERSION;
-    enum _CS_GNU_LIBPTHREAD_VERSION = _Anonymous_40._CS_GNU_LIBPTHREAD_VERSION;
-    enum _CS_V5_WIDTH_RESTRICTED_ENVS = _Anonymous_40._CS_V5_WIDTH_RESTRICTED_ENVS;
-    enum _CS_V7_WIDTH_RESTRICTED_ENVS = _Anonymous_40._CS_V7_WIDTH_RESTRICTED_ENVS;
-    enum _CS_LFS_CFLAGS = _Anonymous_40._CS_LFS_CFLAGS;
-    enum _CS_LFS_LDFLAGS = _Anonymous_40._CS_LFS_LDFLAGS;
-    enum _CS_LFS_LIBS = _Anonymous_40._CS_LFS_LIBS;
-    enum _CS_LFS_LINTFLAGS = _Anonymous_40._CS_LFS_LINTFLAGS;
-    enum _CS_LFS64_CFLAGS = _Anonymous_40._CS_LFS64_CFLAGS;
-    enum _CS_LFS64_LDFLAGS = _Anonymous_40._CS_LFS64_LDFLAGS;
-    enum _CS_LFS64_LIBS = _Anonymous_40._CS_LFS64_LIBS;
-    enum _CS_LFS64_LINTFLAGS = _Anonymous_40._CS_LFS64_LINTFLAGS;
-    enum _CS_XBS5_ILP32_OFF32_CFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFF32_CFLAGS;
-    enum _CS_XBS5_ILP32_OFF32_LDFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFF32_LDFLAGS;
-    enum _CS_XBS5_ILP32_OFF32_LIBS = _Anonymous_40._CS_XBS5_ILP32_OFF32_LIBS;
-    enum _CS_XBS5_ILP32_OFF32_LINTFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFF32_LINTFLAGS;
-    enum _CS_XBS5_ILP32_OFFBIG_CFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFFBIG_CFLAGS;
-    enum _CS_XBS5_ILP32_OFFBIG_LDFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFFBIG_LDFLAGS;
-    enum _CS_XBS5_ILP32_OFFBIG_LIBS = _Anonymous_40._CS_XBS5_ILP32_OFFBIG_LIBS;
-    enum _CS_XBS5_ILP32_OFFBIG_LINTFLAGS = _Anonymous_40._CS_XBS5_ILP32_OFFBIG_LINTFLAGS;
-    enum _CS_XBS5_LP64_OFF64_CFLAGS = _Anonymous_40._CS_XBS5_LP64_OFF64_CFLAGS;
-    enum _CS_XBS5_LP64_OFF64_LDFLAGS = _Anonymous_40._CS_XBS5_LP64_OFF64_LDFLAGS;
-    enum _CS_XBS5_LP64_OFF64_LIBS = _Anonymous_40._CS_XBS5_LP64_OFF64_LIBS;
-    enum _CS_XBS5_LP64_OFF64_LINTFLAGS = _Anonymous_40._CS_XBS5_LP64_OFF64_LINTFLAGS;
-    enum _CS_XBS5_LPBIG_OFFBIG_CFLAGS = _Anonymous_40._CS_XBS5_LPBIG_OFFBIG_CFLAGS;
-    enum _CS_XBS5_LPBIG_OFFBIG_LDFLAGS = _Anonymous_40._CS_XBS5_LPBIG_OFFBIG_LDFLAGS;
-    enum _CS_XBS5_LPBIG_OFFBIG_LIBS = _Anonymous_40._CS_XBS5_LPBIG_OFFBIG_LIBS;
-    enum _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_40._CS_XBS5_LPBIG_OFFBIG_LINTFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFF32_CFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFF32_CFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFF32_LDFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFF32_LDFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFF32_LIBS = _Anonymous_40._CS_POSIX_V6_ILP32_OFF32_LIBS;
-    enum _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFF32_LINTFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFFBIG_CFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS;
-    enum _CS_POSIX_V6_ILP32_OFFBIG_LIBS = _Anonymous_40._CS_POSIX_V6_ILP32_OFFBIG_LIBS;
-    enum _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS = _Anonymous_40._CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS;
-    enum _CS_POSIX_V6_LP64_OFF64_CFLAGS = _Anonymous_40._CS_POSIX_V6_LP64_OFF64_CFLAGS;
-    enum _CS_POSIX_V6_LP64_OFF64_LDFLAGS = _Anonymous_40._CS_POSIX_V6_LP64_OFF64_LDFLAGS;
-    enum _CS_POSIX_V6_LP64_OFF64_LIBS = _Anonymous_40._CS_POSIX_V6_LP64_OFF64_LIBS;
-    enum _CS_POSIX_V6_LP64_OFF64_LINTFLAGS = _Anonymous_40._CS_POSIX_V6_LP64_OFF64_LINTFLAGS;
-    enum _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS = _Anonymous_40._CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS;
-    enum _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS = _Anonymous_40._CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS;
-    enum _CS_POSIX_V6_LPBIG_OFFBIG_LIBS = _Anonymous_40._CS_POSIX_V6_LPBIG_OFFBIG_LIBS;
-    enum _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_40._CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFF32_CFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFF32_CFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFF32_LDFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFF32_LDFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFF32_LIBS = _Anonymous_40._CS_POSIX_V7_ILP32_OFF32_LIBS;
-    enum _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFF32_LINTFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFFBIG_CFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS;
-    enum _CS_POSIX_V7_ILP32_OFFBIG_LIBS = _Anonymous_40._CS_POSIX_V7_ILP32_OFFBIG_LIBS;
-    enum _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS = _Anonymous_40._CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS;
-    enum _CS_POSIX_V7_LP64_OFF64_CFLAGS = _Anonymous_40._CS_POSIX_V7_LP64_OFF64_CFLAGS;
-    enum _CS_POSIX_V7_LP64_OFF64_LDFLAGS = _Anonymous_40._CS_POSIX_V7_LP64_OFF64_LDFLAGS;
-    enum _CS_POSIX_V7_LP64_OFF64_LIBS = _Anonymous_40._CS_POSIX_V7_LP64_OFF64_LIBS;
-    enum _CS_POSIX_V7_LP64_OFF64_LINTFLAGS = _Anonymous_40._CS_POSIX_V7_LP64_OFF64_LINTFLAGS;
-    enum _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS = _Anonymous_40._CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS;
-    enum _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS = _Anonymous_40._CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS;
-    enum _CS_POSIX_V7_LPBIG_OFFBIG_LIBS = _Anonymous_40._CS_POSIX_V7_LPBIG_OFFBIG_LIBS;
-    enum _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_40._CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS;
-    enum _CS_V6_ENV = _Anonymous_40._CS_V6_ENV;
-    enum _CS_V7_ENV = _Anonymous_40._CS_V7_ENV;
-    enum _Anonymous_41
+    enum _PC_LINK_MAX = _Anonymous_31._PC_LINK_MAX;
+    enum _PC_MAX_CANON = _Anonymous_31._PC_MAX_CANON;
+    enum _PC_MAX_INPUT = _Anonymous_31._PC_MAX_INPUT;
+    enum _PC_NAME_MAX = _Anonymous_31._PC_NAME_MAX;
+    enum _PC_PATH_MAX = _Anonymous_31._PC_PATH_MAX;
+    enum _PC_PIPE_BUF = _Anonymous_31._PC_PIPE_BUF;
+    enum _PC_CHOWN_RESTRICTED = _Anonymous_31._PC_CHOWN_RESTRICTED;
+    enum _PC_NO_TRUNC = _Anonymous_31._PC_NO_TRUNC;
+    enum _PC_VDISABLE = _Anonymous_31._PC_VDISABLE;
+    enum _PC_SYNC_IO = _Anonymous_31._PC_SYNC_IO;
+    enum _PC_ASYNC_IO = _Anonymous_31._PC_ASYNC_IO;
+    enum _PC_PRIO_IO = _Anonymous_31._PC_PRIO_IO;
+    enum _PC_SOCK_MAXBUF = _Anonymous_31._PC_SOCK_MAXBUF;
+    enum _PC_FILESIZEBITS = _Anonymous_31._PC_FILESIZEBITS;
+    enum _PC_REC_INCR_XFER_SIZE = _Anonymous_31._PC_REC_INCR_XFER_SIZE;
+    enum _PC_REC_MAX_XFER_SIZE = _Anonymous_31._PC_REC_MAX_XFER_SIZE;
+    enum _PC_REC_MIN_XFER_SIZE = _Anonymous_31._PC_REC_MIN_XFER_SIZE;
+    enum _PC_REC_XFER_ALIGN = _Anonymous_31._PC_REC_XFER_ALIGN;
+    enum _PC_ALLOC_SIZE_MIN = _Anonymous_31._PC_ALLOC_SIZE_MIN;
+    enum _PC_SYMLINK_MAX = _Anonymous_31._PC_SYMLINK_MAX;
+    enum _PC_2_SYMLINKS = _Anonymous_31._PC_2_SYMLINKS;
+    uint sleep(uint) @nogc nothrow;
+    uint alarm(uint) @nogc nothrow;
+    int pipe(int*) @nogc nothrow;
+    c_long pwrite(int, const(void)*, c_ulong, c_long) @nogc nothrow;
+    c_long pread(int, void*, c_ulong, c_long) @nogc nothrow;
+    c_long write(int, const(void)*, c_ulong) @nogc nothrow;
+    c_long read(int, void*, c_ulong) @nogc nothrow;
+    int close(int) @nogc nothrow;
+    c_long lseek(int, c_long, int) @nogc nothrow;
+    enum _Anonymous_32
     {
         _SC_ARG_MAX = 0,
         _SC_CHILD_MAX = 1,
@@ -3478,433 +3041,926 @@ extern(C)
         _SC_THREAD_ROBUST_PRIO_INHERIT = 247,
         _SC_THREAD_ROBUST_PRIO_PROTECT = 248,
     }
-    enum _SC_ARG_MAX = _Anonymous_41._SC_ARG_MAX;
-    enum _SC_CHILD_MAX = _Anonymous_41._SC_CHILD_MAX;
-    enum _SC_CLK_TCK = _Anonymous_41._SC_CLK_TCK;
-    enum _SC_NGROUPS_MAX = _Anonymous_41._SC_NGROUPS_MAX;
-    enum _SC_OPEN_MAX = _Anonymous_41._SC_OPEN_MAX;
-    enum _SC_STREAM_MAX = _Anonymous_41._SC_STREAM_MAX;
-    enum _SC_TZNAME_MAX = _Anonymous_41._SC_TZNAME_MAX;
-    enum _SC_JOB_CONTROL = _Anonymous_41._SC_JOB_CONTROL;
-    enum _SC_SAVED_IDS = _Anonymous_41._SC_SAVED_IDS;
-    enum _SC_REALTIME_SIGNALS = _Anonymous_41._SC_REALTIME_SIGNALS;
-    enum _SC_PRIORITY_SCHEDULING = _Anonymous_41._SC_PRIORITY_SCHEDULING;
-    enum _SC_TIMERS = _Anonymous_41._SC_TIMERS;
-    enum _SC_ASYNCHRONOUS_IO = _Anonymous_41._SC_ASYNCHRONOUS_IO;
-    enum _SC_PRIORITIZED_IO = _Anonymous_41._SC_PRIORITIZED_IO;
-    enum _SC_SYNCHRONIZED_IO = _Anonymous_41._SC_SYNCHRONIZED_IO;
-    enum _SC_FSYNC = _Anonymous_41._SC_FSYNC;
-    enum _SC_MAPPED_FILES = _Anonymous_41._SC_MAPPED_FILES;
-    enum _SC_MEMLOCK = _Anonymous_41._SC_MEMLOCK;
-    enum _SC_MEMLOCK_RANGE = _Anonymous_41._SC_MEMLOCK_RANGE;
-    enum _SC_MEMORY_PROTECTION = _Anonymous_41._SC_MEMORY_PROTECTION;
-    enum _SC_MESSAGE_PASSING = _Anonymous_41._SC_MESSAGE_PASSING;
-    enum _SC_SEMAPHORES = _Anonymous_41._SC_SEMAPHORES;
-    enum _SC_SHARED_MEMORY_OBJECTS = _Anonymous_41._SC_SHARED_MEMORY_OBJECTS;
-    enum _SC_AIO_LISTIO_MAX = _Anonymous_41._SC_AIO_LISTIO_MAX;
-    enum _SC_AIO_MAX = _Anonymous_41._SC_AIO_MAX;
-    enum _SC_AIO_PRIO_DELTA_MAX = _Anonymous_41._SC_AIO_PRIO_DELTA_MAX;
-    enum _SC_DELAYTIMER_MAX = _Anonymous_41._SC_DELAYTIMER_MAX;
-    enum _SC_MQ_OPEN_MAX = _Anonymous_41._SC_MQ_OPEN_MAX;
-    enum _SC_MQ_PRIO_MAX = _Anonymous_41._SC_MQ_PRIO_MAX;
-    enum _SC_VERSION = _Anonymous_41._SC_VERSION;
-    enum _SC_PAGESIZE = _Anonymous_41._SC_PAGESIZE;
-    enum _SC_RTSIG_MAX = _Anonymous_41._SC_RTSIG_MAX;
-    enum _SC_SEM_NSEMS_MAX = _Anonymous_41._SC_SEM_NSEMS_MAX;
-    enum _SC_SEM_VALUE_MAX = _Anonymous_41._SC_SEM_VALUE_MAX;
-    enum _SC_SIGQUEUE_MAX = _Anonymous_41._SC_SIGQUEUE_MAX;
-    enum _SC_TIMER_MAX = _Anonymous_41._SC_TIMER_MAX;
-    enum _SC_BC_BASE_MAX = _Anonymous_41._SC_BC_BASE_MAX;
-    enum _SC_BC_DIM_MAX = _Anonymous_41._SC_BC_DIM_MAX;
-    enum _SC_BC_SCALE_MAX = _Anonymous_41._SC_BC_SCALE_MAX;
-    enum _SC_BC_STRING_MAX = _Anonymous_41._SC_BC_STRING_MAX;
-    enum _SC_COLL_WEIGHTS_MAX = _Anonymous_41._SC_COLL_WEIGHTS_MAX;
-    enum _SC_EQUIV_CLASS_MAX = _Anonymous_41._SC_EQUIV_CLASS_MAX;
-    enum _SC_EXPR_NEST_MAX = _Anonymous_41._SC_EXPR_NEST_MAX;
-    enum _SC_LINE_MAX = _Anonymous_41._SC_LINE_MAX;
-    enum _SC_RE_DUP_MAX = _Anonymous_41._SC_RE_DUP_MAX;
-    enum _SC_CHARCLASS_NAME_MAX = _Anonymous_41._SC_CHARCLASS_NAME_MAX;
-    enum _SC_2_VERSION = _Anonymous_41._SC_2_VERSION;
-    enum _SC_2_C_BIND = _Anonymous_41._SC_2_C_BIND;
-    enum _SC_2_C_DEV = _Anonymous_41._SC_2_C_DEV;
-    enum _SC_2_FORT_DEV = _Anonymous_41._SC_2_FORT_DEV;
-    enum _SC_2_FORT_RUN = _Anonymous_41._SC_2_FORT_RUN;
-    enum _SC_2_SW_DEV = _Anonymous_41._SC_2_SW_DEV;
-    enum _SC_2_LOCALEDEF = _Anonymous_41._SC_2_LOCALEDEF;
-    enum _SC_PII = _Anonymous_41._SC_PII;
-    enum _SC_PII_XTI = _Anonymous_41._SC_PII_XTI;
-    enum _SC_PII_SOCKET = _Anonymous_41._SC_PII_SOCKET;
-    enum _SC_PII_INTERNET = _Anonymous_41._SC_PII_INTERNET;
-    enum _SC_PII_OSI = _Anonymous_41._SC_PII_OSI;
-    enum _SC_POLL = _Anonymous_41._SC_POLL;
-    enum _SC_SELECT = _Anonymous_41._SC_SELECT;
-    enum _SC_UIO_MAXIOV = _Anonymous_41._SC_UIO_MAXIOV;
-    enum _SC_IOV_MAX = _Anonymous_41._SC_IOV_MAX;
-    enum _SC_PII_INTERNET_STREAM = _Anonymous_41._SC_PII_INTERNET_STREAM;
-    enum _SC_PII_INTERNET_DGRAM = _Anonymous_41._SC_PII_INTERNET_DGRAM;
-    enum _SC_PII_OSI_COTS = _Anonymous_41._SC_PII_OSI_COTS;
-    enum _SC_PII_OSI_CLTS = _Anonymous_41._SC_PII_OSI_CLTS;
-    enum _SC_PII_OSI_M = _Anonymous_41._SC_PII_OSI_M;
-    enum _SC_T_IOV_MAX = _Anonymous_41._SC_T_IOV_MAX;
-    enum _SC_THREADS = _Anonymous_41._SC_THREADS;
-    enum _SC_THREAD_SAFE_FUNCTIONS = _Anonymous_41._SC_THREAD_SAFE_FUNCTIONS;
-    enum _SC_GETGR_R_SIZE_MAX = _Anonymous_41._SC_GETGR_R_SIZE_MAX;
-    enum _SC_GETPW_R_SIZE_MAX = _Anonymous_41._SC_GETPW_R_SIZE_MAX;
-    enum _SC_LOGIN_NAME_MAX = _Anonymous_41._SC_LOGIN_NAME_MAX;
-    enum _SC_TTY_NAME_MAX = _Anonymous_41._SC_TTY_NAME_MAX;
-    enum _SC_THREAD_DESTRUCTOR_ITERATIONS = _Anonymous_41._SC_THREAD_DESTRUCTOR_ITERATIONS;
-    enum _SC_THREAD_KEYS_MAX = _Anonymous_41._SC_THREAD_KEYS_MAX;
-    enum _SC_THREAD_STACK_MIN = _Anonymous_41._SC_THREAD_STACK_MIN;
-    enum _SC_THREAD_THREADS_MAX = _Anonymous_41._SC_THREAD_THREADS_MAX;
-    enum _SC_THREAD_ATTR_STACKADDR = _Anonymous_41._SC_THREAD_ATTR_STACKADDR;
-    enum _SC_THREAD_ATTR_STACKSIZE = _Anonymous_41._SC_THREAD_ATTR_STACKSIZE;
-    enum _SC_THREAD_PRIORITY_SCHEDULING = _Anonymous_41._SC_THREAD_PRIORITY_SCHEDULING;
-    enum _SC_THREAD_PRIO_INHERIT = _Anonymous_41._SC_THREAD_PRIO_INHERIT;
-    enum _SC_THREAD_PRIO_PROTECT = _Anonymous_41._SC_THREAD_PRIO_PROTECT;
-    enum _SC_THREAD_PROCESS_SHARED = _Anonymous_41._SC_THREAD_PROCESS_SHARED;
-    enum _SC_NPROCESSORS_CONF = _Anonymous_41._SC_NPROCESSORS_CONF;
-    enum _SC_NPROCESSORS_ONLN = _Anonymous_41._SC_NPROCESSORS_ONLN;
-    enum _SC_PHYS_PAGES = _Anonymous_41._SC_PHYS_PAGES;
-    enum _SC_AVPHYS_PAGES = _Anonymous_41._SC_AVPHYS_PAGES;
-    enum _SC_ATEXIT_MAX = _Anonymous_41._SC_ATEXIT_MAX;
-    enum _SC_PASS_MAX = _Anonymous_41._SC_PASS_MAX;
-    enum _SC_XOPEN_VERSION = _Anonymous_41._SC_XOPEN_VERSION;
-    enum _SC_XOPEN_XCU_VERSION = _Anonymous_41._SC_XOPEN_XCU_VERSION;
-    enum _SC_XOPEN_UNIX = _Anonymous_41._SC_XOPEN_UNIX;
-    enum _SC_XOPEN_CRYPT = _Anonymous_41._SC_XOPEN_CRYPT;
-    enum _SC_XOPEN_ENH_I18N = _Anonymous_41._SC_XOPEN_ENH_I18N;
-    enum _SC_XOPEN_SHM = _Anonymous_41._SC_XOPEN_SHM;
-    enum _SC_2_CHAR_TERM = _Anonymous_41._SC_2_CHAR_TERM;
-    enum _SC_2_C_VERSION = _Anonymous_41._SC_2_C_VERSION;
-    enum _SC_2_UPE = _Anonymous_41._SC_2_UPE;
-    enum _SC_XOPEN_XPG2 = _Anonymous_41._SC_XOPEN_XPG2;
-    enum _SC_XOPEN_XPG3 = _Anonymous_41._SC_XOPEN_XPG3;
-    enum _SC_XOPEN_XPG4 = _Anonymous_41._SC_XOPEN_XPG4;
-    enum _SC_CHAR_BIT = _Anonymous_41._SC_CHAR_BIT;
-    enum _SC_CHAR_MAX = _Anonymous_41._SC_CHAR_MAX;
-    enum _SC_CHAR_MIN = _Anonymous_41._SC_CHAR_MIN;
-    enum _SC_INT_MAX = _Anonymous_41._SC_INT_MAX;
-    enum _SC_INT_MIN = _Anonymous_41._SC_INT_MIN;
-    enum _SC_LONG_BIT = _Anonymous_41._SC_LONG_BIT;
-    enum _SC_WORD_BIT = _Anonymous_41._SC_WORD_BIT;
-    enum _SC_MB_LEN_MAX = _Anonymous_41._SC_MB_LEN_MAX;
-    enum _SC_NZERO = _Anonymous_41._SC_NZERO;
-    enum _SC_SSIZE_MAX = _Anonymous_41._SC_SSIZE_MAX;
-    enum _SC_SCHAR_MAX = _Anonymous_41._SC_SCHAR_MAX;
-    enum _SC_SCHAR_MIN = _Anonymous_41._SC_SCHAR_MIN;
-    enum _SC_SHRT_MAX = _Anonymous_41._SC_SHRT_MAX;
-    enum _SC_SHRT_MIN = _Anonymous_41._SC_SHRT_MIN;
-    enum _SC_UCHAR_MAX = _Anonymous_41._SC_UCHAR_MAX;
-    enum _SC_UINT_MAX = _Anonymous_41._SC_UINT_MAX;
-    enum _SC_ULONG_MAX = _Anonymous_41._SC_ULONG_MAX;
-    enum _SC_USHRT_MAX = _Anonymous_41._SC_USHRT_MAX;
-    enum _SC_NL_ARGMAX = _Anonymous_41._SC_NL_ARGMAX;
-    enum _SC_NL_LANGMAX = _Anonymous_41._SC_NL_LANGMAX;
-    enum _SC_NL_MSGMAX = _Anonymous_41._SC_NL_MSGMAX;
-    enum _SC_NL_NMAX = _Anonymous_41._SC_NL_NMAX;
-    enum _SC_NL_SETMAX = _Anonymous_41._SC_NL_SETMAX;
-    enum _SC_NL_TEXTMAX = _Anonymous_41._SC_NL_TEXTMAX;
-    enum _SC_XBS5_ILP32_OFF32 = _Anonymous_41._SC_XBS5_ILP32_OFF32;
-    enum _SC_XBS5_ILP32_OFFBIG = _Anonymous_41._SC_XBS5_ILP32_OFFBIG;
-    enum _SC_XBS5_LP64_OFF64 = _Anonymous_41._SC_XBS5_LP64_OFF64;
-    enum _SC_XBS5_LPBIG_OFFBIG = _Anonymous_41._SC_XBS5_LPBIG_OFFBIG;
-    enum _SC_XOPEN_LEGACY = _Anonymous_41._SC_XOPEN_LEGACY;
-    enum _SC_XOPEN_REALTIME = _Anonymous_41._SC_XOPEN_REALTIME;
-    enum _SC_XOPEN_REALTIME_THREADS = _Anonymous_41._SC_XOPEN_REALTIME_THREADS;
-    enum _SC_ADVISORY_INFO = _Anonymous_41._SC_ADVISORY_INFO;
-    enum _SC_BARRIERS = _Anonymous_41._SC_BARRIERS;
-    enum _SC_BASE = _Anonymous_41._SC_BASE;
-    enum _SC_C_LANG_SUPPORT = _Anonymous_41._SC_C_LANG_SUPPORT;
-    enum _SC_C_LANG_SUPPORT_R = _Anonymous_41._SC_C_LANG_SUPPORT_R;
-    enum _SC_CLOCK_SELECTION = _Anonymous_41._SC_CLOCK_SELECTION;
-    enum _SC_CPUTIME = _Anonymous_41._SC_CPUTIME;
-    enum _SC_THREAD_CPUTIME = _Anonymous_41._SC_THREAD_CPUTIME;
-    enum _SC_DEVICE_IO = _Anonymous_41._SC_DEVICE_IO;
-    enum _SC_DEVICE_SPECIFIC = _Anonymous_41._SC_DEVICE_SPECIFIC;
-    enum _SC_DEVICE_SPECIFIC_R = _Anonymous_41._SC_DEVICE_SPECIFIC_R;
-    enum _SC_FD_MGMT = _Anonymous_41._SC_FD_MGMT;
-    enum _SC_FIFO = _Anonymous_41._SC_FIFO;
-    enum _SC_PIPE = _Anonymous_41._SC_PIPE;
-    enum _SC_FILE_ATTRIBUTES = _Anonymous_41._SC_FILE_ATTRIBUTES;
-    enum _SC_FILE_LOCKING = _Anonymous_41._SC_FILE_LOCKING;
-    enum _SC_FILE_SYSTEM = _Anonymous_41._SC_FILE_SYSTEM;
-    enum _SC_MONOTONIC_CLOCK = _Anonymous_41._SC_MONOTONIC_CLOCK;
-    enum _SC_MULTI_PROCESS = _Anonymous_41._SC_MULTI_PROCESS;
-    enum _SC_SINGLE_PROCESS = _Anonymous_41._SC_SINGLE_PROCESS;
-    enum _SC_NETWORKING = _Anonymous_41._SC_NETWORKING;
-    enum _SC_READER_WRITER_LOCKS = _Anonymous_41._SC_READER_WRITER_LOCKS;
-    enum _SC_SPIN_LOCKS = _Anonymous_41._SC_SPIN_LOCKS;
-    enum _SC_REGEXP = _Anonymous_41._SC_REGEXP;
-    enum _SC_REGEX_VERSION = _Anonymous_41._SC_REGEX_VERSION;
-    enum _SC_SHELL = _Anonymous_41._SC_SHELL;
-    enum _SC_SIGNALS = _Anonymous_41._SC_SIGNALS;
-    enum _SC_SPAWN = _Anonymous_41._SC_SPAWN;
-    enum _SC_SPORADIC_SERVER = _Anonymous_41._SC_SPORADIC_SERVER;
-    enum _SC_THREAD_SPORADIC_SERVER = _Anonymous_41._SC_THREAD_SPORADIC_SERVER;
-    enum _SC_SYSTEM_DATABASE = _Anonymous_41._SC_SYSTEM_DATABASE;
-    enum _SC_SYSTEM_DATABASE_R = _Anonymous_41._SC_SYSTEM_DATABASE_R;
-    enum _SC_TIMEOUTS = _Anonymous_41._SC_TIMEOUTS;
-    enum _SC_TYPED_MEMORY_OBJECTS = _Anonymous_41._SC_TYPED_MEMORY_OBJECTS;
-    enum _SC_USER_GROUPS = _Anonymous_41._SC_USER_GROUPS;
-    enum _SC_USER_GROUPS_R = _Anonymous_41._SC_USER_GROUPS_R;
-    enum _SC_2_PBS = _Anonymous_41._SC_2_PBS;
-    enum _SC_2_PBS_ACCOUNTING = _Anonymous_41._SC_2_PBS_ACCOUNTING;
-    enum _SC_2_PBS_LOCATE = _Anonymous_41._SC_2_PBS_LOCATE;
-    enum _SC_2_PBS_MESSAGE = _Anonymous_41._SC_2_PBS_MESSAGE;
-    enum _SC_2_PBS_TRACK = _Anonymous_41._SC_2_PBS_TRACK;
-    enum _SC_SYMLOOP_MAX = _Anonymous_41._SC_SYMLOOP_MAX;
-    enum _SC_STREAMS = _Anonymous_41._SC_STREAMS;
-    enum _SC_2_PBS_CHECKPOINT = _Anonymous_41._SC_2_PBS_CHECKPOINT;
-    enum _SC_V6_ILP32_OFF32 = _Anonymous_41._SC_V6_ILP32_OFF32;
-    enum _SC_V6_ILP32_OFFBIG = _Anonymous_41._SC_V6_ILP32_OFFBIG;
-    enum _SC_V6_LP64_OFF64 = _Anonymous_41._SC_V6_LP64_OFF64;
-    enum _SC_V6_LPBIG_OFFBIG = _Anonymous_41._SC_V6_LPBIG_OFFBIG;
-    enum _SC_HOST_NAME_MAX = _Anonymous_41._SC_HOST_NAME_MAX;
-    enum _SC_TRACE = _Anonymous_41._SC_TRACE;
-    enum _SC_TRACE_EVENT_FILTER = _Anonymous_41._SC_TRACE_EVENT_FILTER;
-    enum _SC_TRACE_INHERIT = _Anonymous_41._SC_TRACE_INHERIT;
-    enum _SC_TRACE_LOG = _Anonymous_41._SC_TRACE_LOG;
-    enum _SC_LEVEL1_ICACHE_SIZE = _Anonymous_41._SC_LEVEL1_ICACHE_SIZE;
-    enum _SC_LEVEL1_ICACHE_ASSOC = _Anonymous_41._SC_LEVEL1_ICACHE_ASSOC;
-    enum _SC_LEVEL1_ICACHE_LINESIZE = _Anonymous_41._SC_LEVEL1_ICACHE_LINESIZE;
-    enum _SC_LEVEL1_DCACHE_SIZE = _Anonymous_41._SC_LEVEL1_DCACHE_SIZE;
-    enum _SC_LEVEL1_DCACHE_ASSOC = _Anonymous_41._SC_LEVEL1_DCACHE_ASSOC;
-    enum _SC_LEVEL1_DCACHE_LINESIZE = _Anonymous_41._SC_LEVEL1_DCACHE_LINESIZE;
-    enum _SC_LEVEL2_CACHE_SIZE = _Anonymous_41._SC_LEVEL2_CACHE_SIZE;
-    enum _SC_LEVEL2_CACHE_ASSOC = _Anonymous_41._SC_LEVEL2_CACHE_ASSOC;
-    enum _SC_LEVEL2_CACHE_LINESIZE = _Anonymous_41._SC_LEVEL2_CACHE_LINESIZE;
-    enum _SC_LEVEL3_CACHE_SIZE = _Anonymous_41._SC_LEVEL3_CACHE_SIZE;
-    enum _SC_LEVEL3_CACHE_ASSOC = _Anonymous_41._SC_LEVEL3_CACHE_ASSOC;
-    enum _SC_LEVEL3_CACHE_LINESIZE = _Anonymous_41._SC_LEVEL3_CACHE_LINESIZE;
-    enum _SC_LEVEL4_CACHE_SIZE = _Anonymous_41._SC_LEVEL4_CACHE_SIZE;
-    enum _SC_LEVEL4_CACHE_ASSOC = _Anonymous_41._SC_LEVEL4_CACHE_ASSOC;
-    enum _SC_LEVEL4_CACHE_LINESIZE = _Anonymous_41._SC_LEVEL4_CACHE_LINESIZE;
-    enum _SC_IPV6 = _Anonymous_41._SC_IPV6;
-    enum _SC_RAW_SOCKETS = _Anonymous_41._SC_RAW_SOCKETS;
-    enum _SC_V7_ILP32_OFF32 = _Anonymous_41._SC_V7_ILP32_OFF32;
-    enum _SC_V7_ILP32_OFFBIG = _Anonymous_41._SC_V7_ILP32_OFFBIG;
-    enum _SC_V7_LP64_OFF64 = _Anonymous_41._SC_V7_LP64_OFF64;
-    enum _SC_V7_LPBIG_OFFBIG = _Anonymous_41._SC_V7_LPBIG_OFFBIG;
-    enum _SC_SS_REPL_MAX = _Anonymous_41._SC_SS_REPL_MAX;
-    enum _SC_TRACE_EVENT_NAME_MAX = _Anonymous_41._SC_TRACE_EVENT_NAME_MAX;
-    enum _SC_TRACE_NAME_MAX = _Anonymous_41._SC_TRACE_NAME_MAX;
-    enum _SC_TRACE_SYS_MAX = _Anonymous_41._SC_TRACE_SYS_MAX;
-    enum _SC_TRACE_USER_EVENT_MAX = _Anonymous_41._SC_TRACE_USER_EVENT_MAX;
-    enum _SC_XOPEN_STREAMS = _Anonymous_41._SC_XOPEN_STREAMS;
-    enum _SC_THREAD_ROBUST_PRIO_INHERIT = _Anonymous_41._SC_THREAD_ROBUST_PRIO_INHERIT;
-    enum _SC_THREAD_ROBUST_PRIO_PROTECT = _Anonymous_41._SC_THREAD_ROBUST_PRIO_PROTECT;
-    enum _Anonymous_42
+    enum _SC_ARG_MAX = _Anonymous_32._SC_ARG_MAX;
+    enum _SC_CHILD_MAX = _Anonymous_32._SC_CHILD_MAX;
+    enum _SC_CLK_TCK = _Anonymous_32._SC_CLK_TCK;
+    enum _SC_NGROUPS_MAX = _Anonymous_32._SC_NGROUPS_MAX;
+    enum _SC_OPEN_MAX = _Anonymous_32._SC_OPEN_MAX;
+    enum _SC_STREAM_MAX = _Anonymous_32._SC_STREAM_MAX;
+    enum _SC_TZNAME_MAX = _Anonymous_32._SC_TZNAME_MAX;
+    enum _SC_JOB_CONTROL = _Anonymous_32._SC_JOB_CONTROL;
+    enum _SC_SAVED_IDS = _Anonymous_32._SC_SAVED_IDS;
+    enum _SC_REALTIME_SIGNALS = _Anonymous_32._SC_REALTIME_SIGNALS;
+    enum _SC_PRIORITY_SCHEDULING = _Anonymous_32._SC_PRIORITY_SCHEDULING;
+    enum _SC_TIMERS = _Anonymous_32._SC_TIMERS;
+    enum _SC_ASYNCHRONOUS_IO = _Anonymous_32._SC_ASYNCHRONOUS_IO;
+    enum _SC_PRIORITIZED_IO = _Anonymous_32._SC_PRIORITIZED_IO;
+    enum _SC_SYNCHRONIZED_IO = _Anonymous_32._SC_SYNCHRONIZED_IO;
+    enum _SC_FSYNC = _Anonymous_32._SC_FSYNC;
+    enum _SC_MAPPED_FILES = _Anonymous_32._SC_MAPPED_FILES;
+    enum _SC_MEMLOCK = _Anonymous_32._SC_MEMLOCK;
+    enum _SC_MEMLOCK_RANGE = _Anonymous_32._SC_MEMLOCK_RANGE;
+    enum _SC_MEMORY_PROTECTION = _Anonymous_32._SC_MEMORY_PROTECTION;
+    enum _SC_MESSAGE_PASSING = _Anonymous_32._SC_MESSAGE_PASSING;
+    enum _SC_SEMAPHORES = _Anonymous_32._SC_SEMAPHORES;
+    enum _SC_SHARED_MEMORY_OBJECTS = _Anonymous_32._SC_SHARED_MEMORY_OBJECTS;
+    enum _SC_AIO_LISTIO_MAX = _Anonymous_32._SC_AIO_LISTIO_MAX;
+    enum _SC_AIO_MAX = _Anonymous_32._SC_AIO_MAX;
+    enum _SC_AIO_PRIO_DELTA_MAX = _Anonymous_32._SC_AIO_PRIO_DELTA_MAX;
+    enum _SC_DELAYTIMER_MAX = _Anonymous_32._SC_DELAYTIMER_MAX;
+    enum _SC_MQ_OPEN_MAX = _Anonymous_32._SC_MQ_OPEN_MAX;
+    enum _SC_MQ_PRIO_MAX = _Anonymous_32._SC_MQ_PRIO_MAX;
+    enum _SC_VERSION = _Anonymous_32._SC_VERSION;
+    enum _SC_PAGESIZE = _Anonymous_32._SC_PAGESIZE;
+    enum _SC_RTSIG_MAX = _Anonymous_32._SC_RTSIG_MAX;
+    enum _SC_SEM_NSEMS_MAX = _Anonymous_32._SC_SEM_NSEMS_MAX;
+    enum _SC_SEM_VALUE_MAX = _Anonymous_32._SC_SEM_VALUE_MAX;
+    enum _SC_SIGQUEUE_MAX = _Anonymous_32._SC_SIGQUEUE_MAX;
+    enum _SC_TIMER_MAX = _Anonymous_32._SC_TIMER_MAX;
+    enum _SC_BC_BASE_MAX = _Anonymous_32._SC_BC_BASE_MAX;
+    enum _SC_BC_DIM_MAX = _Anonymous_32._SC_BC_DIM_MAX;
+    enum _SC_BC_SCALE_MAX = _Anonymous_32._SC_BC_SCALE_MAX;
+    enum _SC_BC_STRING_MAX = _Anonymous_32._SC_BC_STRING_MAX;
+    enum _SC_COLL_WEIGHTS_MAX = _Anonymous_32._SC_COLL_WEIGHTS_MAX;
+    enum _SC_EQUIV_CLASS_MAX = _Anonymous_32._SC_EQUIV_CLASS_MAX;
+    enum _SC_EXPR_NEST_MAX = _Anonymous_32._SC_EXPR_NEST_MAX;
+    enum _SC_LINE_MAX = _Anonymous_32._SC_LINE_MAX;
+    enum _SC_RE_DUP_MAX = _Anonymous_32._SC_RE_DUP_MAX;
+    enum _SC_CHARCLASS_NAME_MAX = _Anonymous_32._SC_CHARCLASS_NAME_MAX;
+    enum _SC_2_VERSION = _Anonymous_32._SC_2_VERSION;
+    enum _SC_2_C_BIND = _Anonymous_32._SC_2_C_BIND;
+    enum _SC_2_C_DEV = _Anonymous_32._SC_2_C_DEV;
+    enum _SC_2_FORT_DEV = _Anonymous_32._SC_2_FORT_DEV;
+    enum _SC_2_FORT_RUN = _Anonymous_32._SC_2_FORT_RUN;
+    enum _SC_2_SW_DEV = _Anonymous_32._SC_2_SW_DEV;
+    enum _SC_2_LOCALEDEF = _Anonymous_32._SC_2_LOCALEDEF;
+    enum _SC_PII = _Anonymous_32._SC_PII;
+    enum _SC_PII_XTI = _Anonymous_32._SC_PII_XTI;
+    enum _SC_PII_SOCKET = _Anonymous_32._SC_PII_SOCKET;
+    enum _SC_PII_INTERNET = _Anonymous_32._SC_PII_INTERNET;
+    enum _SC_PII_OSI = _Anonymous_32._SC_PII_OSI;
+    enum _SC_POLL = _Anonymous_32._SC_POLL;
+    enum _SC_SELECT = _Anonymous_32._SC_SELECT;
+    enum _SC_UIO_MAXIOV = _Anonymous_32._SC_UIO_MAXIOV;
+    enum _SC_IOV_MAX = _Anonymous_32._SC_IOV_MAX;
+    enum _SC_PII_INTERNET_STREAM = _Anonymous_32._SC_PII_INTERNET_STREAM;
+    enum _SC_PII_INTERNET_DGRAM = _Anonymous_32._SC_PII_INTERNET_DGRAM;
+    enum _SC_PII_OSI_COTS = _Anonymous_32._SC_PII_OSI_COTS;
+    enum _SC_PII_OSI_CLTS = _Anonymous_32._SC_PII_OSI_CLTS;
+    enum _SC_PII_OSI_M = _Anonymous_32._SC_PII_OSI_M;
+    enum _SC_T_IOV_MAX = _Anonymous_32._SC_T_IOV_MAX;
+    enum _SC_THREADS = _Anonymous_32._SC_THREADS;
+    enum _SC_THREAD_SAFE_FUNCTIONS = _Anonymous_32._SC_THREAD_SAFE_FUNCTIONS;
+    enum _SC_GETGR_R_SIZE_MAX = _Anonymous_32._SC_GETGR_R_SIZE_MAX;
+    enum _SC_GETPW_R_SIZE_MAX = _Anonymous_32._SC_GETPW_R_SIZE_MAX;
+    enum _SC_LOGIN_NAME_MAX = _Anonymous_32._SC_LOGIN_NAME_MAX;
+    enum _SC_TTY_NAME_MAX = _Anonymous_32._SC_TTY_NAME_MAX;
+    enum _SC_THREAD_DESTRUCTOR_ITERATIONS = _Anonymous_32._SC_THREAD_DESTRUCTOR_ITERATIONS;
+    enum _SC_THREAD_KEYS_MAX = _Anonymous_32._SC_THREAD_KEYS_MAX;
+    enum _SC_THREAD_STACK_MIN = _Anonymous_32._SC_THREAD_STACK_MIN;
+    enum _SC_THREAD_THREADS_MAX = _Anonymous_32._SC_THREAD_THREADS_MAX;
+    enum _SC_THREAD_ATTR_STACKADDR = _Anonymous_32._SC_THREAD_ATTR_STACKADDR;
+    enum _SC_THREAD_ATTR_STACKSIZE = _Anonymous_32._SC_THREAD_ATTR_STACKSIZE;
+    enum _SC_THREAD_PRIORITY_SCHEDULING = _Anonymous_32._SC_THREAD_PRIORITY_SCHEDULING;
+    enum _SC_THREAD_PRIO_INHERIT = _Anonymous_32._SC_THREAD_PRIO_INHERIT;
+    enum _SC_THREAD_PRIO_PROTECT = _Anonymous_32._SC_THREAD_PRIO_PROTECT;
+    enum _SC_THREAD_PROCESS_SHARED = _Anonymous_32._SC_THREAD_PROCESS_SHARED;
+    enum _SC_NPROCESSORS_CONF = _Anonymous_32._SC_NPROCESSORS_CONF;
+    enum _SC_NPROCESSORS_ONLN = _Anonymous_32._SC_NPROCESSORS_ONLN;
+    enum _SC_PHYS_PAGES = _Anonymous_32._SC_PHYS_PAGES;
+    enum _SC_AVPHYS_PAGES = _Anonymous_32._SC_AVPHYS_PAGES;
+    enum _SC_ATEXIT_MAX = _Anonymous_32._SC_ATEXIT_MAX;
+    enum _SC_PASS_MAX = _Anonymous_32._SC_PASS_MAX;
+    enum _SC_XOPEN_VERSION = _Anonymous_32._SC_XOPEN_VERSION;
+    enum _SC_XOPEN_XCU_VERSION = _Anonymous_32._SC_XOPEN_XCU_VERSION;
+    enum _SC_XOPEN_UNIX = _Anonymous_32._SC_XOPEN_UNIX;
+    enum _SC_XOPEN_CRYPT = _Anonymous_32._SC_XOPEN_CRYPT;
+    enum _SC_XOPEN_ENH_I18N = _Anonymous_32._SC_XOPEN_ENH_I18N;
+    enum _SC_XOPEN_SHM = _Anonymous_32._SC_XOPEN_SHM;
+    enum _SC_2_CHAR_TERM = _Anonymous_32._SC_2_CHAR_TERM;
+    enum _SC_2_C_VERSION = _Anonymous_32._SC_2_C_VERSION;
+    enum _SC_2_UPE = _Anonymous_32._SC_2_UPE;
+    enum _SC_XOPEN_XPG2 = _Anonymous_32._SC_XOPEN_XPG2;
+    enum _SC_XOPEN_XPG3 = _Anonymous_32._SC_XOPEN_XPG3;
+    enum _SC_XOPEN_XPG4 = _Anonymous_32._SC_XOPEN_XPG4;
+    enum _SC_CHAR_BIT = _Anonymous_32._SC_CHAR_BIT;
+    enum _SC_CHAR_MAX = _Anonymous_32._SC_CHAR_MAX;
+    enum _SC_CHAR_MIN = _Anonymous_32._SC_CHAR_MIN;
+    enum _SC_INT_MAX = _Anonymous_32._SC_INT_MAX;
+    enum _SC_INT_MIN = _Anonymous_32._SC_INT_MIN;
+    enum _SC_LONG_BIT = _Anonymous_32._SC_LONG_BIT;
+    enum _SC_WORD_BIT = _Anonymous_32._SC_WORD_BIT;
+    enum _SC_MB_LEN_MAX = _Anonymous_32._SC_MB_LEN_MAX;
+    enum _SC_NZERO = _Anonymous_32._SC_NZERO;
+    enum _SC_SSIZE_MAX = _Anonymous_32._SC_SSIZE_MAX;
+    enum _SC_SCHAR_MAX = _Anonymous_32._SC_SCHAR_MAX;
+    enum _SC_SCHAR_MIN = _Anonymous_32._SC_SCHAR_MIN;
+    enum _SC_SHRT_MAX = _Anonymous_32._SC_SHRT_MAX;
+    enum _SC_SHRT_MIN = _Anonymous_32._SC_SHRT_MIN;
+    enum _SC_UCHAR_MAX = _Anonymous_32._SC_UCHAR_MAX;
+    enum _SC_UINT_MAX = _Anonymous_32._SC_UINT_MAX;
+    enum _SC_ULONG_MAX = _Anonymous_32._SC_ULONG_MAX;
+    enum _SC_USHRT_MAX = _Anonymous_32._SC_USHRT_MAX;
+    enum _SC_NL_ARGMAX = _Anonymous_32._SC_NL_ARGMAX;
+    enum _SC_NL_LANGMAX = _Anonymous_32._SC_NL_LANGMAX;
+    enum _SC_NL_MSGMAX = _Anonymous_32._SC_NL_MSGMAX;
+    enum _SC_NL_NMAX = _Anonymous_32._SC_NL_NMAX;
+    enum _SC_NL_SETMAX = _Anonymous_32._SC_NL_SETMAX;
+    enum _SC_NL_TEXTMAX = _Anonymous_32._SC_NL_TEXTMAX;
+    enum _SC_XBS5_ILP32_OFF32 = _Anonymous_32._SC_XBS5_ILP32_OFF32;
+    enum _SC_XBS5_ILP32_OFFBIG = _Anonymous_32._SC_XBS5_ILP32_OFFBIG;
+    enum _SC_XBS5_LP64_OFF64 = _Anonymous_32._SC_XBS5_LP64_OFF64;
+    enum _SC_XBS5_LPBIG_OFFBIG = _Anonymous_32._SC_XBS5_LPBIG_OFFBIG;
+    enum _SC_XOPEN_LEGACY = _Anonymous_32._SC_XOPEN_LEGACY;
+    enum _SC_XOPEN_REALTIME = _Anonymous_32._SC_XOPEN_REALTIME;
+    enum _SC_XOPEN_REALTIME_THREADS = _Anonymous_32._SC_XOPEN_REALTIME_THREADS;
+    enum _SC_ADVISORY_INFO = _Anonymous_32._SC_ADVISORY_INFO;
+    enum _SC_BARRIERS = _Anonymous_32._SC_BARRIERS;
+    enum _SC_BASE = _Anonymous_32._SC_BASE;
+    enum _SC_C_LANG_SUPPORT = _Anonymous_32._SC_C_LANG_SUPPORT;
+    enum _SC_C_LANG_SUPPORT_R = _Anonymous_32._SC_C_LANG_SUPPORT_R;
+    enum _SC_CLOCK_SELECTION = _Anonymous_32._SC_CLOCK_SELECTION;
+    enum _SC_CPUTIME = _Anonymous_32._SC_CPUTIME;
+    enum _SC_THREAD_CPUTIME = _Anonymous_32._SC_THREAD_CPUTIME;
+    enum _SC_DEVICE_IO = _Anonymous_32._SC_DEVICE_IO;
+    enum _SC_DEVICE_SPECIFIC = _Anonymous_32._SC_DEVICE_SPECIFIC;
+    enum _SC_DEVICE_SPECIFIC_R = _Anonymous_32._SC_DEVICE_SPECIFIC_R;
+    enum _SC_FD_MGMT = _Anonymous_32._SC_FD_MGMT;
+    enum _SC_FIFO = _Anonymous_32._SC_FIFO;
+    enum _SC_PIPE = _Anonymous_32._SC_PIPE;
+    enum _SC_FILE_ATTRIBUTES = _Anonymous_32._SC_FILE_ATTRIBUTES;
+    enum _SC_FILE_LOCKING = _Anonymous_32._SC_FILE_LOCKING;
+    enum _SC_FILE_SYSTEM = _Anonymous_32._SC_FILE_SYSTEM;
+    enum _SC_MONOTONIC_CLOCK = _Anonymous_32._SC_MONOTONIC_CLOCK;
+    enum _SC_MULTI_PROCESS = _Anonymous_32._SC_MULTI_PROCESS;
+    enum _SC_SINGLE_PROCESS = _Anonymous_32._SC_SINGLE_PROCESS;
+    enum _SC_NETWORKING = _Anonymous_32._SC_NETWORKING;
+    enum _SC_READER_WRITER_LOCKS = _Anonymous_32._SC_READER_WRITER_LOCKS;
+    enum _SC_SPIN_LOCKS = _Anonymous_32._SC_SPIN_LOCKS;
+    enum _SC_REGEXP = _Anonymous_32._SC_REGEXP;
+    enum _SC_REGEX_VERSION = _Anonymous_32._SC_REGEX_VERSION;
+    enum _SC_SHELL = _Anonymous_32._SC_SHELL;
+    enum _SC_SIGNALS = _Anonymous_32._SC_SIGNALS;
+    enum _SC_SPAWN = _Anonymous_32._SC_SPAWN;
+    enum _SC_SPORADIC_SERVER = _Anonymous_32._SC_SPORADIC_SERVER;
+    enum _SC_THREAD_SPORADIC_SERVER = _Anonymous_32._SC_THREAD_SPORADIC_SERVER;
+    enum _SC_SYSTEM_DATABASE = _Anonymous_32._SC_SYSTEM_DATABASE;
+    enum _SC_SYSTEM_DATABASE_R = _Anonymous_32._SC_SYSTEM_DATABASE_R;
+    enum _SC_TIMEOUTS = _Anonymous_32._SC_TIMEOUTS;
+    enum _SC_TYPED_MEMORY_OBJECTS = _Anonymous_32._SC_TYPED_MEMORY_OBJECTS;
+    enum _SC_USER_GROUPS = _Anonymous_32._SC_USER_GROUPS;
+    enum _SC_USER_GROUPS_R = _Anonymous_32._SC_USER_GROUPS_R;
+    enum _SC_2_PBS = _Anonymous_32._SC_2_PBS;
+    enum _SC_2_PBS_ACCOUNTING = _Anonymous_32._SC_2_PBS_ACCOUNTING;
+    enum _SC_2_PBS_LOCATE = _Anonymous_32._SC_2_PBS_LOCATE;
+    enum _SC_2_PBS_MESSAGE = _Anonymous_32._SC_2_PBS_MESSAGE;
+    enum _SC_2_PBS_TRACK = _Anonymous_32._SC_2_PBS_TRACK;
+    enum _SC_SYMLOOP_MAX = _Anonymous_32._SC_SYMLOOP_MAX;
+    enum _SC_STREAMS = _Anonymous_32._SC_STREAMS;
+    enum _SC_2_PBS_CHECKPOINT = _Anonymous_32._SC_2_PBS_CHECKPOINT;
+    enum _SC_V6_ILP32_OFF32 = _Anonymous_32._SC_V6_ILP32_OFF32;
+    enum _SC_V6_ILP32_OFFBIG = _Anonymous_32._SC_V6_ILP32_OFFBIG;
+    enum _SC_V6_LP64_OFF64 = _Anonymous_32._SC_V6_LP64_OFF64;
+    enum _SC_V6_LPBIG_OFFBIG = _Anonymous_32._SC_V6_LPBIG_OFFBIG;
+    enum _SC_HOST_NAME_MAX = _Anonymous_32._SC_HOST_NAME_MAX;
+    enum _SC_TRACE = _Anonymous_32._SC_TRACE;
+    enum _SC_TRACE_EVENT_FILTER = _Anonymous_32._SC_TRACE_EVENT_FILTER;
+    enum _SC_TRACE_INHERIT = _Anonymous_32._SC_TRACE_INHERIT;
+    enum _SC_TRACE_LOG = _Anonymous_32._SC_TRACE_LOG;
+    enum _SC_LEVEL1_ICACHE_SIZE = _Anonymous_32._SC_LEVEL1_ICACHE_SIZE;
+    enum _SC_LEVEL1_ICACHE_ASSOC = _Anonymous_32._SC_LEVEL1_ICACHE_ASSOC;
+    enum _SC_LEVEL1_ICACHE_LINESIZE = _Anonymous_32._SC_LEVEL1_ICACHE_LINESIZE;
+    enum _SC_LEVEL1_DCACHE_SIZE = _Anonymous_32._SC_LEVEL1_DCACHE_SIZE;
+    enum _SC_LEVEL1_DCACHE_ASSOC = _Anonymous_32._SC_LEVEL1_DCACHE_ASSOC;
+    enum _SC_LEVEL1_DCACHE_LINESIZE = _Anonymous_32._SC_LEVEL1_DCACHE_LINESIZE;
+    enum _SC_LEVEL2_CACHE_SIZE = _Anonymous_32._SC_LEVEL2_CACHE_SIZE;
+    enum _SC_LEVEL2_CACHE_ASSOC = _Anonymous_32._SC_LEVEL2_CACHE_ASSOC;
+    enum _SC_LEVEL2_CACHE_LINESIZE = _Anonymous_32._SC_LEVEL2_CACHE_LINESIZE;
+    enum _SC_LEVEL3_CACHE_SIZE = _Anonymous_32._SC_LEVEL3_CACHE_SIZE;
+    enum _SC_LEVEL3_CACHE_ASSOC = _Anonymous_32._SC_LEVEL3_CACHE_ASSOC;
+    enum _SC_LEVEL3_CACHE_LINESIZE = _Anonymous_32._SC_LEVEL3_CACHE_LINESIZE;
+    enum _SC_LEVEL4_CACHE_SIZE = _Anonymous_32._SC_LEVEL4_CACHE_SIZE;
+    enum _SC_LEVEL4_CACHE_ASSOC = _Anonymous_32._SC_LEVEL4_CACHE_ASSOC;
+    enum _SC_LEVEL4_CACHE_LINESIZE = _Anonymous_32._SC_LEVEL4_CACHE_LINESIZE;
+    enum _SC_IPV6 = _Anonymous_32._SC_IPV6;
+    enum _SC_RAW_SOCKETS = _Anonymous_32._SC_RAW_SOCKETS;
+    enum _SC_V7_ILP32_OFF32 = _Anonymous_32._SC_V7_ILP32_OFF32;
+    enum _SC_V7_ILP32_OFFBIG = _Anonymous_32._SC_V7_ILP32_OFFBIG;
+    enum _SC_V7_LP64_OFF64 = _Anonymous_32._SC_V7_LP64_OFF64;
+    enum _SC_V7_LPBIG_OFFBIG = _Anonymous_32._SC_V7_LPBIG_OFFBIG;
+    enum _SC_SS_REPL_MAX = _Anonymous_32._SC_SS_REPL_MAX;
+    enum _SC_TRACE_EVENT_NAME_MAX = _Anonymous_32._SC_TRACE_EVENT_NAME_MAX;
+    enum _SC_TRACE_NAME_MAX = _Anonymous_32._SC_TRACE_NAME_MAX;
+    enum _SC_TRACE_SYS_MAX = _Anonymous_32._SC_TRACE_SYS_MAX;
+    enum _SC_TRACE_USER_EVENT_MAX = _Anonymous_32._SC_TRACE_USER_EVENT_MAX;
+    enum _SC_XOPEN_STREAMS = _Anonymous_32._SC_XOPEN_STREAMS;
+    enum _SC_THREAD_ROBUST_PRIO_INHERIT = _Anonymous_32._SC_THREAD_ROBUST_PRIO_INHERIT;
+    enum _SC_THREAD_ROBUST_PRIO_PROTECT = _Anonymous_32._SC_THREAD_ROBUST_PRIO_PROTECT;
+    int faccessat(int, const(char)*, int, int) @nogc nothrow;
+    int access(const(char)*, int) @nogc nothrow;
+    alias socklen_t = uint;
+    alias useconds_t = uint;
+    int timespec_get(timespec*, int) @nogc nothrow;
+    int timer_getoverrun(void*) @nogc nothrow;
+    int timer_gettime(void*, itimerspec*) @nogc nothrow;
+    int timer_settime(void*, int, const(itimerspec)*, itimerspec*) @nogc nothrow;
+    int timer_delete(void*) @nogc nothrow;
+    int timer_create(int, sigevent*, void**) @nogc nothrow;
+    int clock_getcpuclockid(int, int*) @nogc nothrow;
+    int clock_nanosleep(int, int, const(timespec)*, timespec*) @nogc nothrow;
+    int clock_settime(int, const(timespec)*) @nogc nothrow;
+    int clock_gettime(int, timespec*) @nogc nothrow;
+    int clock_getres(int, timespec*) @nogc nothrow;
+    int nanosleep(const(timespec)*, timespec*) @nogc nothrow;
+    int dysize(int) @nogc nothrow;
+    c_long timelocal(tm*) @nogc nothrow;
+    c_long timegm(tm*) @nogc nothrow;
+    int stime(const(c_long)*) @nogc nothrow;
+    extern __gshared c_long timezone;
+    extern __gshared int daylight;
+    void tzset() @nogc nothrow;
+    extern __gshared char*[2] tzname;
+    extern __gshared c_long __timezone;
+    extern __gshared int __daylight;
+    extern __gshared char*[2] __tzname;
+    char* ctime_r(const(c_long)*, char*) @nogc nothrow;
+    char* asctime_r(const(tm)*, char*) @nogc nothrow;
+    char* ctime(const(c_long)*) @nogc nothrow;
+    char* asctime(const(tm)*) @nogc nothrow;
+    tm* localtime_r(const(c_long)*, tm*) @nogc nothrow;
+    tm* gmtime_r(const(c_long)*, tm*) @nogc nothrow;
+    tm* localtime(const(c_long)*) @nogc nothrow;
+    tm* gmtime(const(c_long)*) @nogc nothrow;
+    c_ulong strftime_l(char*, c_ulong, const(char)*, const(tm)*, __locale_struct*) @nogc nothrow;
+    c_ulong strftime(char*, c_ulong, const(char)*, const(tm)*) @nogc nothrow;
+    c_long mktime(tm*) @nogc nothrow;
+    double difftime(c_long, c_long) @nogc nothrow;
+    c_long time(c_long*) @nogc nothrow;
+    c_long clock() @nogc nothrow;
+    struct sigevent;
+    alias fsfilcnt_t = c_ulong;
+    alias fsblkcnt_t = c_ulong;
+    alias blkcnt_t = c_long;
+    alias blksize_t = c_long;
+    alias register_t = c_long;
+    alias u_int64_t = c_ulong;
+    alias u_int32_t = uint;
+    alias u_int16_t = ushort;
+    alias u_int8_t = ubyte;
+    alias key_t = int;
+    alias caddr_t = char*;
+    alias daddr_t = int;
+    alias id_t = uint;
+    alias pid_t = int;
+    alias uid_t = uint;
+    alias nlink_t = c_ulong;
+    alias mode_t = uint;
+    alias gid_t = uint;
+    alias dev_t = c_ulong;
+    alias ino_t = c_ulong;
+    alias loff_t = c_long;
+    alias fsid_t = __fsid_t;
+    alias u_quad_t = c_ulong;
+    alias quad_t = c_long;
+    alias u_long = c_ulong;
+    alias u_int = uint;
+    alias u_short = ushort;
+    alias u_char = ubyte;
+    int pselect(int, fd_set*, fd_set*, fd_set*, const(timespec)*, const(__sigset_t)*) @nogc nothrow;
+    int select(int, fd_set*, fd_set*, fd_set*, timeval*) @nogc nothrow;
+    alias fd_mask = c_long;
+    struct fd_set
     {
-        _PC_LINK_MAX = 0,
-        _PC_MAX_CANON = 1,
-        _PC_MAX_INPUT = 2,
-        _PC_NAME_MAX = 3,
-        _PC_PATH_MAX = 4,
-        _PC_PIPE_BUF = 5,
-        _PC_CHOWN_RESTRICTED = 6,
-        _PC_NO_TRUNC = 7,
-        _PC_VDISABLE = 8,
-        _PC_SYNC_IO = 9,
-        _PC_ASYNC_IO = 10,
-        _PC_PRIO_IO = 11,
-        _PC_SOCK_MAXBUF = 12,
-        _PC_FILESIZEBITS = 13,
-        _PC_REC_INCR_XFER_SIZE = 14,
-        _PC_REC_MAX_XFER_SIZE = 15,
-        _PC_REC_MIN_XFER_SIZE = 16,
-        _PC_REC_XFER_ALIGN = 17,
-        _PC_ALLOC_SIZE_MIN = 18,
-        _PC_SYMLINK_MAX = 19,
-        _PC_2_SYMLINKS = 20,
+        c_long[16] __fds_bits;
     }
-    enum _PC_LINK_MAX = _Anonymous_42._PC_LINK_MAX;
-    enum _PC_MAX_CANON = _Anonymous_42._PC_MAX_CANON;
-    enum _PC_MAX_INPUT = _Anonymous_42._PC_MAX_INPUT;
-    enum _PC_NAME_MAX = _Anonymous_42._PC_NAME_MAX;
-    enum _PC_PATH_MAX = _Anonymous_42._PC_PATH_MAX;
-    enum _PC_PIPE_BUF = _Anonymous_42._PC_PIPE_BUF;
-    enum _PC_CHOWN_RESTRICTED = _Anonymous_42._PC_CHOWN_RESTRICTED;
-    enum _PC_NO_TRUNC = _Anonymous_42._PC_NO_TRUNC;
-    enum _PC_VDISABLE = _Anonymous_42._PC_VDISABLE;
-    enum _PC_SYNC_IO = _Anonymous_42._PC_SYNC_IO;
-    enum _PC_ASYNC_IO = _Anonymous_42._PC_ASYNC_IO;
-    enum _PC_PRIO_IO = _Anonymous_42._PC_PRIO_IO;
-    enum _PC_SOCK_MAXBUF = _Anonymous_42._PC_SOCK_MAXBUF;
-    enum _PC_FILESIZEBITS = _Anonymous_42._PC_FILESIZEBITS;
-    enum _PC_REC_INCR_XFER_SIZE = _Anonymous_42._PC_REC_INCR_XFER_SIZE;
-    enum _PC_REC_MAX_XFER_SIZE = _Anonymous_42._PC_REC_MAX_XFER_SIZE;
-    enum _PC_REC_MIN_XFER_SIZE = _Anonymous_42._PC_REC_MIN_XFER_SIZE;
-    enum _PC_REC_XFER_ALIGN = _Anonymous_42._PC_REC_XFER_ALIGN;
-    enum _PC_ALLOC_SIZE_MIN = _Anonymous_42._PC_ALLOC_SIZE_MIN;
-    enum _PC_SYMLINK_MAX = _Anonymous_42._PC_SYMLINK_MAX;
-    enum _PC_2_SYMLINKS = _Anonymous_42._PC_2_SYMLINKS;
+    alias __fd_mask = c_long;
+    alias suseconds_t = c_long;
+    enum _Anonymous_33
+    {
+        _CS_PATH = 0,
+        _CS_V6_WIDTH_RESTRICTED_ENVS = 1,
+        _CS_GNU_LIBC_VERSION = 2,
+        _CS_GNU_LIBPTHREAD_VERSION = 3,
+        _CS_V5_WIDTH_RESTRICTED_ENVS = 4,
+        _CS_V7_WIDTH_RESTRICTED_ENVS = 5,
+        _CS_LFS_CFLAGS = 1000,
+        _CS_LFS_LDFLAGS = 1001,
+        _CS_LFS_LIBS = 1002,
+        _CS_LFS_LINTFLAGS = 1003,
+        _CS_LFS64_CFLAGS = 1004,
+        _CS_LFS64_LDFLAGS = 1005,
+        _CS_LFS64_LIBS = 1006,
+        _CS_LFS64_LINTFLAGS = 1007,
+        _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
+        _CS_XBS5_ILP32_OFF32_LDFLAGS = 1101,
+        _CS_XBS5_ILP32_OFF32_LIBS = 1102,
+        _CS_XBS5_ILP32_OFF32_LINTFLAGS = 1103,
+        _CS_XBS5_ILP32_OFFBIG_CFLAGS = 1104,
+        _CS_XBS5_ILP32_OFFBIG_LDFLAGS = 1105,
+        _CS_XBS5_ILP32_OFFBIG_LIBS = 1106,
+        _CS_XBS5_ILP32_OFFBIG_LINTFLAGS = 1107,
+        _CS_XBS5_LP64_OFF64_CFLAGS = 1108,
+        _CS_XBS5_LP64_OFF64_LDFLAGS = 1109,
+        _CS_XBS5_LP64_OFF64_LIBS = 1110,
+        _CS_XBS5_LP64_OFF64_LINTFLAGS = 1111,
+        _CS_XBS5_LPBIG_OFFBIG_CFLAGS = 1112,
+        _CS_XBS5_LPBIG_OFFBIG_LDFLAGS = 1113,
+        _CS_XBS5_LPBIG_OFFBIG_LIBS = 1114,
+        _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS = 1115,
+        _CS_POSIX_V6_ILP32_OFF32_CFLAGS = 1116,
+        _CS_POSIX_V6_ILP32_OFF32_LDFLAGS = 1117,
+        _CS_POSIX_V6_ILP32_OFF32_LIBS = 1118,
+        _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS = 1119,
+        _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS = 1120,
+        _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS = 1121,
+        _CS_POSIX_V6_ILP32_OFFBIG_LIBS = 1122,
+        _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS = 1123,
+        _CS_POSIX_V6_LP64_OFF64_CFLAGS = 1124,
+        _CS_POSIX_V6_LP64_OFF64_LDFLAGS = 1125,
+        _CS_POSIX_V6_LP64_OFF64_LIBS = 1126,
+        _CS_POSIX_V6_LP64_OFF64_LINTFLAGS = 1127,
+        _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS = 1128,
+        _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS = 1129,
+        _CS_POSIX_V6_LPBIG_OFFBIG_LIBS = 1130,
+        _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS = 1131,
+        _CS_POSIX_V7_ILP32_OFF32_CFLAGS = 1132,
+        _CS_POSIX_V7_ILP32_OFF32_LDFLAGS = 1133,
+        _CS_POSIX_V7_ILP32_OFF32_LIBS = 1134,
+        _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS = 1135,
+        _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS = 1136,
+        _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS = 1137,
+        _CS_POSIX_V7_ILP32_OFFBIG_LIBS = 1138,
+        _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS = 1139,
+        _CS_POSIX_V7_LP64_OFF64_CFLAGS = 1140,
+        _CS_POSIX_V7_LP64_OFF64_LDFLAGS = 1141,
+        _CS_POSIX_V7_LP64_OFF64_LIBS = 1142,
+        _CS_POSIX_V7_LP64_OFF64_LINTFLAGS = 1143,
+        _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS = 1144,
+        _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS = 1145,
+        _CS_POSIX_V7_LPBIG_OFFBIG_LIBS = 1146,
+        _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS = 1147,
+        _CS_V6_ENV = 1148,
+        _CS_V7_ENV = 1149,
+    }
+    enum _CS_PATH = _Anonymous_33._CS_PATH;
+    enum _CS_V6_WIDTH_RESTRICTED_ENVS = _Anonymous_33._CS_V6_WIDTH_RESTRICTED_ENVS;
+    enum _CS_GNU_LIBC_VERSION = _Anonymous_33._CS_GNU_LIBC_VERSION;
+    enum _CS_GNU_LIBPTHREAD_VERSION = _Anonymous_33._CS_GNU_LIBPTHREAD_VERSION;
+    enum _CS_V5_WIDTH_RESTRICTED_ENVS = _Anonymous_33._CS_V5_WIDTH_RESTRICTED_ENVS;
+    enum _CS_V7_WIDTH_RESTRICTED_ENVS = _Anonymous_33._CS_V7_WIDTH_RESTRICTED_ENVS;
+    enum _CS_LFS_CFLAGS = _Anonymous_33._CS_LFS_CFLAGS;
+    enum _CS_LFS_LDFLAGS = _Anonymous_33._CS_LFS_LDFLAGS;
+    enum _CS_LFS_LIBS = _Anonymous_33._CS_LFS_LIBS;
+    enum _CS_LFS_LINTFLAGS = _Anonymous_33._CS_LFS_LINTFLAGS;
+    enum _CS_LFS64_CFLAGS = _Anonymous_33._CS_LFS64_CFLAGS;
+    enum _CS_LFS64_LDFLAGS = _Anonymous_33._CS_LFS64_LDFLAGS;
+    enum _CS_LFS64_LIBS = _Anonymous_33._CS_LFS64_LIBS;
+    enum _CS_LFS64_LINTFLAGS = _Anonymous_33._CS_LFS64_LINTFLAGS;
+    enum _CS_XBS5_ILP32_OFF32_CFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFF32_CFLAGS;
+    enum _CS_XBS5_ILP32_OFF32_LDFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFF32_LDFLAGS;
+    enum _CS_XBS5_ILP32_OFF32_LIBS = _Anonymous_33._CS_XBS5_ILP32_OFF32_LIBS;
+    enum _CS_XBS5_ILP32_OFF32_LINTFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFF32_LINTFLAGS;
+    enum _CS_XBS5_ILP32_OFFBIG_CFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFFBIG_CFLAGS;
+    enum _CS_XBS5_ILP32_OFFBIG_LDFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFFBIG_LDFLAGS;
+    enum _CS_XBS5_ILP32_OFFBIG_LIBS = _Anonymous_33._CS_XBS5_ILP32_OFFBIG_LIBS;
+    enum _CS_XBS5_ILP32_OFFBIG_LINTFLAGS = _Anonymous_33._CS_XBS5_ILP32_OFFBIG_LINTFLAGS;
+    enum _CS_XBS5_LP64_OFF64_CFLAGS = _Anonymous_33._CS_XBS5_LP64_OFF64_CFLAGS;
+    enum _CS_XBS5_LP64_OFF64_LDFLAGS = _Anonymous_33._CS_XBS5_LP64_OFF64_LDFLAGS;
+    enum _CS_XBS5_LP64_OFF64_LIBS = _Anonymous_33._CS_XBS5_LP64_OFF64_LIBS;
+    enum _CS_XBS5_LP64_OFF64_LINTFLAGS = _Anonymous_33._CS_XBS5_LP64_OFF64_LINTFLAGS;
+    enum _CS_XBS5_LPBIG_OFFBIG_CFLAGS = _Anonymous_33._CS_XBS5_LPBIG_OFFBIG_CFLAGS;
+    enum _CS_XBS5_LPBIG_OFFBIG_LDFLAGS = _Anonymous_33._CS_XBS5_LPBIG_OFFBIG_LDFLAGS;
+    enum _CS_XBS5_LPBIG_OFFBIG_LIBS = _Anonymous_33._CS_XBS5_LPBIG_OFFBIG_LIBS;
+    enum _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_33._CS_XBS5_LPBIG_OFFBIG_LINTFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFF32_CFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFF32_CFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFF32_LDFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFF32_LDFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFF32_LIBS = _Anonymous_33._CS_POSIX_V6_ILP32_OFF32_LIBS;
+    enum _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFF32_LINTFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFFBIG_CFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS;
+    enum _CS_POSIX_V6_ILP32_OFFBIG_LIBS = _Anonymous_33._CS_POSIX_V6_ILP32_OFFBIG_LIBS;
+    enum _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS = _Anonymous_33._CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS;
+    enum _CS_POSIX_V6_LP64_OFF64_CFLAGS = _Anonymous_33._CS_POSIX_V6_LP64_OFF64_CFLAGS;
+    enum _CS_POSIX_V6_LP64_OFF64_LDFLAGS = _Anonymous_33._CS_POSIX_V6_LP64_OFF64_LDFLAGS;
+    enum _CS_POSIX_V6_LP64_OFF64_LIBS = _Anonymous_33._CS_POSIX_V6_LP64_OFF64_LIBS;
+    enum _CS_POSIX_V6_LP64_OFF64_LINTFLAGS = _Anonymous_33._CS_POSIX_V6_LP64_OFF64_LINTFLAGS;
+    enum _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS = _Anonymous_33._CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS;
+    enum _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS = _Anonymous_33._CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS;
+    enum _CS_POSIX_V6_LPBIG_OFFBIG_LIBS = _Anonymous_33._CS_POSIX_V6_LPBIG_OFFBIG_LIBS;
+    enum _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_33._CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFF32_CFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFF32_CFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFF32_LDFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFF32_LDFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFF32_LIBS = _Anonymous_33._CS_POSIX_V7_ILP32_OFF32_LIBS;
+    enum _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFF32_LINTFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFFBIG_CFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS;
+    enum _CS_POSIX_V7_ILP32_OFFBIG_LIBS = _Anonymous_33._CS_POSIX_V7_ILP32_OFFBIG_LIBS;
+    enum _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS = _Anonymous_33._CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS;
+    enum _CS_POSIX_V7_LP64_OFF64_CFLAGS = _Anonymous_33._CS_POSIX_V7_LP64_OFF64_CFLAGS;
+    enum _CS_POSIX_V7_LP64_OFF64_LDFLAGS = _Anonymous_33._CS_POSIX_V7_LP64_OFF64_LDFLAGS;
+    enum _CS_POSIX_V7_LP64_OFF64_LIBS = _Anonymous_33._CS_POSIX_V7_LP64_OFF64_LIBS;
+    enum _CS_POSIX_V7_LP64_OFF64_LINTFLAGS = _Anonymous_33._CS_POSIX_V7_LP64_OFF64_LINTFLAGS;
+    enum _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS = _Anonymous_33._CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS;
+    enum _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS = _Anonymous_33._CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS;
+    enum _CS_POSIX_V7_LPBIG_OFFBIG_LIBS = _Anonymous_33._CS_POSIX_V7_LPBIG_OFFBIG_LIBS;
+    enum _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS = _Anonymous_33._CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS;
+    enum _CS_V6_ENV = _Anonymous_33._CS_V6_ENV;
+    enum _CS_V7_ENV = _Anonymous_33._CS_V7_ENV;
+    int strncasecmp_l(const(char)*, const(char)*, c_ulong, __locale_struct*) @nogc nothrow;
+    int strcasecmp_l(const(char)*, const(char)*, __locale_struct*) @nogc nothrow;
+    int strncasecmp(const(char)*, const(char)*, c_ulong) @nogc nothrow;
+    int strcasecmp(const(char)*, const(char)*) @nogc nothrow;
+    int ffsll(long) @nogc nothrow;
+    int ffsl(c_long) @nogc nothrow;
+    int ffs(int) @nogc nothrow;
+    char* rindex(const(char)*, int) @nogc nothrow;
+    char* index(const(char)*, int) @nogc nothrow;
+    void bzero(void*, c_ulong) @nogc nothrow;
+    void bcopy(const(void)*, void*, c_ulong) @nogc nothrow;
+    alias _Float32 = float;
+    int bcmp(const(void)*, const(void)*, c_ulong) @nogc nothrow;
+    alias _Float64 = double;
+    alias _Float32x = double;
+    alias _Float64x = real;
+    char* stpncpy(char*, const(char)*, c_ulong) @nogc nothrow;
+    char* __stpncpy(char*, const(char)*, c_ulong) @nogc nothrow;
+    char* stpcpy(char*, const(char)*) @nogc nothrow;
+    extern __gshared char* optarg;
+    extern __gshared int optind;
+    extern __gshared int opterr;
+    extern __gshared int optopt;
+    int getopt(int, char**, const(char)*) @nogc nothrow;
+    char* __stpcpy(char*, const(char)*) @nogc nothrow;
+    char* strsignal(int) @nogc nothrow;
+    char* strsep(char**, const(char)*) @nogc nothrow;
+    void explicit_bzero(void*, c_ulong) @nogc nothrow;
+    char* strerror_l(int, __locale_struct*) @nogc nothrow;
+    int strerror_r(int, char*, c_ulong) @nogc nothrow;
+    char* strerror(int) @nogc nothrow;
+    c_ulong strnlen(const(char)*, c_ulong) @nogc nothrow;
+    c_ulong strlen(const(char)*) @nogc nothrow;
+    char* strtok_r(char*, const(char)*, char**) @nogc nothrow;
+    char* __strtok_r(char*, const(char)*, char**) @nogc nothrow;
+    char* strtok(char*, const(char)*) @nogc nothrow;
+    char* strstr(const(char)*, const(char)*) @nogc nothrow;
+    char* strpbrk(const(char)*, const(char)*) @nogc nothrow;
+    c_ulong strspn(const(char)*, const(char)*) @nogc nothrow;
+    c_ulong strcspn(const(char)*, const(char)*) @nogc nothrow;
+    char* strrchr(const(char)*, int) @nogc nothrow;
+    char* strchr(const(char)*, int) @nogc nothrow;
+    char* strndup(const(char)*, c_ulong) @nogc nothrow;
+    char* strdup(const(char)*) @nogc nothrow;
+    c_ulong strxfrm_l(char*, const(char)*, c_ulong, __locale_struct*) @nogc nothrow;
+    int strcoll_l(const(char)*, const(char)*, __locale_struct*) @nogc nothrow;
+    c_ulong strxfrm(char*, const(char)*, c_ulong) @nogc nothrow;
+    int strcoll(const(char)*, const(char)*) @nogc nothrow;
+    int strncmp(const(char)*, const(char)*, c_ulong) @nogc nothrow;
+    int strcmp(const(char)*, const(char)*) @nogc nothrow;
+    char* strncat(char*, const(char)*, c_ulong) @nogc nothrow;
+    char* strcat(char*, const(char)*) @nogc nothrow;
+    char* strncpy(char*, const(char)*, c_ulong) @nogc nothrow;
+    char* strcpy(char*, const(char)*) @nogc nothrow;
+    void* memchr(const(void)*, int, c_ulong) @nogc nothrow;
+    int memcmp(const(void)*, const(void)*, c_ulong) @nogc nothrow;
+    void* memset(void*, int, c_ulong) @nogc nothrow;
+    void* memccpy(void*, const(void)*, int, c_ulong) @nogc nothrow;
+    void* memmove(void*, const(void)*, c_ulong) @nogc nothrow;
+    void* memcpy(void*, const(void)*, c_ulong) @nogc nothrow;
+    int getloadavg(double*, int) @nogc nothrow;
+    int getsubopt(char**, char**, char**) @nogc nothrow;
+    int rpmatch(const(char)*) @nogc nothrow;
+    c_ulong wcstombs(char*, const(int)*, c_ulong) @nogc nothrow;
+    c_ulong mbstowcs(int*, const(char)*, c_ulong) @nogc nothrow;
+    int wctomb(char*, int) @nogc nothrow;
+    int mbtowc(int*, const(char)*, c_ulong) @nogc nothrow;
+    struct __pthread_rwlock_arch_t
+    {
+        uint __readers;
+        uint __writers;
+        uint __wrphase_futex;
+        uint __writers_futex;
+        uint __pad3;
+        uint __pad4;
+        int __cur_writer;
+        int __shared;
+        byte __rwelision;
+        ubyte[7] __pad1;
+        c_ulong __pad2;
+        uint __flags;
+    }
+    int mblen(const(char)*, c_ulong) @nogc nothrow;
+    alias pthread_t = c_ulong;
+    union pthread_mutexattr_t
+    {
+        char[4] __size;
+        int __align;
+    }
+    union pthread_condattr_t
+    {
+        char[4] __size;
+        int __align;
+    }
+    alias pthread_key_t = uint;
+    alias pthread_once_t = int;
+    union pthread_attr_t
+    {
+        char[56] __size;
+        c_long __align;
+    }
+    union pthread_mutex_t
+    {
+        __pthread_mutex_s __data;
+        char[40] __size;
+        c_long __align;
+    }
+    union pthread_cond_t
+    {
+        __pthread_cond_s __data;
+        char[48] __size;
+        long __align;
+    }
+    union pthread_rwlock_t
+    {
+        __pthread_rwlock_arch_t __data;
+        char[56] __size;
+        c_long __align;
+    }
+    union pthread_rwlockattr_t
+    {
+        char[8] __size;
+        c_long __align;
+    }
+    alias pthread_spinlock_t = int;
+    union pthread_barrier_t
+    {
+        char[32] __size;
+        c_long __align;
+    }
+    union pthread_barrierattr_t
+    {
+        char[4] __size;
+        int __align;
+    }
+    int qfcvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    int qecvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    alias int8_t = byte;
+    alias int16_t = short;
+    alias int32_t = int;
+    alias int64_t = c_long;
+    int fcvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    alias uint8_t = ubyte;
+    alias uint16_t = ushort;
+    alias uint32_t = uint;
+    alias uint64_t = ulong;
+    int ecvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    extern __gshared int sys_nerr;
+    extern __gshared const(const(char)*)[0] sys_errlist;
+    char* qgcvt(real, int, char*) @nogc nothrow;
+    alias __pthread_list_t = __pthread_internal_list;
+    struct __pthread_internal_list
+    {
+        __pthread_internal_list* __prev;
+        __pthread_internal_list* __next;
+    }
+    struct __pthread_mutex_s
+    {
+        int __lock;
+        uint __count;
+        int __owner;
+        uint __nusers;
+        int __kind;
+        short __spins;
+        short __elision;
+        __pthread_internal_list __list;
+    }
+    struct __pthread_cond_s
+    {
+        static union _Anonymous_34
+        {
+            ulong __wseq;
+            static struct _Anonymous_35
+            {
+                uint __low;
+                uint __high;
+            }
+            _Anonymous_35 __wseq32;
+        }
+        _Anonymous_34 _anonymous_36;
+        auto __wseq() @property @nogc pure nothrow { return _anonymous_36.__wseq; }
+        void __wseq(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_36.__wseq = val; }
+        auto __wseq32() @property @nogc pure nothrow { return _anonymous_36.__wseq32; }
+        void __wseq32(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_36.__wseq32 = val; }
+        static union _Anonymous_37
+        {
+            ulong __g1_start;
+            static struct _Anonymous_38
+            {
+                uint __low;
+                uint __high;
+            }
+            _Anonymous_38 __g1_start32;
+        }
+        _Anonymous_37 _anonymous_39;
+        auto __g1_start() @property @nogc pure nothrow { return _anonymous_39.__g1_start; }
+        void __g1_start(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_39.__g1_start = val; }
+        auto __g1_start32() @property @nogc pure nothrow { return _anonymous_39.__g1_start32; }
+        void __g1_start32(_T_)(auto ref _T_ val) @property @nogc pure nothrow { _anonymous_39.__g1_start32 = val; }
+        uint[2] __g_refs;
+        uint[2] __g_size;
+        uint __g1_orig_size;
+        uint __wrefs;
+        uint[2] __g_signals;
+    }
+    char* qfcvt(real, int, int*, int*) @nogc nothrow;
+    char* qecvt(real, int, int*, int*) @nogc nothrow;
+    char* gcvt(double, int, char*) @nogc nothrow;
+    char* fcvt(double, int, int*, int*) @nogc nothrow;
+    char* ecvt(double, int, int*, int*) @nogc nothrow;
+    alias __u_char = ubyte;
+    alias __u_short = ushort;
+    alias __u_int = uint;
+    alias __u_long = c_ulong;
+    alias __int8_t = byte;
+    alias __uint8_t = ubyte;
+    alias __int16_t = short;
+    alias __uint16_t = ushort;
+    alias __int32_t = int;
+    alias __uint32_t = uint;
+    alias __int64_t = c_long;
+    alias __uint64_t = c_ulong;
+    alias __int_least8_t = byte;
+    alias __uint_least8_t = ubyte;
+    alias __int_least16_t = short;
+    alias __uint_least16_t = ushort;
+    alias __int_least32_t = int;
+    alias __uint_least32_t = uint;
+    alias __int_least64_t = c_long;
+    alias __uint_least64_t = c_ulong;
+    alias __quad_t = c_long;
+    alias __u_quad_t = c_ulong;
+    alias __intmax_t = c_long;
+    alias __uintmax_t = c_ulong;
+    lldiv_t lldiv(long, long) @nogc nothrow;
+    ldiv_t ldiv(c_long, c_long) @nogc nothrow;
+    div_t div(int, int) @nogc nothrow;
+    long llabs(long) @nogc nothrow;
+    alias __dev_t = c_ulong;
+    alias __uid_t = uint;
+    alias __gid_t = uint;
+    alias __ino_t = c_ulong;
+    alias __ino64_t = c_ulong;
+    alias __mode_t = uint;
+    alias __nlink_t = c_ulong;
+    alias __off_t = c_long;
+    alias __off64_t = c_long;
+    alias __pid_t = int;
+    struct __fsid_t
+    {
+        int[2] __val;
+    }
+    alias __clock_t = c_long;
+    alias __rlim_t = c_ulong;
+    alias __rlim64_t = c_ulong;
+    alias __id_t = uint;
+    alias __time_t = c_long;
+    alias __useconds_t = uint;
+    alias __suseconds_t = c_long;
+    alias __daddr_t = int;
+    alias __key_t = int;
+    alias __clockid_t = int;
+    alias __timer_t = void*;
+    alias __blksize_t = c_long;
+    alias __blkcnt_t = c_long;
+    alias __blkcnt64_t = c_long;
+    alias __fsblkcnt_t = c_ulong;
+    alias __fsblkcnt64_t = c_ulong;
+    alias __fsfilcnt_t = c_ulong;
+    alias __fsfilcnt64_t = c_ulong;
+    alias __fsword_t = c_long;
+    alias __ssize_t = c_long;
+    alias __syscall_slong_t = c_long;
+    alias __syscall_ulong_t = c_ulong;
+    alias __loff_t = c_long;
+    alias __caddr_t = char*;
+    alias __intptr_t = c_long;
+    alias __socklen_t = uint;
+    alias __sig_atomic_t = int;
+    alias FILE = _IO_FILE;
+    /*struct _IO_FILE
+    {
+        int _flags;
+        char* _IO_read_ptr;
+        char* _IO_read_end;
+        char* _IO_read_base;
+        char* _IO_write_base;
+        char* _IO_write_ptr;
+        char* _IO_write_end;
+        char* _IO_buf_base;
+        char* _IO_buf_end;
+        char* _IO_save_base;
+        char* _IO_backup_base;
+        char* _IO_save_end;
+        _IO_marker* _markers;
+        _IO_FILE* _chain;
+        int _fileno;
+        int _flags2;
+        c_long _old_offset;
+        ushort _cur_column;
+        byte _vtable_offset;
+        char[1] _shortbuf;
+        void* _lock;
+        c_long _offset;
+        _IO_codecvt* _codecvt;
+        _IO_wide_data* _wide_data;
+        _IO_FILE* _freeres_list;
+        void* _freeres_buf;
+        c_ulong __pad5;
+        int _mode;
+        char[20] _unused2;
+    }*/
+	import core.stdc.stdio : _IO_FILE;
+    alias __FILE = _IO_FILE;
+    c_long labs(c_long) @nogc nothrow;
+    alias __fpos64_t = _G_fpos64_t;
     struct _G_fpos64_t
     {
-        __off64_t __pos;
+        c_long __pos;
         __mbstate_t __state;
     }
+    alias __fpos_t = _G_fpos_t;
     struct _G_fpos_t
     {
-        __off_t __pos;
+        c_long __pos;
         __mbstate_t __state;
     }
-    alias off_t = c_long;
-    alias ssize_t = c_long;
-    alias fpos_t = _G_fpos_t;
-    int getentropy(void*, size_t) @nogc nothrow;
-    int fdatasync(int) @nogc nothrow;
-    extern __gshared _IO_FILE* stdin;
-    extern __gshared _IO_FILE* stdout;
-    extern __gshared _IO_FILE* stderr;
-    int lockf(int, int, __off_t) @nogc nothrow;
-    int remove(const(char)*) @nogc nothrow;
-    int rename(const(char)*, const(char)*) @nogc nothrow;
-    int renameat(int, const(char)*, int, const(char)*) @nogc nothrow;
-    FILE* tmpfile() @nogc nothrow;
-    char* tmpnam(char*) @nogc nothrow;
-    char* tmpnam_r(char*) @nogc nothrow;
-    char* tempnam(const(char)*, const(char)*) @nogc nothrow;
-    int fclose(FILE*) @nogc nothrow;
-    int fflush(FILE*) @nogc nothrow;
-    int fflush_unlocked(FILE*) @nogc nothrow;
-    FILE* fopen(const(char)*, const(char)*) @nogc nothrow;
-    FILE* freopen(const(char)*, const(char)*, FILE*) @nogc nothrow;
-    FILE* fdopen(int, const(char)*) @nogc nothrow;
-    FILE* fmemopen(void*, size_t, const(char)*) @nogc nothrow;
-    FILE* open_memstream(char**, size_t*) @nogc nothrow;
-    void setbuf(FILE*, char*) @nogc nothrow;
-    int setvbuf(FILE*, char*, int, size_t) @nogc nothrow;
-    void setbuffer(FILE*, char*, size_t) @nogc nothrow;
-    void setlinebuf(FILE*) @nogc nothrow;
-    int fprintf(FILE*, const(char)*, ...) @nogc nothrow;
-    int printf(const(char)*, ...) @nogc nothrow;
-    int sprintf(char*, const(char)*, ...) @nogc nothrow;
-    int vfprintf(FILE*, const(char)*, va_list) @nogc nothrow;
-    int vprintf(const(char)*, va_list) @nogc nothrow;
-    int vsprintf(char*, const(char)*, va_list) @nogc nothrow;
-    int snprintf(char*, size_t, const(char)*, ...) @nogc nothrow;
-    int vsnprintf(char*, size_t, const(char)*, va_list) @nogc nothrow;
-    int vdprintf(int, const(char)*, va_list) @nogc nothrow;
-    int dprintf(int, const(char)*, ...) @nogc nothrow;
-    int fscanf(FILE*, const(char)*, ...) @nogc nothrow;
-    int scanf(const(char)*, ...) @nogc nothrow;
-    int sscanf(const(char)*, const(char)*, ...) @nogc nothrow;
-    int vfscanf(FILE*, const(char)*, va_list) @nogc nothrow;
-    int vscanf(const(char)*, va_list) @nogc nothrow;
-    int vsscanf(const(char)*, const(char)*, va_list) @nogc nothrow;
-    int fgetc(FILE*) @nogc nothrow;
-    pragma(mangle, "getc") int getc_(FILE*) @nogc nothrow;
-    int getchar() @nogc nothrow;
-    c_long syscall(c_long, ...) @nogc nothrow;
-    int getc_unlocked(FILE*) @nogc nothrow;
-    int getchar_unlocked() @nogc nothrow;
-    int fgetc_unlocked(FILE*) @nogc nothrow;
-    int fputc(int, FILE*) @nogc nothrow;
-    pragma(mangle, "putc") int putc_(int, FILE*) @nogc nothrow;
-    int putchar(int) @nogc nothrow;
-    int fputc_unlocked(int, FILE*) @nogc nothrow;
-    int putc_unlocked(int, FILE*) @nogc nothrow;
-    int putchar_unlocked(int) @nogc nothrow;
-    int getw(FILE*) @nogc nothrow;
-    int putw(int, FILE*) @nogc nothrow;
-    char* fgets(char*, int, FILE*) @nogc nothrow;
-    __ssize_t __getdelim(char**, size_t*, int, FILE*) @nogc nothrow;
-    __ssize_t getdelim(char**, size_t*, int, FILE*) @nogc nothrow;
-    __ssize_t getline(char**, size_t*, FILE*) @nogc nothrow;
-    int fputs(const(char)*, FILE*) @nogc nothrow;
-    int puts(const(char)*) @nogc nothrow;
-    int ungetc(int, FILE*) @nogc nothrow;
-    size_t fread(void*, size_t, size_t, FILE*) @nogc nothrow;
-    size_t fwrite(const(void)*, size_t, size_t, FILE*) @nogc nothrow;
-    size_t fread_unlocked(void*, size_t, size_t, FILE*) @nogc nothrow;
-    size_t fwrite_unlocked(const(void)*, size_t, size_t, FILE*) @nogc nothrow;
-    int fseek(FILE*, c_long, int) @nogc nothrow;
-    c_long ftell(FILE*) @nogc nothrow;
-    void rewind(FILE*) @nogc nothrow;
-    int fseeko(FILE*, __off_t, int) @nogc nothrow;
-    __off_t ftello(FILE*) @nogc nothrow;
-    int fgetpos(FILE*, fpos_t*) @nogc nothrow;
-    int fsetpos(FILE*, const(fpos_t)*) @nogc nothrow;
-    void clearerr(FILE*) @nogc nothrow;
-    int feof(FILE*) @nogc nothrow;
-    int ferror(FILE*) @nogc nothrow;
-    void clearerr_unlocked(FILE*) @nogc nothrow;
-    int feof_unlocked(FILE*) @nogc nothrow;
-    int ferror_unlocked(FILE*) @nogc nothrow;
-    void perror(const(char)*) @nogc nothrow;
-    int fileno(FILE*) @nogc nothrow;
-    int fileno_unlocked(FILE*) @nogc nothrow;
-    FILE* popen(const(char)*, const(char)*) @nogc nothrow;
-    int pclose(FILE*) @nogc nothrow;
-    char* ctermid(char*) @nogc nothrow;
-    void flockfile(FILE*) @nogc nothrow;
-    int ftrylockfile(FILE*) @nogc nothrow;
-    void funlockfile(FILE*) @nogc nothrow;
-    void* sbrk(intptr_t) @nogc nothrow;
-    int brk(void*) @nogc nothrow;
-    int ftruncate(int, __off_t) @nogc nothrow;
-    struct div_t
+    struct __locale_struct
     {
-        int quot;
-        int rem;
+        __locale_data*[13] __locales;
+        const(ushort)* __ctype_b;
+        const(int)* __ctype_tolower;
+        const(int)* __ctype_toupper;
+        const(char)*[13] __names;
     }
-    struct ldiv_t
+    alias __locale_t = __locale_struct*;
+    int abs(int) @nogc nothrow;
+    struct __mbstate_t
     {
-        c_long quot;
-        c_long rem;
+        int __count;
+        static union _Anonymous_40
+        {
+            uint __wch;
+            char[4] __wchb;
+        }
+        _Anonymous_40 __value;
     }
-    struct lldiv_t
+    void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    struct __sigset_t
     {
-        long quot;
-        long rem;
+        c_ulong[16] __val;
     }
-    int truncate(const(char)*, __off_t) @nogc nothrow;
-    size_t __ctype_get_mb_cur_max() @nogc nothrow;
-    double atof(const(char)*) @nogc nothrow;
-    int atoi(const(char)*) @nogc nothrow;
-    c_long atol(const(char)*) @nogc nothrow;
-    long atoll(const(char)*) @nogc nothrow;
-    double strtod(const(char)*, char**) @nogc nothrow;
-    float strtof(const(char)*, char**) @nogc nothrow;
-    real strtold(const(char)*, char**) @nogc nothrow;
-    c_long strtol(const(char)*, char**, int) @nogc nothrow;
-    c_ulong strtoul(const(char)*, char**, int) @nogc nothrow;
-    long strtoq(const(char)*, char**, int) @nogc nothrow;
-    ulong strtouq(const(char)*, char**, int) @nogc nothrow;
-    long strtoll(const(char)*, char**, int) @nogc nothrow;
-    ulong strtoull(const(char)*, char**, int) @nogc nothrow;
-    char* l64a(c_long) @nogc nothrow;
-    c_long a64l(const(char)*) @nogc nothrow;
-    c_long random() @nogc nothrow;
-    void srandom(uint) @nogc nothrow;
-    char* initstate(uint, char*, size_t) @nogc nothrow;
-    char* setstate(char*) @nogc nothrow;
-    struct random_data
+    alias clock_t = c_long;
+    alias clockid_t = int;
+    void* bsearch(const(void)*, const(void)*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    alias locale_t = __locale_struct*;
+    alias __compar_fn_t = int function(const(void)*, const(void)*);
+    alias sigset_t = __sigset_t;
+    struct _IO_marker;
+    struct _IO_codecvt;
+    struct _IO_wide_data;
+    alias _IO_lock_t = void;
+    char* realpath(const(char)*, char*) @nogc nothrow;
+    int system(const(char)*) @nogc nothrow;
+    struct itimerspec
     {
-        int32_t* fptr;
-        int32_t* rptr;
-        int32_t* state;
-        int rand_type;
-        int rand_deg;
-        int rand_sep;
-        int32_t* end_ptr;
+        timespec it_interval;
+        timespec it_value;
     }
-    int random_r(random_data*, int32_t*) @nogc nothrow;
-    int srandom_r(uint, random_data*) @nogc nothrow;
-    int initstate_r(uint, char*, size_t, random_data*) @nogc nothrow;
-    int setstate_r(char*, random_data*) @nogc nothrow;
-    int rand() @nogc nothrow;
-    void srand(uint) @nogc nothrow;
-    int rand_r(uint*) @nogc nothrow;
-    double drand48() @nogc nothrow;
-    double erand48(ushort*) @nogc nothrow;
-    c_long lrand48() @nogc nothrow;
-    c_long nrand48(ushort*) @nogc nothrow;
-    c_long mrand48() @nogc nothrow;
-    c_long jrand48(ushort*) @nogc nothrow;
-    void srand48(c_long) @nogc nothrow;
-    ushort* seed48(ushort*) @nogc nothrow;
-    void lcong48(ushort*) @nogc nothrow;
+    char* mkdtemp(char*) @nogc nothrow;
+    struct timespec
+    {
+        c_long tv_sec;
+        c_long tv_nsec;
+    }
+    struct timeval
+    {
+        c_long tv_sec;
+        c_long tv_usec;
+    }
+    struct tm
+    {
+        int tm_sec;
+        int tm_min;
+        int tm_hour;
+        int tm_mday;
+        int tm_mon;
+        int tm_year;
+        int tm_wday;
+        int tm_yday;
+        int tm_isdst;
+        c_long tm_gmtoff;
+        const(char)* tm_zone;
+    }
+    alias time_t = c_long;
+    int mkstemps(char*, int) @nogc nothrow;
+    alias timer_t = void*;
+    int mkstemp(char*) @nogc nothrow;
+    char* mktemp(char*) @nogc nothrow;
+    int clearenv() @nogc nothrow;
+    int unsetenv(const(char)*) @nogc nothrow;
+    int setenv(const(char)*, const(char)*, int) @nogc nothrow;
+    int putenv(char*) @nogc nothrow;
+    char* getenv(const(char)*) @nogc nothrow;
+    void _Exit(int) @nogc nothrow;
+    void quick_exit(int) @nogc nothrow;
+    void exit(int) @nogc nothrow;
+    int on_exit(void function(int, void*), void*) @nogc nothrow;
+    static ushort __uint16_identity(ushort) @nogc nothrow;
+    static uint __uint32_identity(uint) @nogc nothrow;
+    static c_ulong __uint64_identity(c_ulong) @nogc nothrow;
+    int at_quick_exit(void function()) @nogc nothrow;
+    int atexit(void function()) @nogc nothrow;
+    void abort() @nogc nothrow;
+    void* aligned_alloc(c_ulong, c_ulong) @nogc nothrow;
+    int posix_memalign(void**, c_ulong, c_ulong) @nogc nothrow;
+    void* valloc(c_ulong) @nogc nothrow;
+    void free(void*) @nogc nothrow;
+    void* reallocarray(void*, c_ulong, c_ulong) @nogc nothrow;
+    void* realloc(void*, c_ulong) @nogc nothrow;
+    void* calloc(c_ulong, c_ulong) @nogc nothrow;
+    void* malloc(c_ulong) @nogc nothrow;
+    enum _Anonymous_41
+    {
+        _ISupper = 256,
+        _ISlower = 512,
+        _ISalpha = 1024,
+        _ISdigit = 2048,
+        _ISxdigit = 4096,
+        _ISspace = 8192,
+        _ISprint = 16384,
+        _ISgraph = 32768,
+        _ISblank = 1,
+        _IScntrl = 2,
+        _ISpunct = 4,
+        _ISalnum = 8,
+    }
+    enum _ISupper = _Anonymous_41._ISupper;
+    enum _ISlower = _Anonymous_41._ISlower;
+    enum _ISalpha = _Anonymous_41._ISalpha;
+    enum _ISdigit = _Anonymous_41._ISdigit;
+    enum _ISxdigit = _Anonymous_41._ISxdigit;
+    enum _ISspace = _Anonymous_41._ISspace;
+    enum _ISprint = _Anonymous_41._ISprint;
+    enum _ISgraph = _Anonymous_41._ISgraph;
+    enum _ISblank = _Anonymous_41._ISblank;
+    enum _IScntrl = _Anonymous_41._IScntrl;
+    enum _ISpunct = _Anonymous_41._ISpunct;
+    enum _ISalnum = _Anonymous_41._ISalnum;
+    const(ushort)** __ctype_b_loc() @nogc nothrow;
+    const(int)** __ctype_tolower_loc() @nogc nothrow;
+    const(int)** __ctype_toupper_loc() @nogc nothrow;
+    int lcong48_r(ushort*, drand48_data*) @nogc nothrow;
+    int seed48_r(ushort*, drand48_data*) @nogc nothrow;
+    pragma(mangle, "isalnum") int isalnum_(int) @nogc nothrow;
+    pragma(mangle, "isalpha") int isalpha_(int) @nogc nothrow;
+    pragma(mangle, "iscntrl") int iscntrl_(int) @nogc nothrow;
+    pragma(mangle, "isdigit") int isdigit_(int) @nogc nothrow;
+    pragma(mangle, "islower") int islower_(int) @nogc nothrow;
+    pragma(mangle, "isgraph") int isgraph_(int) @nogc nothrow;
+    pragma(mangle, "isprint") int isprint_(int) @nogc nothrow;
+    pragma(mangle, "ispunct") int ispunct_(int) @nogc nothrow;
+    pragma(mangle, "isspace") int isspace_(int) @nogc nothrow;
+    pragma(mangle, "isupper") int isupper_(int) @nogc nothrow;
+    pragma(mangle, "isxdigit") int isxdigit_(int) @nogc nothrow;
+    int tolower(int) @nogc nothrow;
+    int toupper(int) @nogc nothrow;
+    pragma(mangle, "isblank") int isblank_(int) @nogc nothrow;
+    pragma(mangle, "isascii") int isascii_(int) @nogc nothrow;
+    pragma(mangle, "toascii") int toascii_(int) @nogc nothrow;
+    pragma(mangle, "_toupper") int _toupper_(int) @nogc nothrow;
+    pragma(mangle, "_tolower") int _tolower_(int) @nogc nothrow;
+    int srand48_r(c_long, drand48_data*) @nogc nothrow;
+    int jrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
+    int mrand48_r(drand48_data*, c_long*) @nogc nothrow;
+    int nrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
+    int lrand48_r(drand48_data*, c_long*) @nogc nothrow;
+    int erand48_r(ushort*, drand48_data*, double*) @nogc nothrow;
+    pragma(mangle, "isalnum_l") int isalnum_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isalpha_l") int isalpha_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "iscntrl_l") int iscntrl_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isdigit_l") int isdigit_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "islower_l") int islower_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isgraph_l") int isgraph_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isprint_l") int isprint_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "ispunct_l") int ispunct_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isspace_l") int isspace_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isupper_l") int isupper_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isxdigit_l") int isxdigit_l_(int, __locale_struct*) @nogc nothrow;
+    pragma(mangle, "isblank_l") int isblank_l_(int, __locale_struct*) @nogc nothrow;
+    int __tolower_l(int, __locale_struct*) @nogc nothrow;
+    int tolower_l(int, __locale_struct*) @nogc nothrow;
+    int __toupper_l(int, __locale_struct*) @nogc nothrow;
+    int toupper_l(int, __locale_struct*) @nogc nothrow;
+    int drand48_r(drand48_data*, double*) @nogc nothrow;
     struct drand48_data
     {
         ushort[3] __x;
@@ -3913,254 +3969,1551 @@ extern(C)
         ushort __init;
         ulong __a;
     }
-    int drand48_r(drand48_data*, double*) @nogc nothrow;
-    int erand48_r(ushort*, drand48_data*, double*) @nogc nothrow;
-    int lrand48_r(drand48_data*, c_long*) @nogc nothrow;
-    int nrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
-    int mrand48_r(drand48_data*, c_long*) @nogc nothrow;
-    int jrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
-    int srand48_r(c_long, drand48_data*) @nogc nothrow;
-    int seed48_r(ushort*, drand48_data*) @nogc nothrow;
-    int lcong48_r(ushort*, drand48_data*) @nogc nothrow;
-    void* malloc(size_t) @nogc nothrow;
-    void* calloc(size_t, size_t) @nogc nothrow;
-    void* realloc(void*, size_t) @nogc nothrow;
-    void free(void*) @nogc nothrow;
-    void* valloc(size_t) @nogc nothrow;
-    int posix_memalign(void**, size_t, size_t) @nogc nothrow;
-    void* aligned_alloc(size_t, size_t) @nogc nothrow;
-    void abort() @nogc nothrow;
-    int atexit(void function()) @nogc nothrow;
-    int at_quick_exit(void function()) @nogc nothrow;
-    int on_exit(void function(int, void*), void*) @nogc nothrow;
-    void exit(int) @nogc nothrow;
-    void quick_exit(int) @nogc nothrow;
-    void _Exit(int) @nogc nothrow;
-    char* getenv(const(char)*) @nogc nothrow;
-    int putenv(char*) @nogc nothrow;
-    int setenv(const(char)*, const(char)*, int) @nogc nothrow;
-    int unsetenv(const(char)*) @nogc nothrow;
-    int clearenv() @nogc nothrow;
-    char* mktemp(char*) @nogc nothrow;
-    int mkstemp(char*) @nogc nothrow;
-    int mkstemps(char*, int) @nogc nothrow;
-    char* mkdtemp(char*) @nogc nothrow;
-    int system(const(char)*) @nogc nothrow;
-    char* realpath(const(char)*, char*) @nogc nothrow;
-    int getdtablesize() @nogc nothrow;
-    alias __compar_fn_t = int function(const(void)*, const(void)*) @nogc nothrow;
-    void* bsearch(const(void)*, const(void)*, size_t, size_t, __compar_fn_t) @nogc nothrow;
-    void qsort(void*, size_t, size_t, __compar_fn_t) @nogc nothrow;
-    int abs(int) @nogc nothrow;
-    c_long labs(c_long) @nogc nothrow;
-    long llabs(long) @nogc nothrow;
-    div_t div(int, int) @nogc nothrow;
-    ldiv_t ldiv(c_long, c_long) @nogc nothrow;
-    lldiv_t lldiv(long, long) @nogc nothrow;
-    char* ecvt(double, int, int*, int*) @nogc nothrow;
-    char* fcvt(double, int, int*, int*) @nogc nothrow;
-    char* gcvt(double, int, char*) @nogc nothrow;
-    char* qecvt(real, int, int*, int*) @nogc nothrow;
-    char* qfcvt(real, int, int*, int*) @nogc nothrow;
-    char* qgcvt(real, int, char*) @nogc nothrow;
-    int ecvt_r(double, int, int*, int*, char*, size_t) @nogc nothrow;
-    int fcvt_r(double, int, int*, int*, char*, size_t) @nogc nothrow;
-    int qecvt_r(real, int, int*, int*, char*, size_t) @nogc nothrow;
-    int qfcvt_r(real, int, int*, int*, char*, size_t) @nogc nothrow;
-    int mblen(const(char)*, size_t) @nogc nothrow;
-    int mbtowc(wchar_t*, const(char)*, size_t) @nogc nothrow;
-    int wctomb(char*, wchar_t) @nogc nothrow;
-    size_t mbstowcs(wchar_t*, const(char)*, size_t) @nogc nothrow;
-    size_t wcstombs(char*, const(wchar_t)*, size_t) @nogc nothrow;
-    int rpmatch(const(char)*) @nogc nothrow;
-    int getsubopt(char**, char**, char**) @nogc nothrow;
-    int getloadavg(double*, int) @nogc nothrow;
-    int getpagesize() @nogc nothrow;
-    void* memcpy(void*, const(void)*, size_t) @nogc nothrow;
-    void* memmove(void*, const(void)*, size_t) @nogc nothrow;
-    void* memccpy(void*, const(void)*, int, size_t) @nogc nothrow;
-    void* memset(void*, int, size_t) @nogc nothrow;
-    int memcmp(const(void)*, const(void)*, size_t) @nogc nothrow;
-    void* memchr(const(void)*, int, size_t) @nogc nothrow;
-    char* strcpy(char*, const(char)*) @nogc nothrow;
-    char* strncpy(char*, const(char)*, size_t) @nogc nothrow;
-    char* strcat(char*, const(char)*) @nogc nothrow;
-    char* strncat(char*, const(char)*, size_t) @nogc nothrow;
-    int strcmp(const(char)*, const(char)*) @nogc nothrow;
-    int strncmp(const(char)*, const(char)*, size_t) @nogc nothrow;
-    int strcoll(const(char)*, const(char)*) @nogc nothrow;
-    c_ulong strxfrm(char*, const(char)*, size_t) @nogc nothrow;
-    int strcoll_l(const(char)*, const(char)*, locale_t) @nogc nothrow;
-    size_t strxfrm_l(char*, const(char)*, size_t, locale_t) @nogc nothrow;
-    char* strdup(const(char)*) @nogc nothrow;
-    char* strndup(const(char)*, size_t) @nogc nothrow;
-    char* strchr(const(char)*, int) @nogc nothrow;
-    char* strrchr(const(char)*, int) @nogc nothrow;
-    c_ulong strcspn(const(char)*, const(char)*) @nogc nothrow;
-    c_ulong strspn(const(char)*, const(char)*) @nogc nothrow;
-    char* strpbrk(const(char)*, const(char)*) @nogc nothrow;
-    char* strstr(const(char)*, const(char)*) @nogc nothrow;
-    char* strtok(char*, const(char)*) @nogc nothrow;
-    char* __strtok_r(char*, const(char)*, char**) @nogc nothrow;
-    char* strtok_r(char*, const(char)*, char**) @nogc nothrow;
-    c_ulong strlen(const(char)*) @nogc nothrow;
-    size_t strnlen(const(char)*, size_t) @nogc nothrow;
-    char* strerror(int) @nogc nothrow;
-    int strerror_r(int, char*, size_t) @nogc nothrow;
-    char* strerror_l(int, locale_t) @nogc nothrow;
-    void explicit_bzero(void*, size_t) @nogc nothrow;
-    char* strsep(char**, const(char)*) @nogc nothrow;
-    char* strsignal(int) @nogc nothrow;
-    char* __stpcpy(char*, const(char)*) @nogc nothrow;
-    char* stpcpy(char*, const(char)*) @nogc nothrow;
-    char* __stpncpy(char*, const(char)*, size_t) @nogc nothrow;
-    char* stpncpy(char*, const(char)*, size_t) @nogc nothrow;
-    void sync() @nogc nothrow;
-    int bcmp(const(void)*, const(void)*, size_t) @nogc nothrow;
-    void bcopy(const(void)*, void*, size_t) @nogc nothrow;
-    void bzero(void*, size_t) @nogc nothrow;
-    char* index(const(char)*, int) @nogc nothrow;
-    char* rindex(const(char)*, int) @nogc nothrow;
-    int ffs(int) @nogc nothrow;
-    int ffsl(c_long) @nogc nothrow;
-    int ffsll(long) @nogc nothrow;
-    int strcasecmp(const(char)*, const(char)*) @nogc nothrow;
-    int strncasecmp(const(char)*, const(char)*, size_t) @nogc nothrow;
-    int strcasecmp_l(const(char)*, const(char)*, locale_t) @nogc nothrow;
-    int strncasecmp_l(const(char)*, const(char)*, size_t, locale_t) @nogc nothrow;
-    c_long gethostid() @nogc nothrow;
-    int fsync(int) @nogc nothrow;
-    struct sigevent;
-    clock_t clock() @nogc nothrow;
-    time_t time(time_t*) @nogc nothrow;
-    double difftime(time_t, time_t) @nogc nothrow;
-    time_t mktime(tm*) @nogc nothrow;
-    size_t strftime(char*, size_t, const(char)*, const(tm)*) @nogc nothrow;
-    size_t strftime_l(char*, size_t, const(char)*, const(tm)*, locale_t) @nogc nothrow;
-    tm* gmtime(const(time_t)*) @nogc nothrow;
-    tm* localtime(const(time_t)*) @nogc nothrow;
-    tm* gmtime_r(const(time_t)*, tm*) @nogc nothrow;
-    tm* localtime_r(const(time_t)*, tm*) @nogc nothrow;
-    char* asctime(const(tm)*) @nogc nothrow;
-    char* ctime(const(time_t)*) @nogc nothrow;
-    char* asctime_r(const(tm)*, char*) @nogc nothrow;
-    char* ctime_r(const(time_t)*, char*) @nogc nothrow;
-    extern __gshared char*[2] __tzname;
-    extern __gshared int __daylight;
-    extern __gshared c_long __timezone;
-    extern __gshared char*[2] tzname;
-    void tzset() @nogc nothrow;
-    extern __gshared int daylight;
-    extern __gshared c_long timezone;
-    int stime(const(time_t)*) @nogc nothrow;
-    char* getpass(const(char)*) @nogc nothrow;
-    time_t timegm(tm*) @nogc nothrow;
-    time_t timelocal(tm*) @nogc nothrow;
-    int dysize(int) @nogc nothrow;
-    int nanosleep(const(timespec)*, timespec*) @nogc nothrow;
-    int clock_getres(clockid_t, timespec*) @nogc nothrow;
-    int clock_gettime(clockid_t, timespec*) @nogc nothrow;
-    int clock_settime(clockid_t, const(timespec)*) @nogc nothrow;
-    int clock_nanosleep(clockid_t, int, const(timespec)*, timespec*) @nogc nothrow;
-    int clock_getcpuclockid(pid_t, clockid_t*) @nogc nothrow;
-    int timer_create(clockid_t, sigevent*, timer_t*) @nogc nothrow;
-    int timer_delete(timer_t) @nogc nothrow;
-    int timer_settime(timer_t, int, const(itimerspec)*, itimerspec*) @nogc nothrow;
-    int timer_gettime(timer_t, itimerspec*) @nogc nothrow;
-    int timer_getoverrun(timer_t) @nogc nothrow;
-    int timespec_get(timespec*, int) @nogc nothrow;
-    int chroot(const(char)*) @nogc nothrow;
-    int daemon(int, int) @nogc nothrow;
-    void setusershell() @nogc nothrow;
-    void endusershell() @nogc nothrow;
-    char* getusershell() @nogc nothrow;
-    int acct(const(char)*) @nogc nothrow;
-    int profil(ushort*, size_t, size_t, uint) @nogc nothrow;
-    alias useconds_t = uint;
-    int revoke(const(char)*) @nogc nothrow;
-    alias socklen_t = uint;
-    int vhangup() @nogc nothrow;
-    int access(const(char)*, int) @nogc nothrow;
-    int faccessat(int, const(char)*, int, int) @nogc nothrow;
-    int setdomainname(const(char)*, size_t) @nogc nothrow;
-    __off_t lseek(int, __off_t, int) @nogc nothrow;
-    int close(int) @nogc nothrow;
-    ssize_t read(int, void*, size_t) @nogc nothrow;
-    ssize_t write(int, const(void)*, size_t) @nogc nothrow;
-    ssize_t pread(int, void*, size_t, __off_t) @nogc nothrow;
-    ssize_t pwrite(int, const(void)*, size_t, __off_t) @nogc nothrow;
-    int pipe(int*) @nogc nothrow;
-    uint alarm(uint) @nogc nothrow;
-    uint sleep(uint) @nogc nothrow;
-    __useconds_t ualarm(__useconds_t, __useconds_t) @nogc nothrow;
-    int usleep(__useconds_t) @nogc nothrow;
-    int pause() @nogc nothrow;
-    int chown(const(char)*, __uid_t, __gid_t) @nogc nothrow;
-    int fchown(int, __uid_t, __gid_t) @nogc nothrow;
-    int lchown(const(char)*, __uid_t, __gid_t) @nogc nothrow;
-    int fchownat(int, const(char)*, __uid_t, __gid_t, int) @nogc nothrow;
-    int chdir(const(char)*) @nogc nothrow;
-    int fchdir(int) @nogc nothrow;
-    char* getcwd(char*, size_t) @nogc nothrow;
-    char* getwd(char*) @nogc nothrow;
-    int dup(int) @nogc nothrow;
-    int dup2(int, int) @nogc nothrow;
-    extern __gshared char** __environ;
-    int execve(const(char)*, char**, char**) @nogc nothrow;
-    int fexecve(int, char**, char**) @nogc nothrow;
-    int execv(const(char)*, char**) @nogc nothrow;
-    int execle(const(char)*, const(char)*, ...) @nogc nothrow;
-    int execl(const(char)*, const(char)*, ...) @nogc nothrow;
-    int execvp(const(char)*, char**) @nogc nothrow;
-    int execlp(const(char)*, const(char)*, ...) @nogc nothrow;
-    int nice(int) @nogc nothrow;
-    void _exit(int) @nogc nothrow;
-    c_long pathconf(const(char)*, int) @nogc nothrow;
-    c_long fpathconf(int, int) @nogc nothrow;
-    c_long sysconf(int) @nogc nothrow;
-    size_t confstr(int, char*, size_t) @nogc nothrow;
-    __pid_t getpid() @nogc nothrow;
-    __pid_t getppid() @nogc nothrow;
-    __pid_t getpgrp() @nogc nothrow;
-    __pid_t __getpgid(__pid_t) @nogc nothrow;
-    __pid_t getpgid(__pid_t) @nogc nothrow;
-    int setpgid(__pid_t, __pid_t) @nogc nothrow;
-    int setpgrp() @nogc nothrow;
-    __pid_t setsid() @nogc nothrow;
-    __pid_t getsid(__pid_t) @nogc nothrow;
-    __uid_t getuid() @nogc nothrow;
-    __uid_t geteuid() @nogc nothrow;
-    __gid_t getgid() @nogc nothrow;
-    __gid_t getegid() @nogc nothrow;
-    int getgroups(int, __gid_t*) @nogc nothrow;
-    int setuid(__uid_t) @nogc nothrow;
-    int setreuid(__uid_t, __uid_t) @nogc nothrow;
-    int seteuid(__uid_t) @nogc nothrow;
-    int setgid(__gid_t) @nogc nothrow;
-    int setregid(__gid_t, __gid_t) @nogc nothrow;
-    int setegid(__gid_t) @nogc nothrow;
-    __pid_t fork() @nogc nothrow;
-    int vfork() @nogc nothrow;
-    char* ttyname(int) @nogc nothrow;
-    int ttyname_r(int, char*, size_t) @nogc nothrow;
-    int isatty(int) @nogc nothrow;
-    int ttyslot() @nogc nothrow;
-    int link(const(char)*, const(char)*) @nogc nothrow;
-    int linkat(int, const(char)*, int, const(char)*, int) @nogc nothrow;
-    int symlink(const(char)*, const(char)*) @nogc nothrow;
-    ssize_t readlink(const(char)*, char*, size_t) @nogc nothrow;
-    int symlinkat(const(char)*, int, const(char)*) @nogc nothrow;
-    ssize_t readlinkat(int, const(char)*, char*, size_t) @nogc nothrow;
-    int unlink(const(char)*) @nogc nothrow;
-    int unlinkat(int, const(char)*, int) @nogc nothrow;
-    int rmdir(const(char)*) @nogc nothrow;
-    __pid_t tcgetpgrp(int) @nogc nothrow;
-    int tcsetpgrp(int, __pid_t) @nogc nothrow;
-    char* getlogin() @nogc nothrow;
-    int getlogin_r(char*, size_t) @nogc nothrow;
-    int setlogin(const(char)*) @nogc nothrow;
-    int gethostname(char*, size_t) @nogc nothrow;
-    int sethostname(const(char)*, size_t) @nogc nothrow;
-    int sethostid(c_long) @nogc nothrow;
-    int getdomainname(char*, size_t) @nogc nothrow;
+    void lcong48(ushort*) @nogc nothrow;
+    ushort* seed48(ushort*) @nogc nothrow;
+    void srand48(c_long) @nogc nothrow;
+    c_long jrand48(ushort*) @nogc nothrow;
+    c_long mrand48() @nogc nothrow;
+    c_long nrand48(ushort*) @nogc nothrow;
+    c_long lrand48() @nogc nothrow;
+    double erand48(ushort*) @nogc nothrow;
+    double drand48() @nogc nothrow;
+    int rand_r(uint*) @nogc nothrow;
+    void srand(uint) @nogc nothrow;
+    int rand() @nogc nothrow;
+    int setstate_r(char*, random_data*) @nogc nothrow;
+    int initstate_r(uint, char*, c_ulong, random_data*) @nogc nothrow;
+    int srandom_r(uint, random_data*) @nogc nothrow;
+    int random_r(random_data*, int*) @nogc nothrow;
+    struct random_data
+    {
+        int* fptr;
+        int* rptr;
+        int* state;
+        int rand_type;
+        int rand_deg;
+        int rand_sep;
+        int* end_ptr;
+    }
+    int* __errno_location() @nogc nothrow;
+    char* setstate(char*) @nogc nothrow;
+    char* initstate(uint, char*, c_ulong) @nogc nothrow;
+    void srandom(uint) @nogc nothrow;
+    c_long random() @nogc nothrow;
+    c_long a64l(const(char)*) @nogc nothrow;
+    char* l64a(c_long) @nogc nothrow;
+    ulong strtoull(const(char)*, char**, int) @nogc nothrow;
+    long strtoll(const(char)*, char**, int) @nogc nothrow;
+    ulong strtouq(const(char)*, char**, int) @nogc nothrow;
+    long strtoq(const(char)*, char**, int) @nogc nothrow;
+    c_ulong strtoul(const(char)*, char**, int) @nogc nothrow;
+    c_long strtol(const(char)*, char**, int) @nogc nothrow;
+    real strtold(const(char)*, char**) @nogc nothrow;
+    alias int_least8_t = byte;
+    alias int_least16_t = short;
+    alias int_least32_t = int;
+    alias int_least64_t = c_long;
+    alias uint_least8_t = ubyte;
+    alias uint_least16_t = ushort;
+    alias uint_least32_t = uint;
+    alias uint_least64_t = c_ulong;
+    alias int_fast8_t = byte;
+    alias int_fast16_t = c_long;
+    alias int_fast32_t = c_long;
+    alias int_fast64_t = c_long;
+    alias uint_fast8_t = ubyte;
+    alias uint_fast16_t = c_ulong;
+    alias uint_fast32_t = c_ulong;
+    alias uint_fast64_t = c_ulong;
+    alias intptr_t = c_long;
+    alias uintptr_t = c_ulong;
+    alias intmax_t = c_long;
+    alias uintmax_t = c_ulong;
+    float strtof(const(char)*, char**) @nogc nothrow;
+    double strtod(const(char)*, char**) @nogc nothrow;
+    long atoll(const(char)*) @nogc nothrow;
+    c_long atol(const(char)*) @nogc nothrow;
+    int atoi(const(char)*) @nogc nothrow;
+    double atof(const(char)*) @nogc nothrow;
+    c_ulong __ctype_get_mb_cur_max() @nogc nothrow;
+    struct lldiv_t
+    {
+        long quot;
+        long rem;
+    }
+    struct ldiv_t
+    {
+        c_long quot;
+        c_long rem;
+    }
+    struct div_t
+    {
+        int quot;
+        int rem;
+    }
+    int __overflow(_IO_FILE*, int) @nogc nothrow;
+    int __uflow(_IO_FILE*) @nogc nothrow;
+    void funlockfile(_IO_FILE*) @nogc nothrow;
+    int ftrylockfile(_IO_FILE*) @nogc nothrow;
+    void flockfile(_IO_FILE*) @nogc nothrow;
+    char* ctermid(char*) @nogc nothrow;
+    int pclose(_IO_FILE*) @nogc nothrow;
+    _IO_FILE* popen(const(char)*, const(char)*) @nogc nothrow;
+    alias off_t = c_long;
+    int fileno_unlocked(_IO_FILE*) @nogc nothrow;
+    alias ssize_t = c_long;
+    alias fpos_t = _G_fpos_t;
+    int fileno(_IO_FILE*) @nogc nothrow;
+    void perror(const(char)*) @nogc nothrow;
+    int ferror_unlocked(_IO_FILE*) @nogc nothrow;
+    extern __gshared _IO_FILE* stdin;
+    extern __gshared _IO_FILE* stdout;
+    extern __gshared _IO_FILE* stderr;
+    int feof_unlocked(_IO_FILE*) @nogc nothrow;
+    int remove(const(char)*) @nogc nothrow;
+    int rename(const(char)*, const(char)*) @nogc nothrow;
+    int renameat(int, const(char)*, int, const(char)*) @nogc nothrow;
+    _IO_FILE* tmpfile() @nogc nothrow;
+    char* tmpnam(char*) @nogc nothrow;
+    char* tmpnam_r(char*) @nogc nothrow;
+    char* tempnam(const(char)*, const(char)*) @nogc nothrow;
+    int fclose(_IO_FILE*) @nogc nothrow;
+    int fflush(_IO_FILE*) @nogc nothrow;
+    int fflush_unlocked(_IO_FILE*) @nogc nothrow;
+    _IO_FILE* fopen(const(char)*, const(char)*) @nogc nothrow;
+    _IO_FILE* freopen(const(char)*, const(char)*, _IO_FILE*) @nogc nothrow;
+    _IO_FILE* fdopen(int, const(char)*) @nogc nothrow;
+    _IO_FILE* fmemopen(void*, c_ulong, const(char)*) @nogc nothrow;
+    _IO_FILE* open_memstream(char**, c_ulong*) @nogc nothrow;
+    void setbuf(_IO_FILE*, char*) @nogc nothrow;
+    int setvbuf(_IO_FILE*, char*, int, c_ulong) @nogc nothrow;
+    void setbuffer(_IO_FILE*, char*, c_ulong) @nogc nothrow;
+    void setlinebuf(_IO_FILE*) @nogc nothrow;
+    int fprintf(_IO_FILE*, const(char)*, ...) @nogc nothrow;
+    int printf(const(char)*, ...) @nogc nothrow;
+    int sprintf(char*, const(char)*, ...) @nogc nothrow;
+    int vfprintf(_IO_FILE*, const(char)*, va_list*) @nogc nothrow;
+    int vprintf(const(char)*, va_list*) @nogc nothrow;
+    int vsprintf(char*, const(char)*, va_list*) @nogc nothrow;
+    int snprintf(char*, c_ulong, const(char)*, ...) @nogc nothrow;
+    int vsnprintf(char*, c_ulong, const(char)*, va_list*) @nogc nothrow;
+    int vdprintf(int, const(char)*, va_list*) @nogc nothrow;
+    int dprintf(int, const(char)*, ...) @nogc nothrow;
+    int fscanf(_IO_FILE*, const(char)*, ...) @nogc nothrow;
+    int scanf(const(char)*, ...) @nogc nothrow;
+    int sscanf(const(char)*, const(char)*, ...) @nogc nothrow;
+    int vfscanf(_IO_FILE*, const(char)*, va_list*) @nogc nothrow;
+    int vscanf(const(char)*, va_list*) @nogc nothrow;
+    int vsscanf(const(char)*, const(char)*, va_list*) @nogc nothrow;
+    int fgetc(_IO_FILE*) @nogc nothrow;
+    int getc(_IO_FILE*) @nogc nothrow;
+    int getchar() @nogc nothrow;
+    int getc_unlocked(_IO_FILE*) @nogc nothrow;
+    int getchar_unlocked() @nogc nothrow;
+    int fgetc_unlocked(_IO_FILE*) @nogc nothrow;
+    int fputc(int, _IO_FILE*) @nogc nothrow;
+    int putc(int, _IO_FILE*) @nogc nothrow;
+    int putchar(int) @nogc nothrow;
+    int fputc_unlocked(int, _IO_FILE*) @nogc nothrow;
+    int putc_unlocked(int, _IO_FILE*) @nogc nothrow;
+    int putchar_unlocked(int) @nogc nothrow;
+    int getw(_IO_FILE*) @nogc nothrow;
+    int putw(int, _IO_FILE*) @nogc nothrow;
+    char* fgets(char*, int, _IO_FILE*) @nogc nothrow;
+    c_long __getdelim(char**, c_ulong*, int, _IO_FILE*) @nogc nothrow;
+    c_long getdelim(char**, c_ulong*, int, _IO_FILE*) @nogc nothrow;
+    c_long getline(char**, c_ulong*, _IO_FILE*) @nogc nothrow;
+    int fputs(const(char)*, _IO_FILE*) @nogc nothrow;
+    int puts(const(char)*) @nogc nothrow;
+    int ungetc(int, _IO_FILE*) @nogc nothrow;
+    c_ulong fread(void*, c_ulong, c_ulong, _IO_FILE*) @nogc nothrow;
+    c_ulong fwrite(const(void)*, c_ulong, c_ulong, _IO_FILE*) @nogc nothrow;
+    c_ulong fread_unlocked(void*, c_ulong, c_ulong, _IO_FILE*) @nogc nothrow;
+    c_ulong fwrite_unlocked(const(void)*, c_ulong, c_ulong, _IO_FILE*) @nogc nothrow;
+    int fseek(_IO_FILE*, c_long, int) @nogc nothrow;
+    c_long ftell(_IO_FILE*) @nogc nothrow;
+    void rewind(_IO_FILE*) @nogc nothrow;
+    int fseeko(_IO_FILE*, c_long, int) @nogc nothrow;
+    c_long ftello(_IO_FILE*) @nogc nothrow;
+    int fgetpos(_IO_FILE*, _G_fpos_t*) @nogc nothrow;
+    int fsetpos(_IO_FILE*, const(_G_fpos_t)*) @nogc nothrow;
+    void clearerr(_IO_FILE*) @nogc nothrow;
+    int feof(_IO_FILE*) @nogc nothrow;
+    int ferror(_IO_FILE*) @nogc nothrow;
+    void clearerr_unlocked(_IO_FILE*) @nogc nothrow;
+    enum DPP_ENUM_SEEK_END = 2;
+
+
+    enum DPP_ENUM_SEEK_CUR = 1;
+
+
+    enum DPP_ENUM_SEEK_SET = 0;
+
+
+
+
+    enum DPP_ENUM_BUFSIZ = 8192;
+
+
+    enum DPP_ENUM__IONBF = 2;
+
+
+    enum DPP_ENUM__IOLBF = 1;
+
+
+    enum DPP_ENUM__IOFBF = 0;
+    enum DPP_ENUM__STDIO_H = 1;
+    enum DPP_ENUM__STDLIB_H = 1;
+    enum DPP_ENUM___ldiv_t_defined = 1;
+    enum DPP_ENUM___lldiv_t_defined = 1;
+
+
+    enum DPP_ENUM_RAND_MAX = 2147483647;
+
+
+    enum DPP_ENUM_EXIT_FAILURE = 1;
+
+
+    enum DPP_ENUM_EXIT_SUCCESS = 0;
+    enum DPP_ENUM__STDINT_H = 1;
+
+
+    enum DPP_ENUM__STDC_PREDEF_H = 1;
+
+
+    enum DPP_ENUM_RTSIG_MAX = 32;
+
+
+    enum DPP_ENUM_XATTR_LIST_MAX = 65536;
+
+
+    enum DPP_ENUM_XATTR_SIZE_MAX = 65536;
+
+
+    enum DPP_ENUM_XATTR_NAME_MAX = 255;
+
+
+    enum DPP_ENUM_PIPE_BUF = 4096;
+
+
+    enum DPP_ENUM_PATH_MAX = 4096;
+
+
+    enum DPP_ENUM_NAME_MAX = 255;
+
+
+    enum DPP_ENUM_MAX_INPUT = 255;
+
+
+    enum DPP_ENUM_MAX_CANON = 255;
+
+
+    enum DPP_ENUM_LINK_MAX = 127;
+
+
+    enum DPP_ENUM_ARG_MAX = 131072;
+
+
+    enum DPP_ENUM_NGROUPS_MAX = 65536;
+
+
+    enum DPP_ENUM_NR_OPEN = 1024;
+    enum DPP_ENUM_MB_LEN_MAX = 16;
+
+
+    enum DPP_ENUM__LIBC_LIMITS_H_ = 1;
+    enum DPP_ENUM___GLIBC_MINOR__ = 29;
+
+
+    enum DPP_ENUM___GLIBC__ = 2;
+
+
+    enum DPP_ENUM___GNU_LIBRARY__ = 6;
+
+
+    enum DPP_ENUM___GLIBC_USE_DEPRECATED_SCANF = 0;
+
+
+    enum DPP_ENUM___GLIBC_USE_DEPRECATED_GETS = 0;
+
+
+    enum DPP_ENUM___USE_FORTIFY_LEVEL = 0;
+
+
+    enum DPP_ENUM___USE_ATFILE = 1;
+
+
+    enum DPP_ENUM___USE_MISC = 1;
+
+
+    enum DPP_ENUM__ATFILE_SOURCE = 1;
+
+
+    enum DPP_ENUM___USE_XOPEN2K8 = 1;
+
+
+    enum DPP_ENUM___USE_ISOC99 = 1;
+
+
+    enum DPP_ENUM___USE_ISOC95 = 1;
+
+
+    enum DPP_ENUM___USE_XOPEN2K = 1;
+
+
+    enum DPP_ENUM___USE_POSIX199506 = 1;
+
+
+    enum DPP_ENUM___USE_POSIX199309 = 1;
+
+
+    enum DPP_ENUM___USE_POSIX2 = 1;
+
+
+    enum DPP_ENUM___USE_POSIX = 1;
+
+
+
+
+    enum DPP_ENUM__POSIX_SOURCE = 1;
+
+
+    enum DPP_ENUM___USE_POSIX_IMPLICITLY = 1;
+
+
+    enum DPP_ENUM___USE_ISOC11 = 1;
+
+
+    enum DPP_ENUM__DEFAULT_SOURCE = 1;
+    enum DPP_ENUM__FEATURES_H = 1;
+
+
+
+
+    enum DPP_ENUM__ERRNO_H = 1;
+    enum DPP_ENUM___PDP_ENDIAN = 3412;
+
+
+    enum DPP_ENUM___BIG_ENDIAN = 4321;
+
+
+    enum DPP_ENUM___LITTLE_ENDIAN = 1234;
+
+
+    enum DPP_ENUM__ENDIAN_H = 1;
+    enum DPP_ENUM__CTYPE_H = 1;
+
+
+    enum DPP_ENUM___SYSCALL_WORDSIZE = 64;
+
+
+    enum DPP_ENUM___WORDSIZE_TIME64_COMPAT32 = 1;
+
+
+    enum DPP_ENUM___WORDSIZE = 64;
+
+
+
+
+
+
+    enum DPP_ENUM__BITS_WCHAR_H = 1;
+    enum DPP_ENUM_WCONTINUED = 8;
+
+
+    enum DPP_ENUM_WEXITED = 4;
+
+
+    enum DPP_ENUM_WSTOPPED = 2;
+
+
+    enum DPP_ENUM_WUNTRACED = 2;
+
+
+    enum DPP_ENUM_WNOHANG = 1;
+
+
+    enum DPP_ENUM__BITS_UINTN_IDENTITY_H = 1;
+
+
+    enum DPP_ENUM___FD_SETSIZE = 1024;
+
+
+    enum DPP_ENUM___RLIM_T_MATCHES_RLIM64_T = 1;
+
+
+    enum DPP_ENUM___INO_T_MATCHES_INO64_T = 1;
+
+
+    enum DPP_ENUM___OFF_T_MATCHES_OFF64_T = 1;
+    enum DPP_ENUM__BITS_TYPESIZES_H = 1;
+
+
+    enum DPP_ENUM___timer_t_defined = 1;
+
+
+    enum DPP_ENUM___time_t_defined = 1;
+
+
+    enum DPP_ENUM___struct_tm_defined = 1;
+
+
+    enum DPP_ENUM___timeval_defined = 1;
+
+
+    enum DPP_ENUM__STRUCT_TIMESPEC = 1;
+
+
+    enum DPP_ENUM___itimerspec_defined = 1;
+    enum DPP_ENUM___struct_FILE_defined = 1;
+
+
+
+
+    enum DPP_ENUM___sigset_t_defined = 1;
+
+
+    enum DPP_ENUM__BITS_TYPES_LOCALE_T_H = 1;
+
+
+    enum DPP_ENUM___clockid_t_defined = 1;
+
+
+    enum DPP_ENUM___clock_t_defined = 1;
+
+
+
+
+
+
+    enum DPP_ENUM_____mbstate_t_defined = 1;
+
+
+    enum DPP_ENUM__BITS_TYPES___LOCALE_T_H = 1;
+
+
+    enum DPP_ENUM______fpos_t_defined = 1;
+
+
+    enum DPP_ENUM______fpos64_t_defined = 1;
+
+
+    enum DPP_ENUM_____FILE_defined = 1;
+
+
+    enum DPP_ENUM___FILE_defined = 1;
+    enum DPP_ENUM__BITS_TYPES_H = 1;
+
+
+
+
+
+
+    enum DPP_ENUM__BITS_TIME64_H = 1;
+
+
+    enum DPP_ENUM_TIMER_ABSTIME = 1;
+
+
+    enum DPP_ENUM_CLOCK_TAI = 11;
+
+
+    enum DPP_ENUM_CLOCK_BOOTTIME_ALARM = 9;
+
+
+    enum DPP_ENUM_CLOCK_REALTIME_ALARM = 8;
+
+
+    enum DPP_ENUM_CLOCK_BOOTTIME = 7;
+
+
+    enum DPP_ENUM_CLOCK_MONOTONIC_COARSE = 6;
+
+
+    enum DPP_ENUM_CLOCK_REALTIME_COARSE = 5;
+
+
+    enum DPP_ENUM_CLOCK_MONOTONIC_RAW = 4;
+
+
+    enum DPP_ENUM_CLOCK_THREAD_CPUTIME_ID = 3;
+
+
+    enum DPP_ENUM_CLOCK_PROCESS_CPUTIME_ID = 2;
+
+
+    enum DPP_ENUM_CLOCK_MONOTONIC = 1;
+
+
+    enum DPP_ENUM_CLOCK_REALTIME = 0;
+
+
+
+
+    enum DPP_ENUM__BITS_TIME_H = 1;
+
+
+    enum DPP_ENUM___PTHREAD_MUTEX_HAVE_PREV = 1;
+    enum DPP_ENUM__THREAD_SHARED_TYPES_H = 1;
+
+
+    enum DPP_ENUM_FOPEN_MAX = 16;
+
+
+    enum DPP_ENUM_L_ctermid = 9;
+
+
+    enum DPP_ENUM_FILENAME_MAX = 4096;
+
+
+    enum DPP_ENUM_TMP_MAX = 238328;
+
+
+    enum DPP_ENUM_L_tmpnam = 20;
+
+
+    enum DPP_ENUM__BITS_STDIO_LIM_H = 1;
+
+
+    enum DPP_ENUM__BITS_STDINT_UINTN_H = 1;
+
+
+    enum DPP_ENUM__BITS_STDINT_INTN_H = 1;
+    enum DPP_ENUM___have_pthread_attr_t = 1;
+
+
+    enum DPP_ENUM__BITS_PTHREADTYPES_COMMON_H = 1;
+
+
+    enum DPP_ENUM___PTHREAD_RWLOCK_INT_FLAGS_SHARED = 1;
+    enum DPP_ENUM___PTHREAD_MUTEX_USE_UNION = 0;
+
+
+    enum DPP_ENUM___PTHREAD_MUTEX_NUSERS_AFTER_KIND = 0;
+
+
+    enum DPP_ENUM___PTHREAD_MUTEX_LOCK_ELISION = 1;
+
+
+
+
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_BARRIERATTR_T = 4;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_RWLOCKATTR_T = 8;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_CONDATTR_T = 4;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_COND_T = 48;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_MUTEXATTR_T = 4;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_BARRIER_T = 32;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_RWLOCK_T = 56;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_MUTEX_T = 40;
+
+
+    enum DPP_ENUM___SIZEOF_PTHREAD_ATTR_T = 56;
+
+
+    enum DPP_ENUM__BITS_PTHREADTYPES_ARCH_H = 1;
+
+
+    enum DPP_ENUM__POSIX_TYPED_MEMORY_OBJECTS = -1;
+
+
+    enum DPP_ENUM__POSIX_TRACE_LOG = -1;
+
+
+    enum DPP_ENUM__POSIX_TRACE_INHERIT = -1;
+
+
+    enum DPP_ENUM__POSIX_TRACE_EVENT_FILTER = -1;
+
+
+    enum DPP_ENUM__POSIX_TRACE = -1;
+
+
+    enum DPP_ENUM__POSIX_THREAD_SPORADIC_SERVER = -1;
+
+
+    enum DPP_ENUM__POSIX_SPORADIC_SERVER = -1;
+
+
+
+
+
+
+    enum DPP_ENUM__STRING_H = 1;
+    enum DPP_ENUM__POSIX_MONOTONIC_CLOCK = 0;
+    enum DPP_ENUM__POSIX_SHELL = 1;
+
+
+
+
+    enum DPP_ENUM__POSIX_REGEXP = 1;
+
+
+    enum DPP_ENUM__POSIX_THREAD_CPUTIME = 0;
+
+
+    enum DPP_ENUM__POSIX_CPUTIME = 0;
+
+
+
+
+    enum DPP_ENUM__LFS64_STDIO = 1;
+
+
+    enum DPP_ENUM__LFS64_LARGEFILE = 1;
+
+
+    enum DPP_ENUM__LFS_LARGEFILE = 1;
+
+
+    enum DPP_ENUM__LFS64_ASYNCHRONOUS_IO = 1;
+
+
+
+
+    enum DPP_ENUM__LFS_ASYNCHRONOUS_IO = 1;
+
+
+    enum DPP_ENUM__POSIX_ASYNC_IO = 1;
+    enum DPP_ENUM__POSIX_THREAD_ROBUST_PRIO_PROTECT = -1;
+    enum DPP_ENUM__POSIX_REENTRANT_FUNCTIONS = 1;
+
+
+
+
+    enum DPP_ENUM__XOPEN_SHM = 1;
+
+
+    enum DPP_ENUM__XOPEN_REALTIME_THREADS = 1;
+
+
+    enum DPP_ENUM__XOPEN_REALTIME = 1;
+
+
+    enum DPP_ENUM__POSIX_NO_TRUNC = 1;
+
+
+
+
+    enum DPP_ENUM__POSIX_CHOWN_RESTRICTED = 0;
+    enum DPP_ENUM__POSIX_SAVED_IDS = 1;
+
+
+    enum DPP_ENUM__POSIX_JOB_CONTROL = 1;
+
+
+    enum DPP_ENUM__BITS_POSIX_OPT_H = 1;
+
+
+
+
+    enum DPP_ENUM_CHARCLASS_NAME_MAX = 2048;
+
+
+
+
+
+
+    enum DPP_ENUM_COLL_WEIGHTS_MAX = 255;
+    enum DPP_ENUM__POSIX2_CHARCLASS_NAME_MAX = 14;
+
+
+    enum DPP_ENUM__POSIX2_RE_DUP_MAX = 255;
+
+
+    enum DPP_ENUM__POSIX2_LINE_MAX = 2048;
+
+
+    enum DPP_ENUM__POSIX2_EXPR_NEST_MAX = 32;
+
+
+    enum DPP_ENUM__POSIX2_COLL_WEIGHTS_MAX = 2;
+
+
+    enum DPP_ENUM__POSIX2_BC_STRING_MAX = 1000;
+
+
+    enum DPP_ENUM__POSIX2_BC_SCALE_MAX = 99;
+
+
+    enum DPP_ENUM__POSIX2_BC_DIM_MAX = 2048;
+
+
+    enum DPP_ENUM__POSIX2_BC_BASE_MAX = 99;
+
+
+    enum DPP_ENUM__BITS_POSIX2_LIM_H = 1;
+
+
+
+
+    enum DPP_ENUM__POSIX_CLOCKRES_MIN = 20000000;
+
+
+    enum DPP_ENUM__POSIX_TZNAME_MAX = 6;
+
+
+    enum DPP_ENUM__POSIX_TTY_NAME_MAX = 9;
+
+
+    enum DPP_ENUM__POSIX_TIMER_MAX = 32;
+
+
+    enum DPP_ENUM__POSIX_SYMLOOP_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_SYMLINK_MAX = 255;
+
+
+    enum DPP_ENUM__POSIX_STREAM_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_SSIZE_MAX = 32767;
+
+
+    enum DPP_ENUM__POSIX_SIGQUEUE_MAX = 32;
+
+
+    enum DPP_ENUM__POSIX_SEM_VALUE_MAX = 32767;
+
+
+    enum DPP_ENUM__POSIX_SEM_NSEMS_MAX = 256;
+
+
+    enum DPP_ENUM__POSIX_RTSIG_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_RE_DUP_MAX = 255;
+
+
+    enum DPP_ENUM__POSIX_PIPE_BUF = 512;
+
+
+    enum DPP_ENUM__POSIX_PATH_MAX = 256;
+
+
+    enum DPP_ENUM__POSIX_OPEN_MAX = 20;
+
+
+    enum DPP_ENUM__POSIX_NGROUPS_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_NAME_MAX = 14;
+
+
+    enum DPP_ENUM__POSIX_MQ_PRIO_MAX = 32;
+
+
+    enum DPP_ENUM__POSIX_MQ_OPEN_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_MAX_INPUT = 255;
+
+
+    enum DPP_ENUM__POSIX_MAX_CANON = 255;
+
+
+    enum DPP_ENUM__POSIX_LOGIN_NAME_MAX = 9;
+
+
+    enum DPP_ENUM__POSIX_LINK_MAX = 8;
+
+
+    enum DPP_ENUM__POSIX_HOST_NAME_MAX = 255;
+
+
+    enum DPP_ENUM__POSIX_DELAYTIMER_MAX = 32;
+
+
+    enum DPP_ENUM__POSIX_CHILD_MAX = 25;
+
+
+    enum DPP_ENUM__POSIX_ARG_MAX = 4096;
+
+
+    enum DPP_ENUM__POSIX_AIO_MAX = 1;
+
+
+    enum DPP_ENUM__POSIX_AIO_LISTIO_MAX = 2;
+
+
+    enum DPP_ENUM__BITS_POSIX1_LIM_H = 1;
+
+
+
+
+    enum DPP_ENUM_MQ_PRIO_MAX = 32768;
+
+
+    enum DPP_ENUM_HOST_NAME_MAX = 64;
+
+
+    enum DPP_ENUM_LOGIN_NAME_MAX = 256;
+
+
+    enum DPP_ENUM_TTY_NAME_MAX = 32;
+
+
+    enum DPP_ENUM_DELAYTIMER_MAX = 2147483647;
+
+
+    enum DPP_ENUM_PTHREAD_STACK_MIN = 16384;
+
+
+    enum DPP_ENUM_AIO_PRIO_DELTA_MAX = 20;
+
+
+    enum DPP_ENUM__POSIX_THREAD_THREADS_MAX = 64;
+
+
+
+
+    enum DPP_ENUM__POSIX_THREAD_DESTRUCTOR_ITERATIONS = 4;
+
+
+    enum DPP_ENUM_PTHREAD_KEYS_MAX = 1024;
+
+
+    enum DPP_ENUM__POSIX_THREAD_KEYS_MAX = 128;
+    enum DPP_ENUM___GLIBC_USE_IEC_60559_TYPES_EXT = 0;
+
+
+    enum DPP_ENUM___GLIBC_USE_IEC_60559_FUNCS_EXT = 0;
+
+
+    enum DPP_ENUM___GLIBC_USE_IEC_60559_BFP_EXT = 0;
+
+
+    enum DPP_ENUM___GLIBC_USE_LIB_EXT2 = 0;
+
+
+    enum DPP_ENUM__GETOPT_POSIX_H = 1;
+
+
+    enum DPP_ENUM__GETOPT_CORE_H = 1;
+
+
+    enum DPP_ENUM___HAVE_FLOAT64X_LONG_DOUBLE = 1;
+
+
+    enum DPP_ENUM___HAVE_FLOAT64X = 1;
+
+
+    enum DPP_ENUM___HAVE_DISTINCT_FLOAT128 = 0;
+
+
+    enum DPP_ENUM___HAVE_FLOAT128 = 0;
+    enum DPP_ENUM__STRINGS_H = 1;
+    enum DPP_ENUM___HAVE_FLOATN_NOT_TYPEDEF = 0;
+
+
+
+
+
+
+
+    enum DPP_ENUM___HAVE_DISTINCT_FLOAT64X = 0;
+
+
+    enum DPP_ENUM___HAVE_DISTINCT_FLOAT32X = 0;
+
+
+    enum DPP_ENUM___HAVE_DISTINCT_FLOAT64 = 0;
+
+
+    enum DPP_ENUM___HAVE_DISTINCT_FLOAT32 = 0;
+
+
+
+
+    enum DPP_ENUM___HAVE_FLOAT128X = 0;
+
+
+    enum DPP_ENUM___HAVE_FLOAT32X = 1;
+
+
+    enum DPP_ENUM___HAVE_FLOAT64 = 1;
+
+
+    enum DPP_ENUM___HAVE_FLOAT32 = 1;
+
+
+    enum DPP_ENUM___HAVE_FLOAT16 = 0;
+
+
+
+
+
+
+    enum DPP_ENUM__BITS_ERRNO_H = 1;
+    enum DPP_ENUM__XBS5_LP64_OFF64 = 1;
+
+
+    enum DPP_ENUM__POSIX_V6_LP64_OFF64 = 1;
+
+
+    enum DPP_ENUM__POSIX_V7_LP64_OFF64 = 1;
+
+
+    enum DPP_ENUM__XBS5_LPBIG_OFFBIG = -1;
+
+
+    enum DPP_ENUM__POSIX_V6_LPBIG_OFFBIG = -1;
+
+
+    enum DPP_ENUM__POSIX_V7_LPBIG_OFFBIG = -1;
+    enum DPP_ENUM__SYS_CDEFS_H = 1;
+    enum DPP_ENUM___glibc_c99_flexarr_available = 1;
+    enum DPP_ENUM___HAVE_GENERIC_SELECTION = 1;
+
+
+    enum DPP_ENUM__SYS_SELECT_H = 1;
+    enum DPP_ENUM__SYS_TYPES_H = 1;
+    enum DPP_ENUM___BIT_TYPES_DEFINED__ = 1;
+    enum DPP_ENUM__TIME_H = 1;
+    enum DPP_ENUM_TIME_UTC = 1;
+    enum DPP_ENUM__UNISTD_H = 1;
+    enum DPP_ENUM__XOPEN_VERSION = 700;
+
+
+    enum DPP_ENUM__XOPEN_XCU_VERSION = 4;
+
+
+    enum DPP_ENUM__XOPEN_XPG2 = 1;
+
+
+    enum DPP_ENUM__XOPEN_XPG3 = 1;
+
+
+    enum DPP_ENUM__XOPEN_XPG4 = 1;
+
+
+    enum DPP_ENUM__XOPEN_UNIX = 1;
+
+
+    enum DPP_ENUM__XOPEN_ENH_I18N = 1;
+
+
+    enum DPP_ENUM__XOPEN_LEGACY = 1;
+    enum DPP_ENUM_STDIN_FILENO = 0;
+
+
+    enum DPP_ENUM_STDOUT_FILENO = 1;
+
+
+    enum DPP_ENUM_STDERR_FILENO = 2;
+    enum DPP_ENUM_R_OK = 4;
+
+
+    enum DPP_ENUM_W_OK = 2;
+
+
+    enum DPP_ENUM_X_OK = 1;
+
+
+    enum DPP_ENUM_F_OK = 0;
+    enum DPP_ENUM__BITS_BYTESWAP_H = 1;
+
+
+    enum DPP_ENUM_EHWPOISON = 133;
+
+
+    enum DPP_ENUM_ERFKILL = 132;
+
+
+    enum DPP_ENUM_ENOTRECOVERABLE = 131;
+
+
+    enum DPP_ENUM_EOWNERDEAD = 130;
+
+
+    enum DPP_ENUM_EKEYREJECTED = 129;
+
+
+    enum DPP_ENUM_EKEYREVOKED = 128;
+
+
+    enum DPP_ENUM_EKEYEXPIRED = 127;
+
+
+    enum DPP_ENUM_ENOKEY = 126;
+
+
+    enum DPP_ENUM_ECANCELED = 125;
+
+
+    enum DPP_ENUM_EMEDIUMTYPE = 124;
+
+
+    enum DPP_ENUM_ENOMEDIUM = 123;
+
+
+    enum DPP_ENUM_EDQUOT = 122;
+
+
+    enum DPP_ENUM_EREMOTEIO = 121;
+
+
+    enum DPP_ENUM_EISNAM = 120;
+
+
+    enum DPP_ENUM_ENAVAIL = 119;
+
+
+    enum DPP_ENUM_ENOTNAM = 118;
+
+
+    enum DPP_ENUM_EUCLEAN = 117;
+
+
+    enum DPP_ENUM_ESTALE = 116;
+
+
+    enum DPP_ENUM_EINPROGRESS = 115;
+
+
+    enum DPP_ENUM_EALREADY = 114;
+
+
+    enum DPP_ENUM_EHOSTUNREACH = 113;
+
+
+    enum DPP_ENUM_EHOSTDOWN = 112;
+
+
+    enum DPP_ENUM_ECONNREFUSED = 111;
+
+
+    enum DPP_ENUM_ETIMEDOUT = 110;
+
+
+    enum DPP_ENUM_ETOOMANYREFS = 109;
+
+
+    enum DPP_ENUM_ESHUTDOWN = 108;
+
+
+    enum DPP_ENUM_ENOTCONN = 107;
+
+
+    enum DPP_ENUM_EISCONN = 106;
+
+
+    enum DPP_ENUM_ENOBUFS = 105;
+
+
+    enum DPP_ENUM_ECONNRESET = 104;
+
+
+    enum DPP_ENUM_ECONNABORTED = 103;
+
+
+    enum DPP_ENUM_ENETRESET = 102;
+
+
+    enum DPP_ENUM_ENETUNREACH = 101;
+
+
+    enum DPP_ENUM_ENETDOWN = 100;
+
+
+    enum DPP_ENUM_EADDRNOTAVAIL = 99;
+
+
+    enum DPP_ENUM_EADDRINUSE = 98;
+
+
+    enum DPP_ENUM_EAFNOSUPPORT = 97;
+
+
+    enum DPP_ENUM_EPFNOSUPPORT = 96;
+
+
+    enum DPP_ENUM_EOPNOTSUPP = 95;
+
+
+    enum DPP_ENUM_ESOCKTNOSUPPORT = 94;
+
+
+    enum DPP_ENUM_EPROTONOSUPPORT = 93;
+
+
+    enum DPP_ENUM_ENOPROTOOPT = 92;
+
+
+    enum DPP_ENUM_EPROTOTYPE = 91;
+
+
+    enum DPP_ENUM_EMSGSIZE = 90;
+
+
+    enum DPP_ENUM_EDESTADDRREQ = 89;
+
+
+    enum DPP_ENUM_ENOTSOCK = 88;
+
+
+    enum DPP_ENUM_EUSERS = 87;
+
+
+    enum DPP_ENUM_ESTRPIPE = 86;
+
+
+    enum DPP_ENUM_ERESTART = 85;
+
+
+    enum DPP_ENUM_EILSEQ = 84;
+
+
+    enum DPP_ENUM_ELIBEXEC = 83;
+
+
+    enum DPP_ENUM_ELIBMAX = 82;
+
+
+    enum DPP_ENUM_ELIBSCN = 81;
+
+
+    enum DPP_ENUM_ELIBBAD = 80;
+
+
+    enum DPP_ENUM_ELIBACC = 79;
+
+
+    enum DPP_ENUM_EREMCHG = 78;
+
+
+    enum DPP_ENUM_EBADFD = 77;
+
+
+    enum DPP_ENUM_ENOTUNIQ = 76;
+
+
+    enum DPP_ENUM_EOVERFLOW = 75;
+
+
+    enum DPP_ENUM_EBADMSG = 74;
+
+
+    enum DPP_ENUM_EDOTDOT = 73;
+
+
+    enum DPP_ENUM_EMULTIHOP = 72;
+
+
+    enum DPP_ENUM_EPROTO = 71;
+
+
+    enum DPP_ENUM_ECOMM = 70;
+
+
+    enum DPP_ENUM_ESRMNT = 69;
+
+
+    enum DPP_ENUM_EADV = 68;
+
+
+    enum DPP_ENUM_ENOLINK = 67;
+
+
+    enum DPP_ENUM_EREMOTE = 66;
+
+
+    enum DPP_ENUM_ENOPKG = 65;
+
+
+    enum DPP_ENUM_ENONET = 64;
+
+
+    enum DPP_ENUM_ENOSR = 63;
+
+
+    enum DPP_ENUM_ETIME = 62;
+
+
+    enum DPP_ENUM_ENODATA = 61;
+
+
+    enum DPP_ENUM_ENOSTR = 60;
+
+
+    enum DPP_ENUM_EBFONT = 59;
+
+
+
+
+    enum DPP_ENUM_EBADSLT = 57;
+
+
+    enum DPP_ENUM_EBADRQC = 56;
+
+
+    enum DPP_ENUM_ENOANO = 55;
+
+
+    enum DPP_ENUM_EXFULL = 54;
+
+
+    enum DPP_ENUM_EBADR = 53;
+
+
+    enum DPP_ENUM_EBADE = 52;
+
+
+    enum DPP_ENUM_EL2HLT = 51;
+
+
+    enum DPP_ENUM_ENOCSI = 50;
+
+
+    enum DPP_ENUM_EUNATCH = 49;
+
+
+    enum DPP_ENUM_ELNRNG = 48;
+
+
+    enum DPP_ENUM_EL3RST = 47;
+
+
+    enum DPP_ENUM_EL3HLT = 46;
+
+
+    enum DPP_ENUM_EL2NSYNC = 45;
+
+
+    enum DPP_ENUM_ECHRNG = 44;
+
+
+    enum DPP_ENUM_EIDRM = 43;
+
+
+    enum DPP_ENUM_ENOMSG = 42;
+
+
+
+
+    enum DPP_ENUM_ELOOP = 40;
+
+
+    enum DPP_ENUM_ENOTEMPTY = 39;
+
+
+    enum DPP_ENUM_ENOSYS = 38;
+
+
+    enum DPP_ENUM_ENOLCK = 37;
+
+
+    enum DPP_ENUM_ENAMETOOLONG = 36;
+
+
+    enum DPP_ENUM_EDEADLK = 35;
+
+
+
+
+    enum DPP_ENUM_ERANGE = 34;
+
+
+    enum DPP_ENUM_EDOM = 33;
+
+
+    enum DPP_ENUM_EPIPE = 32;
+
+
+    enum DPP_ENUM_EMLINK = 31;
+
+
+    enum DPP_ENUM_EROFS = 30;
+
+
+    enum DPP_ENUM_ESPIPE = 29;
+
+
+    enum DPP_ENUM_ENOSPC = 28;
+
+
+    enum DPP_ENUM_EFBIG = 27;
+
+
+    enum DPP_ENUM_ETXTBSY = 26;
+
+
+    enum DPP_ENUM_ENOTTY = 25;
+
+
+    enum DPP_ENUM_EMFILE = 24;
+
+
+    enum DPP_ENUM_ENFILE = 23;
+
+
+    enum DPP_ENUM_EINVAL = 22;
+
+
+    enum DPP_ENUM_EISDIR = 21;
+
+
+    enum DPP_ENUM_ENOTDIR = 20;
+
+
+    enum DPP_ENUM_ENODEV = 19;
+
+
+    enum DPP_ENUM_EXDEV = 18;
+
+
+    enum DPP_ENUM_EEXIST = 17;
+
+
+    enum DPP_ENUM_EBUSY = 16;
+
+
+    enum DPP_ENUM_ENOTBLK = 15;
+
+
+    enum DPP_ENUM_EFAULT = 14;
+
+
+    enum DPP_ENUM_EACCES = 13;
+
+
+    enum DPP_ENUM_ENOMEM = 12;
+
+
+    enum DPP_ENUM_EAGAIN = 11;
+
+
+    enum DPP_ENUM_ECHILD = 10;
+
+
+    enum DPP_ENUM_EBADF = 9;
+
+
+    enum DPP_ENUM_ENOEXEC = 8;
+
+
+    enum DPP_ENUM_E2BIG = 7;
+
+
+    enum DPP_ENUM_ENXIO = 6;
+
+
+    enum DPP_ENUM_EIO = 5;
+
+
+    enum DPP_ENUM_EINTR = 4;
+
+
+    enum DPP_ENUM_ESRCH = 3;
+
+
+    enum DPP_ENUM_ENOENT = 2;
+
+
+    enum DPP_ENUM_EPERM = 1;
+
+
+
+
+
+
+    enum DPP_ENUM__ALLOCA_H = 1;
+    enum DPP_ENUM_LXW_ATTR_32 = 32;
+
+
+    enum DPP_ENUM_LXW_MAX_ATTRIBUTE_LENGTH = 256;
+    enum DPP_ENUM_LXW_BREAKS_MAX = 1023;
+
+
+    enum DPP_ENUM_LXW_PANE_NAME_LENGTH = 12;
+
+
+    enum DPP_ENUM_LXW_MAX_NUMBER_URLS = 65530;
+
+
+    enum DPP_ENUM_LXW_HEADER_FOOTER_MAX = 255;
+
+
+    enum DPP_ENUM_LXW_COL_META_MAX = 128;
+
+
+    enum DPP_ENUM_LXW_COL_MAX = 16384;
+
+
+    enum DPP_ENUM_LXW_ROW_MAX = 1048576;
+    enum DPP_ENUM_LXW_DEFINED_NAME_LENGTH = 128;
+    enum DPP_ENUM_DEF_MEM_LEVEL = 8;
+    enum DPP_ENUM_Z_BZIP2ED = 12;
+    enum DPP_ENUM_RB_INF = 1;
+
+
+    enum DPP_ENUM_RB_NEGINF = -1;
+    enum DPP_ENUM_RB_RED = 1;
+
+
+    enum DPP_ENUM_RB_BLACK = 0;
+    enum DPP_ENUM_SPLAY_INF = 1;
+
+
+    enum DPP_ENUM_SPLAY_NEGINF = -1;
+    enum DPP_ENUM_F_ULOCK = 0;
+
+
+    enum DPP_ENUM_F_LOCK = 1;
+
+
+    enum DPP_ENUM_F_TLOCK = 2;
+
+
+    enum DPP_ENUM_F_TEST = 3;
+    enum DPP_ENUM_MAX_MEM_LEVEL = 9;
+
+
+    enum DPP_ENUM_MAX_WBITS = 15;
+    enum DPP_ENUM_ZLIB_VER_MAJOR = 1;
+
+
+    enum DPP_ENUM_ZLIB_VER_MINOR = 2;
+
+
+    enum DPP_ENUM_ZLIB_VER_REVISION = 11;
+
+
+    enum DPP_ENUM_ZLIB_VER_SUBREVISION = 0;
+    enum DPP_ENUM_Z_NO_FLUSH = 0;
+
+
+    enum DPP_ENUM_Z_PARTIAL_FLUSH = 1;
+
+
+    enum DPP_ENUM_Z_SYNC_FLUSH = 2;
+
+
+    enum DPP_ENUM_Z_FULL_FLUSH = 3;
+
+
+    enum DPP_ENUM_Z_FINISH = 4;
+
+
+    enum DPP_ENUM_Z_BLOCK = 5;
+
+
+    enum DPP_ENUM_Z_TREES = 6;
+
+
+    enum DPP_ENUM_Z_OK = 0;
+
+
+    enum DPP_ENUM_Z_STREAM_END = 1;
+
+
+    enum DPP_ENUM_Z_NEED_DICT = 2;
+    enum DPP_ENUM_Z_NO_COMPRESSION = 0;
+
+
+    enum DPP_ENUM_Z_BEST_SPEED = 1;
+
+
+    enum DPP_ENUM_Z_BEST_COMPRESSION = 9;
+
+
+
+
+    enum DPP_ENUM_Z_FILTERED = 1;
+
+
+    enum DPP_ENUM_Z_HUFFMAN_ONLY = 2;
+
+
+    enum DPP_ENUM_Z_RLE = 3;
+
+
+    enum DPP_ENUM_Z_FIXED = 4;
+
+
+    enum DPP_ENUM_Z_DEFAULT_STRATEGY = 0;
+
+
+    enum DPP_ENUM_Z_BINARY = 0;
+
+
+    enum DPP_ENUM_Z_TEXT = 1;
+
+
+
+
+    enum DPP_ENUM_Z_UNKNOWN = 2;
+
+
+    enum DPP_ENUM_Z_DEFLATED = 8;
+
+
+    enum DPP_ENUM_Z_NULL = 0;
+    enum DPP_ENUM__FILE_OFFSET_BIT = 64;
+    enum DPP_ENUM_LXW_MAX_FONT_SIZE = 409.0;
+
+
+    enum DPP_ENUM_LXW_MIN_FONT_SIZE = 1.0;
+
+
+
+
+    enum DPP_ENUM_LXW_COLOR_UNSET = -1;
+
+
+    enum DPP_ENUM_LXW_PROPERTY_UNSET = -1;
+
+
+    enum DPP_ENUM_LXW_DEFAULT_FONT_THEME = 1;
+
+
+    enum DPP_ENUM_LXW_DEFAULT_FONT_FAMILY = 2;
+
+
+
+
+    enum DPP_ENUM_LXW_FORMAT_FIELD_LEN = 128;
+    enum DPP_ENUM_LXW_LANDSCAPE = 0;
+
+
+    enum DPP_ENUM_LXW_PORTRAIT = 1;
+
+
+    enum DPP_ENUM_LXW_IGNORE = 1;
+
+
+    enum DPP_ENUM_LXW_FILENAME_LENGTH = 128;
+
+
+
+
+    enum DPP_ENUM_LXW_EPOCH_1904 = 1;
+
+
+    enum DPP_ENUM_LXW_EPOCH_1900 = 0;
+    enum DPP_ENUM_LXW_SHEETNAME_MAX = 31;
+    enum DPP_ENUM_LXW_CHART_DEFAULT_GAP = 501;
+
+
+    enum DPP_ENUM_LXW_CHART_NUM_FORMAT_LEN = 128;
+    enum DPP_ENUM___GNUC_VA_LIST = 1;
 }
+
+
+struct __va_list_tag;

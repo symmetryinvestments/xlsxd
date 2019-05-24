@@ -73,6 +73,18 @@ xlsxd can only write xlsx files, but there are more things to do
 * [excel-d](https://github.com/kaleidicassociates/excel-d) can create excel
   plugins
 
+## Updating libxlsxwriter
+libxlsxwriter is integrated as a squashed git subtree.
+The command:
+```
+git subtree pull --prefix=libxlsxwriter --squash https://github.com/jmcnamara/libxlsxwriter master
+```
+will update that subtree to the current master of the libxlsxwriter repo.
+Then remove source/libxlsxd/xlsxwrap.d and then run
+```
+make source/libxlsxd/xlsxwrap.d
+```
+
 About Kaleidic Associates
 -------------------------
 We are a boutique consultancy that advises a small number of hedge fund clients.  We are
