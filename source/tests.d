@@ -19,6 +19,16 @@ unittest {
     /* Write some simple text. */
     worksheet.writeString(0, 0, "Hello " ~ to!string(i));
 
+	import std.datetime : DateTime, Month;
+	DateTime dt;
+	dt.year = 1337;
+	dt.month = Month.jul;
+	dt.day = 2;
+	dt.hour = 13;
+	dt.minute = 37;
+
+	worksheet.write(7, 3, Datetime(dt));
+
     /* Text with formatting. */
 	version(No_Overloads_Or_Templates) {
 		worksheet.writeStringFormat(to!RowType(1), to!ColType(0), "World",
