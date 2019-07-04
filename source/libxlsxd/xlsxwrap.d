@@ -1006,10 +1006,9 @@ extern(C)
     lxw_error chartsheet_set_footer(lxw_chartsheet*, const(char)*) @nogc nothrow;
     lxw_error chartsheet_set_header_opt(lxw_chartsheet*, const(char)*, lxw_header_footer_options*) @nogc nothrow;
     lxw_error chartsheet_set_footer_opt(lxw_chartsheet*, const(char)*, lxw_header_footer_options*) @nogc nothrow;
-    lxw_chartsheet* lxw_chartsheet_new() @nogc nothrow;
+    lxw_chartsheet* lxw_chartsheet_new(lxw_worksheet_init_data*) @nogc nothrow;
     void lxw_chartsheet_free(lxw_chartsheet*) @nogc nothrow;
     void lxw_chartsheet_assemble_xml_file(lxw_chartsheet*) @nogc nothrow;
-    int inflateReset2(z_stream_s*, int) @nogc nothrow;
     alias lxw_row_t = uint;
     alias lxw_col_t = ushort;
     enum lxw_boolean
@@ -1090,6 +1089,7 @@ extern(C)
     enum LXW_CUSTOM_INTEGER = lxw_custom_property_types.LXW_CUSTOM_INTEGER;
     enum LXW_CUSTOM_BOOLEAN = lxw_custom_property_types.LXW_CUSTOM_BOOLEAN;
     enum LXW_CUSTOM_DATETIME = lxw_custom_property_types.LXW_CUSTOM_DATETIME;
+    int inflateReset2(z_stream_s*, int) @nogc nothrow;
     int inflateReset(z_stream_s*) @nogc nothrow;
     int inflateCopy(z_stream_s*, z_stream_s*) @nogc nothrow;
     int inflateSync(z_stream_s*) @nogc nothrow;
@@ -1629,6 +1629,7 @@ extern(C)
     lxw_hash_element* lxw_insert_hash_element(lxw_hash_table*, void*, void*, c_ulong) @nogc nothrow;
     lxw_hash_table* lxw_hash_new(uint, ubyte, ubyte) @nogc nothrow;
     void lxw_hash_free(lxw_hash_table*) @nogc nothrow;
+    int inflateEnd(z_stream_s*) @nogc nothrow;
     struct lxw_packager
     {
         _IO_FILE* file;
@@ -1639,13 +1640,10 @@ extern(C)
         char* filename;
         char* buffer;
         char* tmpdir;
-        ushort chart_count;
-        ushort drawing_count;
     }
     lxw_packager* lxw_packager_new(const(char)*, char*) @nogc nothrow;
     void lxw_packager_free(lxw_packager*) @nogc nothrow;
     lxw_error lxw_create_package(lxw_packager*) @nogc nothrow;
-    int inflateEnd(z_stream_s*) @nogc nothrow;
     struct lxw_rel_tuple
     {
         char* type;
@@ -2007,11 +2005,6 @@ extern(C)
         lxw_chart* stqh_first;
         lxw_chart** stqh_last;
     }
-    struct lxw_defined_names
-    {
-        lxw_defined_name* tqh_first;
-        lxw_defined_name** tqh_last;
-    }
     struct lxw_defined_name
     {
         short index;
@@ -2027,6 +2020,11 @@ extern(C)
             lxw_defined_name** tqe_prev;
         }
         _Anonymous_21 list_pointers;
+    }
+    struct lxw_defined_names
+    {
+        lxw_defined_name* tqh_first;
+        lxw_defined_name** tqh_last;
     }
     int symlink(const(char)*, const(char)*) @nogc nothrow;
     struct lxw_doc_properties
@@ -2320,11 +2318,6 @@ extern(C)
         }
         _Anonymous_26 list_pointers;
     }
-    struct lxw_data_validations
-    {
-        lxw_data_validation* stqh_first;
-        lxw_data_validation** stqh_last;
-    }
     struct lxw_data_validation
     {
         ubyte validate;
@@ -2356,6 +2349,16 @@ extern(C)
         }
         _Anonymous_27 list_pointers;
     }
+    struct lxw_data_validations
+    {
+        lxw_data_validation* stqh_first;
+        lxw_data_validation** stqh_last;
+    }
+    struct lxw_image_data
+    {
+        lxw_image_options* stqh_first;
+        lxw_image_options** stqh_last;
+    }
     struct lxw_image_options
     {
         int x_offset;
@@ -2385,11 +2388,6 @@ extern(C)
             lxw_image_options* stqe_next;
         }
         _Anonymous_28 list_pointers;
-    }
-    struct lxw_image_data
-    {
-        lxw_image_options* stqh_first;
-        lxw_image_options** stqh_last;
     }
     struct lxw_chart_data
     {
@@ -3477,20 +3475,20 @@ extern(C)
     char* index(const(char)*, int) @nogc nothrow;
     void bzero(void*, c_ulong) @nogc nothrow;
     void bcopy(const(void)*, void*, c_ulong) @nogc nothrow;
-    alias _Float32 = float;
     int bcmp(const(void)*, const(void)*, c_ulong) @nogc nothrow;
+    alias _Float32 = float;
     alias _Float64 = double;
     alias _Float32x = double;
-    alias _Float64x = real;
     char* stpncpy(char*, const(char)*, c_ulong) @nogc nothrow;
+    alias _Float64x = real;
     char* __stpncpy(char*, const(char)*, c_ulong) @nogc nothrow;
     char* stpcpy(char*, const(char)*) @nogc nothrow;
+    char* __stpcpy(char*, const(char)*) @nogc nothrow;
     extern __gshared char* optarg;
     extern __gshared int optind;
     extern __gshared int opterr;
     extern __gshared int optopt;
     int getopt(int, char**, const(char)*) @nogc nothrow;
-    char* __stpcpy(char*, const(char)*) @nogc nothrow;
     char* strsignal(int) @nogc nothrow;
     char* strsep(char**, const(char)*) @nogc nothrow;
     void explicit_bzero(void*, c_ulong) @nogc nothrow;
@@ -3533,6 +3531,7 @@ extern(C)
     c_ulong mbstowcs(int*, const(char)*, c_ulong) @nogc nothrow;
     int wctomb(char*, int) @nogc nothrow;
     int mbtowc(int*, const(char)*, c_ulong) @nogc nothrow;
+    int mblen(const(char)*, c_ulong) @nogc nothrow;
     struct __pthread_rwlock_arch_t
     {
         uint __readers;
@@ -3548,7 +3547,7 @@ extern(C)
         c_ulong __pad2;
         uint __flags;
     }
-    int mblen(const(char)*, c_ulong) @nogc nothrow;
+    int qfcvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
     alias pthread_t = c_ulong;
     union pthread_mutexattr_t
     {
@@ -3567,6 +3566,7 @@ extern(C)
         char[56] __size;
         c_long __align;
     }
+    int qecvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
     union pthread_mutex_t
     {
         __pthread_mutex_s __data;
@@ -3601,21 +3601,20 @@ extern(C)
         char[4] __size;
         int __align;
     }
-    int qfcvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
-    int qecvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    int fcvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    int ecvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
     alias int8_t = byte;
     alias int16_t = short;
     alias int32_t = int;
     alias int64_t = c_long;
-    int fcvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
     alias uint8_t = ubyte;
     alias uint16_t = ushort;
     alias uint32_t = uint;
     alias uint64_t = ulong;
-    int ecvt_r(double, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    char* qgcvt(real, int, char*) @nogc nothrow;
     extern __gshared int sys_nerr;
     extern __gshared const(const(char)*)[0] sys_errlist;
-    char* qgcvt(real, int, char*) @nogc nothrow;
+    char* qfcvt(real, int, int*, int*) @nogc nothrow;
     alias __pthread_list_t = __pthread_internal_list;
     struct __pthread_internal_list
     {
@@ -3671,7 +3670,6 @@ extern(C)
         uint __wrefs;
         uint[2] __g_signals;
     }
-    char* qfcvt(real, int, int*, int*) @nogc nothrow;
     char* qecvt(real, int, int*, int*) @nogc nothrow;
     char* gcvt(double, int, char*) @nogc nothrow;
     char* fcvt(double, int, int*, int*) @nogc nothrow;
@@ -3704,6 +3702,7 @@ extern(C)
     ldiv_t ldiv(c_long, c_long) @nogc nothrow;
     div_t div(int, int) @nogc nothrow;
     long llabs(long) @nogc nothrow;
+    c_long labs(c_long) @nogc nothrow;
     alias __dev_t = c_ulong;
     alias __uid_t = uint;
     alias __gid_t = uint;
@@ -3746,7 +3745,8 @@ extern(C)
     alias __socklen_t = uint;
     alias __sig_atomic_t = int;
     alias FILE = _IO_FILE;
-    /*struct _IO_FILE
+    int abs(int) @nogc nothrow;
+    struct _IO_FILE
     {
         int _flags;
         char* _IO_read_ptr;
@@ -3777,16 +3777,15 @@ extern(C)
         c_ulong __pad5;
         int _mode;
         char[20] _unused2;
-    }*/
-	import core.stdc.stdio : _IO_FILE;
+    }
     alias __FILE = _IO_FILE;
-    c_long labs(c_long) @nogc nothrow;
     alias __fpos64_t = _G_fpos64_t;
     struct _G_fpos64_t
     {
         c_long __pos;
         __mbstate_t __state;
     }
+    void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
     alias __fpos_t = _G_fpos_t;
     struct _G_fpos_t
     {
@@ -3802,7 +3801,6 @@ extern(C)
         const(char)*[13] __names;
     }
     alias __locale_t = __locale_struct*;
-    int abs(int) @nogc nothrow;
     struct __mbstate_t
     {
         int __count;
@@ -3813,29 +3811,29 @@ extern(C)
         }
         _Anonymous_40 __value;
     }
-    void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    void* bsearch(const(void)*, const(void)*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    alias __compar_fn_t = int function(const(void)*, const(void)*);
     struct __sigset_t
     {
         c_ulong[16] __val;
     }
     alias clock_t = c_long;
     alias clockid_t = int;
-    void* bsearch(const(void)*, const(void)*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    char* realpath(const(char)*, char*) @nogc nothrow;
     alias locale_t = __locale_struct*;
-    alias __compar_fn_t = int function(const(void)*, const(void)*);
     alias sigset_t = __sigset_t;
     struct _IO_marker;
     struct _IO_codecvt;
     struct _IO_wide_data;
     alias _IO_lock_t = void;
-    char* realpath(const(char)*, char*) @nogc nothrow;
     int system(const(char)*) @nogc nothrow;
+    char* mkdtemp(char*) @nogc nothrow;
     struct itimerspec
     {
         timespec it_interval;
         timespec it_value;
     }
-    char* mkdtemp(char*) @nogc nothrow;
+    int mkstemps(char*, int) @nogc nothrow;
     struct timespec
     {
         c_long tv_sec;
@@ -3861,9 +3859,8 @@ extern(C)
         const(char)* tm_zone;
     }
     alias time_t = c_long;
-    int mkstemps(char*, int) @nogc nothrow;
-    alias timer_t = void*;
     int mkstemp(char*) @nogc nothrow;
+    alias timer_t = void*;
     char* mktemp(char*) @nogc nothrow;
     int clearenv() @nogc nothrow;
     int unsetenv(const(char)*) @nogc nothrow;
@@ -3874,10 +3871,10 @@ extern(C)
     void quick_exit(int) @nogc nothrow;
     void exit(int) @nogc nothrow;
     int on_exit(void function(int, void*), void*) @nogc nothrow;
+    int at_quick_exit(void function()) @nogc nothrow;
     static ushort __uint16_identity(ushort) @nogc nothrow;
     static uint __uint32_identity(uint) @nogc nothrow;
     static c_ulong __uint64_identity(c_ulong) @nogc nothrow;
-    int at_quick_exit(void function()) @nogc nothrow;
     int atexit(void function()) @nogc nothrow;
     void abort() @nogc nothrow;
     void* aligned_alloc(c_ulong, c_ulong) @nogc nothrow;
@@ -3888,6 +3885,8 @@ extern(C)
     void* realloc(void*, c_ulong) @nogc nothrow;
     void* calloc(c_ulong, c_ulong) @nogc nothrow;
     void* malloc(c_ulong) @nogc nothrow;
+    int lcong48_r(ushort*, drand48_data*) @nogc nothrow;
+    int seed48_r(ushort*, drand48_data*) @nogc nothrow;
     enum _Anonymous_41
     {
         _ISupper = 256,
@@ -3918,8 +3917,7 @@ extern(C)
     const(ushort)** __ctype_b_loc() @nogc nothrow;
     const(int)** __ctype_tolower_loc() @nogc nothrow;
     const(int)** __ctype_toupper_loc() @nogc nothrow;
-    int lcong48_r(ushort*, drand48_data*) @nogc nothrow;
-    int seed48_r(ushort*, drand48_data*) @nogc nothrow;
+    int srand48_r(c_long, drand48_data*) @nogc nothrow;
     pragma(mangle, "isalnum") int isalnum_(int) @nogc nothrow;
     pragma(mangle, "isalpha") int isalpha_(int) @nogc nothrow;
     pragma(mangle, "iscntrl") int iscntrl_(int) @nogc nothrow;
@@ -3938,12 +3936,20 @@ extern(C)
     pragma(mangle, "toascii") int toascii_(int) @nogc nothrow;
     pragma(mangle, "_toupper") int _toupper_(int) @nogc nothrow;
     pragma(mangle, "_tolower") int _tolower_(int) @nogc nothrow;
-    int srand48_r(c_long, drand48_data*) @nogc nothrow;
     int jrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
     int mrand48_r(drand48_data*, c_long*) @nogc nothrow;
     int nrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
     int lrand48_r(drand48_data*, c_long*) @nogc nothrow;
     int erand48_r(ushort*, drand48_data*, double*) @nogc nothrow;
+    int drand48_r(drand48_data*, double*) @nogc nothrow;
+    struct drand48_data
+    {
+        ushort[3] __x;
+        ushort[3] __old_x;
+        ushort __c;
+        ushort __init;
+        ulong __a;
+    }
     pragma(mangle, "isalnum_l") int isalnum_l_(int, __locale_struct*) @nogc nothrow;
     pragma(mangle, "isalpha_l") int isalpha_l_(int, __locale_struct*) @nogc nothrow;
     pragma(mangle, "iscntrl_l") int iscntrl_l_(int, __locale_struct*) @nogc nothrow;
@@ -3960,15 +3966,6 @@ extern(C)
     int tolower_l(int, __locale_struct*) @nogc nothrow;
     int __toupper_l(int, __locale_struct*) @nogc nothrow;
     int toupper_l(int, __locale_struct*) @nogc nothrow;
-    int drand48_r(drand48_data*, double*) @nogc nothrow;
-    struct drand48_data
-    {
-        ushort[3] __x;
-        ushort[3] __old_x;
-        ushort __c;
-        ushort __init;
-        ulong __a;
-    }
     void lcong48(ushort*) @nogc nothrow;
     ushort* seed48(ushort*) @nogc nothrow;
     void srand48(c_long) @nogc nothrow;
@@ -3995,9 +3992,9 @@ extern(C)
         int rand_sep;
         int* end_ptr;
     }
-    int* __errno_location() @nogc nothrow;
     char* setstate(char*) @nogc nothrow;
     char* initstate(uint, char*, c_ulong) @nogc nothrow;
+    int* __errno_location() @nogc nothrow;
     void srandom(uint) @nogc nothrow;
     c_long random() @nogc nothrow;
     c_long a64l(const(char)*) @nogc nothrow;
@@ -4009,6 +4006,7 @@ extern(C)
     c_ulong strtoul(const(char)*, char**, int) @nogc nothrow;
     c_long strtol(const(char)*, char**, int) @nogc nothrow;
     real strtold(const(char)*, char**) @nogc nothrow;
+    float strtof(const(char)*, char**) @nogc nothrow;
     alias int_least8_t = byte;
     alias int_least16_t = short;
     alias int_least32_t = int;
@@ -4029,7 +4027,6 @@ extern(C)
     alias uintptr_t = c_ulong;
     alias intmax_t = c_long;
     alias uintmax_t = c_ulong;
-    float strtof(const(char)*, char**) @nogc nothrow;
     double strtod(const(char)*, char**) @nogc nothrow;
     long atoll(const(char)*) @nogc nothrow;
     c_long atol(const(char)*) @nogc nothrow;
@@ -4059,17 +4056,18 @@ extern(C)
     char* ctermid(char*) @nogc nothrow;
     int pclose(_IO_FILE*) @nogc nothrow;
     _IO_FILE* popen(const(char)*, const(char)*) @nogc nothrow;
-    alias off_t = c_long;
     int fileno_unlocked(_IO_FILE*) @nogc nothrow;
+    alias off_t = c_long;
+    int fileno(_IO_FILE*) @nogc nothrow;
     alias ssize_t = c_long;
     alias fpos_t = _G_fpos_t;
-    int fileno(_IO_FILE*) @nogc nothrow;
     void perror(const(char)*) @nogc nothrow;
     int ferror_unlocked(_IO_FILE*) @nogc nothrow;
+    int feof_unlocked(_IO_FILE*) @nogc nothrow;
     extern __gshared _IO_FILE* stdin;
     extern __gshared _IO_FILE* stdout;
     extern __gshared _IO_FILE* stderr;
-    int feof_unlocked(_IO_FILE*) @nogc nothrow;
+    void clearerr_unlocked(_IO_FILE*) @nogc nothrow;
     int remove(const(char)*) @nogc nothrow;
     int rename(const(char)*, const(char)*) @nogc nothrow;
     int renameat(int, const(char)*, int, const(char)*) @nogc nothrow;
@@ -4140,7 +4138,6 @@ extern(C)
     void clearerr(_IO_FILE*) @nogc nothrow;
     int feof(_IO_FILE*) @nogc nothrow;
     int ferror(_IO_FILE*) @nogc nothrow;
-    void clearerr_unlocked(_IO_FILE*) @nogc nothrow;
     enum DPP_ENUM_SEEK_END = 2;
 
 
@@ -4368,8 +4365,6 @@ extern(C)
     enum DPP_ENUM___struct_FILE_defined = 1;
 
 
-
-
     enum DPP_ENUM___sigset_t_defined = 1;
 
 
@@ -4380,12 +4375,6 @@ extern(C)
 
 
     enum DPP_ENUM___clock_t_defined = 1;
-
-
-
-
-
-
     enum DPP_ENUM_____mbstate_t_defined = 1;
 
 
@@ -4548,14 +4537,10 @@ extern(C)
 
 
     enum DPP_ENUM__POSIX_SPORADIC_SERVER = -1;
-
-
-
-
+    enum DPP_ENUM__POSIX_MONOTONIC_CLOCK = 0;
 
 
     enum DPP_ENUM__STRING_H = 1;
-    enum DPP_ENUM__POSIX_MONOTONIC_CLOCK = 0;
     enum DPP_ENUM__POSIX_SHELL = 1;
 
 
