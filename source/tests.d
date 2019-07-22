@@ -1,4 +1,5 @@
 import libxlsxd;
+import std.datetime;
 
 unittest {
 	import std.conv : to;
@@ -28,6 +29,10 @@ unittest {
 	dt.minute = 37;
 
 	worksheet.write(7, 3, Datetime(dt));
+
+	worksheet.write(7, 3, Date(2038, 2, 13));
+	worksheet.write(8, 3, DateTime(2038, 2, 13, 15, 14, 13));
+	worksheet.write(9, 3, TimeOfDay(16, 14, 13));
 
     /* Text with formatting. */
 	version(No_Overloads_Or_Templates) {

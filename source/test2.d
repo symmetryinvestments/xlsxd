@@ -4,7 +4,7 @@ private template Identity(T) {
 	alias Identity = T;
 }
 
-unittest {
+@safe unittest {
 	/* This tests tries to call each method of each struct defined.
 	As the arguments are randomly generated these calls might throw.
 	This does not matter, we are just trying to make sure that the parameter
@@ -12,6 +12,7 @@ unittest {
 	methods or functions are not called.
 	*/
 
+	import std.datetime;
 	import std.stdio;
 	import std.array : empty;
 	import std.traits;
@@ -24,10 +25,13 @@ unittest {
 
 	auto rnd = Random(1337);
 
-	auto wb = newWorkbook("test2.xlsx");
+	auto wb = WorkbookOpen("test2.xlsx");
+	scope(exit) {
+		wb.close();
+	}
 	auto ws = wb.addWorksheet("__theworksheet");
 
-	string genString() {
+	string genString() @safe {
 		string ret = "";
 		foreach(num; 0 .. uniform(2, 10, rnd)) {
 			ret ~= to!char(uniform('a', 'z', rnd));
@@ -35,17 +39,17 @@ unittest {
 		return ret;
 	}
 
-	DocProperties genDocProperties() {
+	DocProperties genDocProperties() @safe {
 		static lxw_doc_properties dp;
 		return DocProperties(&dp);
 	}
 
-	Chart genChart() {
+	Chart genChart() @safe {
 		Chart ret = wb.addChart(1);
 		return ret;
 	}
 
-	lxw_rich_string_tuple** genRichStringTuple() {
+	lxw_rich_string_tuple** genRichStringTuple() @trusted {
 		static lxw_rich_string_tuple tmp;
 		static lxw_rich_string_tuple*[2] ret;
 		tmp.format = null;
@@ -56,12 +60,12 @@ unittest {
 		return ret.ptr;
 	}
 
-	lxw_row_col_options* genRowColOptions() {
+	lxw_row_col_options* genRowColOptions() @safe {
 		static lxw_row_col_options ret;
 		return &ret;
 	}
 
-	lxw_chart_point** genChartPoint() {
+	lxw_chart_point** genChartPoint() @trusted {
 		static lxw_chart_point tmp;
 		static lxw_chart_point*[2] ret;
 		ret[0] = &tmp;
@@ -69,52 +73,52 @@ unittest {
 		return ret.ptr;
 	}
 
-	lxw_image_options* genImageOptions() {
+	lxw_image_options* genImageOptions() @safe {
 		static lxw_image_options ret;
 		return &ret;
 	}
 
-	lxw_series_error_bars* genSeriesErrorBars() {
+	lxw_series_error_bars* genSeriesErrorBars() @safe {
 		static lxw_series_error_bars ret;
 		return &ret;
 	}
 
-	lxw_data_validation* genDataValidation() {
+	lxw_data_validation* genDataValidation() @safe {
 		static lxw_data_validation ret;
 		return &ret;
 	}
 
-	lxw_protection* genProtection() {
+	lxw_protection* genProtection() @safe {
 		static lxw_protection ret;
 		return &ret;
 	}
 
-	lxw_chart_font* genChartFont() {
+	lxw_chart_font* genChartFont() @safe {
 		static lxw_chart_font ret;
 		return &ret;
 	}
 
-	lxw_chart_line* genChartLine() {
+	lxw_chart_line* genChartLine() @safe {
 		static lxw_chart_line ret;
 		return &ret;
 	}
 
-	lxw_chart_pattern* genChartPattern() {
+	lxw_chart_pattern* genChartPattern() @safe {
 		static lxw_chart_pattern ret;
 		return &ret;
 	}
 
-	lxw_chart_fill* genChartFill() {
+	lxw_chart_fill* genChartFill() @safe {
 		static lxw_chart_fill ret;
 		return &ret;
 	}
 
-	lxw_header_footer_options* genHFOptions() {
+	lxw_header_footer_options* genHFOptions() @safe {
 		static lxw_header_footer_options ret;
 		return &ret;
 	}
 
-	void fillValues(T...)(ref T values) {
+	void fillValues(T...)(ref T values) @safe {
 		foreach(ref val; values) {
 			static if(isSomeString!(typeof(val))) {
 				val = genString();
@@ -198,13 +202,21 @@ unittest {
 				val = t;
 			} else static if(is(typeof(val) == Chart)) {
 				val = genChart();
+			} else static if(is(typeof(val) == Date)) {
+				val = Date(
+						uniform(1901, 2037, rnd),
+						uniform(1, 12, rnd),
+						uniform(1, 28, rnd));
+			} else static if(is(typeof(val) == TimeOfDay)) {
+				val = TimeOfDay(uniform(1, 23, rnd), uniform(1, 59, rnd),
+						uniform(1, 59, rnd));
 			} else {
 				static assert(false, "No gen for " ~ typeof(val).stringof);
 			}
 		}
 	}
 
-	void runner(T, alias exclude, S)(S obj) {
+	void runner(T, alias exclude, S)(ref S obj) @safe {
 		static foreach(mem; __traits(allMembers, T)) {{
 			static if(!canFind(exclude, mem)
 					&& __traits(getProtection, __traits(getMember, T, mem))
@@ -221,7 +233,7 @@ unittest {
 				}
 				try {
 					__traits(getMember, obj, mem)(vals);
-				} catch(Throwable t) {
+				} catch(Exception t) {
 				}
 			}
 		}}

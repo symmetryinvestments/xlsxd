@@ -3,6 +3,7 @@
 	"authors": [
 		"Robert Schadek"
 	],
+	"dflags": ["-dip1000", "-dip25", "-dip1008"],
 	"description": "A thin wrapper around libxlsx to write excel spreadsheets",
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
