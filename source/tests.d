@@ -4,7 +4,17 @@ import std.datetime;
 unittest {
 	import std.conv : to;
     /* Create a new workbook and add a worksheet. */
-    auto workbook  = newWorkbook("demo.xlsx");
+    auto workbook  = newWorkbook("empty.xlsx");
+}
+
+@safe unittest {
+	import std.conv : to;
+    /* Create a new workbook and add a worksheet. */
+    auto workbook  = WorkbookOpen("demo.xlsx");
+	scope(exit) {
+		workbook.close();
+	}
+
 	foreach(i; 0 .. 2) {
     auto worksheet = workbook.addWorksheet(to!string(i));
 
@@ -72,7 +82,7 @@ unittest {
 	}
 }
 
-unittest {
+@safe unittest {
 	import std.conv : to;
     /* Create a new workbook and add a worksheet.
 	   WorkbookOpen needs to be closed manually
