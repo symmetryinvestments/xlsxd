@@ -13,7 +13,7 @@ import libxlsxd.docproperties;
 
 alias Workbook = RefCounted!WorkbookImpl;
 
-Workbook newWorkbook(string filename) {
+Workbook newWorkbook(string filename) @trusted {
 	Workbook wb;
 	wb.filename = filename;
 	wb.open();
@@ -25,7 +25,7 @@ struct WorkbookImpl {
 
 	alias workBook this;
 
-	~this() {
+	~this() @safe {
 		this.workBook.close();
 	}
 }
@@ -38,90 +38,107 @@ struct WorkbookOpen {
 	string filename;
 
 	Format[string] formats;
+	Format dateFormat;
+	Format timeFormat;
+	Format dateTimeFormat;
 
-	static WorkbookOpen opCall(string filename) {
+	static WorkbookOpen opCall(string filename) @safe {
 		WorkbookOpen ret;
 		ret.filename = filename;
 		ret.open();
+		ret.buildDefaultFormats();
 		return ret;
 	}
 
-	void open() {
+	void open() @trusted {
 		this.handle = workbook_new(this.filename.toStringz());
+		this.buildDefaultFormats();
 	}
 
-	void close() {
+	void buildDefaultFormats() @safe {
+		this.dateFormat = this.addFormat();
+		this.dateFormat.setNumFormat("yyyy-mm-dd");
+
+		this.dateTimeFormat = this.addFormat();
+		this.dateTimeFormat.setNumFormat("yyyy-mm-ddThh:MM:ss");
+
+		this.timeFormat = this.addFormat();
+		this.timeFormat.setNumFormat("hh:MM:ss");
+	}
+
+	void close() @trusted {
 		workbook_close(this.handle);
 	}
 
-	WorksheetFluent addFluentWorksheet(string name) {
+	WorksheetFluent addFluentWorksheet(string name) @trusted {
 		return WorksheetFluent(&this, this.addWorksheet(name));
 	}
 
-	Worksheet addWorksheet(string name) nothrow {
+	Worksheet addWorksheet(string name) nothrow @trusted {
 		return Worksheet(workbook_add_worksheet(this.handle,
-					name.empty ? null : name.toStringz())
+					name.empty ? null : name.toStringz()),
+					&this.dateTimeFormat, &this.dateFormat, &this.timeFormat
 				);
 	}
 
-	Chartsheet addChartsheet(string name) {
+	Chartsheet addChartsheet(string name) @trusted {
 		return Chartsheet(workbook_add_chartsheet(this.handle,
 					name.empty ? null : name.toStringz())
 				);
 	}
 
-	Format addFormat() nothrow @nogc {
+	Format addFormat() nothrow @nogc @trusted {
 		return Format(workbook_add_format(this.handle));
 	}
 
 	version(No_Overloads_Or_Templates) {
-		Format addFormatNamed(string name) nothrow {
+		Format addFormatNamed(string name) nothrow @safe {
 			return this.addFormatNamedImpl(name);
 		}
 	} else {
-		Format addFormat(string name) nothrow {
+		Format addFormat(string name) nothrow @safe {
 			return this.addFormatNamedImpl(name);
 		}
 	}
 
-	private Format addFormatNamedImpl(string name) nothrow {
+	private Format addFormatNamedImpl(string name) nothrow @trusted {
 		auto t = Format(workbook_add_format(this.handle));
 		this.formats[name] = t;
 		return t;
 	}
 
-	Format getFormat(string name) nothrow {
+	Format getFormat(string name) nothrow @safe {
 		return this.formats[name];
 	}
 
-	Chart addChart(ubyte chartType) @nogc nothrow {
+	Chart addChart(ubyte chartType) @nogc nothrow @trusted {
 		return Chart(workbook_add_chart(this.handle, chartType));
 	}
 
-	void setProperties(DocProperties property) {
+	void setProperties(DocProperties property) @trusted {
 		enforce(workbook_set_properties(this.handle, property.handle)
 				== LXW_NO_ERROR
 			);
 	}
 
 	version(No_Overloads_Or_Templates) {
-		void setCustomPropertiesBool(string name, bool b) {
+		void setCustomPropertiesBool(string name, bool b) @safe {
 			return this.setCustomPropertiesImpl(name, b);
 		}
-		void setCustomPropertiesInt(string name, long l) {
+		void setCustomPropertiesInt(string name, long l) @safe {
 			return this.setCustomPropertiesImpl(name, l);
 		}
-		void setCustomPropertiesNumber(string name, double d) {
+		void setCustomPropertiesNumber(string name, double d) @safe {
 			return this.setCustomPropertiesImpl(name, d);
 		}
-		void setCustomPropertiesDateTime(string name, DateTime d) {
+		void setCustomPropertiesDateTime(string name, DateTime d) @safe {
 			return this.setCustomPropertiesImpl(name, Datetime.fromDateTime(d));
 		}
 	} else {
 		alias setCustomProperties = setCustomPropertiesImpl;
 	}
 
-	private void setCustomPropertiesImpl(T)(string name, T t) {
+	private void setCustomPropertiesImpl(T)(string name, T t) @trusted {
 		import std.traits : isIntegral, isFloatingPoint, isSomeString;
 		import std.conv : to;
 
@@ -154,7 +171,7 @@ struct WorkbookOpen {
 		}
 	}
 
-	void defineName(string name, string formula) {
+	void defineName(string name, string formula) @trusted {
 		enforce(workbook_define_name(this.handle, name.toStringz(),
 						formula.toStringz()
 					)
@@ -162,21 +179,22 @@ struct WorkbookOpen {
 			);
 	}
 
-	Worksheet getWorksheetByName(string name) {
+	Worksheet getWorksheetByName(string name) @trusted {
 		return Worksheet(workbook_get_worksheet_by_name(this.handle,
 						name.toStringz()
-					)
+					),
+					&this.dateTimeFormat, &this.dateFormat, &this.timeFormat
 				);
 	}
 
-	Chartsheet getChartByName(string name) {
+	Chartsheet getChartByName(string name) @trusted {
 		return Chartsheet(workbook_get_chartsheet_by_name(this.handle,
 						name.toStringz()
 					)
 				);
 	}
 
-	bool validateSheetName(string name) {
+	bool validateSheetName(string name) @trusted {
 		return workbook_validate_sheet_name(this.handle, name.toStringz())
 				== LXW_NO_ERROR;
 	}

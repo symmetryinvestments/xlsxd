@@ -13,125 +13,125 @@ struct Chartaxis {
 		this.handle = handle;
 	}
 
-	void setName(string name) {
+	void setName(string name) @trusted {
 		chart_axis_set_name(this.handle, toStringz(name));
 	}
 
-	void setNameRange(string sheetname, lxw_row_t row, lxw_col_t col) {
+	void setNameRange(string sheetname, lxw_row_t row, lxw_col_t col) @trusted {
 		chart_axis_set_name_range(this.handle, toStringz(sheetname), row,
 				col
 			);
 	}
 
-	void setNameFont(lxw_chart_font* font) @nogc nothrow {
+	void setNameFont(lxw_chart_font* font) @nogc nothrow @trusted {
 		chart_axis_set_name_font(this.handle, font);
 	}
 
-	void setNumFont(lxw_chart_font* font) @nogc nothrow {
+	void setNumFont(lxw_chart_font* font) @nogc nothrow @trusted {
 		chart_axis_set_num_font(this.handle, font);
 	}
 
-	void setNumFormat(string numFormat) {
+	void setNumFormat(string numFormat) @trusted {
 		chart_axis_set_num_format(this.handle, toStringz(numFormat));
 	}
 
-	void setLine(lxw_chart_line* line) @nogc nothrow {
+	void setLine(lxw_chart_line* line) @nogc nothrow @trusted {
 		chart_axis_set_line(this.handle, line);
 	}
 
-	void setFill(lxw_chart_fill* fill) @nogc nothrow {
+	void setFill(lxw_chart_fill* fill) @nogc nothrow @trusted {
 		chart_axis_set_fill(this.handle, fill);
 	}
 
-	void setPattern(lxw_chart_pattern* pattern) @nogc nothrow {
+	void setPattern(lxw_chart_pattern* pattern) @nogc nothrow @trusted {
 		chart_axis_set_pattern(this.handle, pattern);
 	}
 
-	void setReverse() @nogc nothrow {
+	void setReverse() @nogc nothrow @trusted {
 		chart_axis_set_reverse(this.handle);
 	}
 
-	void setCrossing(double value) @nogc nothrow {
+	void setCrossing(double value) @nogc nothrow @trusted {
 		chart_axis_set_crossing(this.handle, value);
 	}
 
-	void setCrossing_max() @nogc nothrow {
+	void setCrossing_max() @nogc nothrow @trusted {
 		chart_axis_set_crossing_max(this.handle);
 	}
 
-	void off() @nogc nothrow {
+	void off() @nogc nothrow @trusted {
 		chart_axis_off(this.handle);
 	}
 
-	void setPosition(ubyte position) @nogc nothrow {
+	void setPosition(ubyte position) @nogc nothrow @trusted {
 		chart_axis_set_position(this.handle, position);
 	}
 
-	void setLabelPosition(ubyte position) @nogc nothrow {
+	void setLabelPosition(ubyte position) @nogc nothrow @trusted {
 		chart_axis_set_label_position(this.handle, position);
 	}
 
-	void setLabelAlign(ubyte align_) @nogc nothrow {
+	void setLabelAlign(ubyte align_) @nogc nothrow @trusted {
 		chart_axis_set_label_align(this.handle, align_);
 	}
 
-	void setMin(double min) @nogc nothrow {
+	void setMin(double min) @nogc nothrow @trusted {
 		chart_axis_set_min(this.handle, min);
 	}
 
-	void setMax(double max) @nogc nothrow {
+	void setMax(double max) @nogc nothrow @trusted {
 		chart_axis_set_max(this.handle, max);
 	}
 
-	void setLogBase(ushort base) @nogc nothrow {
+	void setLogBase(ushort base) @nogc nothrow @trusted {
 		chart_axis_set_log_base(this.handle, base);
 	}
 
-	void setMajorTickMark(ubyte mark) @nogc nothrow {
+	void setMajorTickMark(ubyte mark) @nogc nothrow @trusted {
 		chart_axis_set_major_tick_mark(this.handle, mark);
 	}
 
-	void setMinorTickMark(ubyte mark) @nogc nothrow {
+	void setMinorTickMark(ubyte mark) @nogc nothrow @trusted {
 		chart_axis_set_minor_tick_mark(this.handle, mark);
 	}
 
-	void setIntervalUnit(ushort unit) @nogc nothrow {
+	void setIntervalUnit(ushort unit) @nogc nothrow @trusted {
 		chart_axis_set_interval_unit(this.handle, unit);
 	}
 
-	void setIntervalTick(ushort tick) @nogc nothrow {
+	void setIntervalTick(ushort tick) @nogc nothrow @trusted {
 		chart_axis_set_interval_tick(this.handle, tick);
 	}
 
-	void setMajorUnit(double unit) @nogc nothrow {
+	void setMajorUnit(double unit) @nogc nothrow @trusted {
 		chart_axis_set_major_unit(this.handle, unit);
 	}
 
-	void setMinorUnit(double unit) @nogc nothrow {
+	void setMinorUnit(double unit) @nogc nothrow @trusted {
 		chart_axis_set_minor_unit(this.handle, unit);
 	}
 
-	void setDisplayUnits(ubyte unit) @nogc nothrow {
+	void setDisplayUnits(ubyte unit) @nogc nothrow @trusted {
 		chart_axis_set_display_units(this.handle, unit);
 	}
 
-	void setDisplayUnitsVisible(bool isVisiable ) {
+	void setDisplayUnitsVisible(bool isVisiable ) @trusted {
 		chart_axis_set_display_units_visible(this.handle, to!ubyte(isVisiable));
 	}
 
-	void majorGridlinesSetVisible(bool isVisiable) {
+	void majorGridlinesSetVisible(bool isVisiable) @trusted {
 		chart_axis_major_gridlines_set_visible(this.handle, to!ubyte(isVisiable));
 	}
 
-	void minorGridlinesSetVisible(bool isVisiable) {
+	void minorGridlinesSetVisible(bool isVisiable) @trusted {
 		chart_axis_minor_gridlines_set_visible(this.handle, to!ubyte(isVisiable));
 	}
 
-	void majorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow {
+	void majorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow @trusted {
 		chart_axis_major_gridlines_set_line(this.handle, line);
 	}
 
-	void minorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow {
+	void minorGridlinesSetLine(lxw_chart_line* line) @nogc nothrow @trusted {
 		chart_axis_minor_gridlines_set_line(this.handle, line);
 	}
 }

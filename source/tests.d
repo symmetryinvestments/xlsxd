@@ -1,9 +1,20 @@
 import libxlsxd;
+import std.datetime;
 
 unittest {
 	import std.conv : to;
     /* Create a new workbook and add a worksheet. */
-    auto workbook  = newWorkbook("demo.xlsx");
+    auto workbook  = newWorkbook("empty.xlsx");
+}
+
+@safe unittest {
+	import std.conv : to;
+    /* Create a new workbook and add a worksheet. */
+    auto workbook  = WorkbookOpen("demo.xlsx");
+	scope(exit) {
+		workbook.close();
+	}
+
 	foreach(i; 0 .. 2) {
     auto worksheet = workbook.addWorksheet(to!string(i));
 
@@ -28,6 +39,10 @@ unittest {
 	dt.minute = 37;
 
 	worksheet.write(7, 3, Datetime(dt));
+
+	worksheet.write(7, 3, Date(2038, 2, 13));
+	worksheet.write(8, 3, DateTime(2038, 2, 13, 15, 14, 13));
+	worksheet.write(9, 3, TimeOfDay(16, 14, 13));
 
     /* Text with formatting. */
 	version(No_Overloads_Or_Templates) {
@@ -67,7 +82,7 @@ unittest {
 	}
 }
 
-unittest {
+@safe unittest {
 	import std.conv : to;
     /* Create a new workbook and add a worksheet.
 	   WorkbookOpen needs to be closed manually
