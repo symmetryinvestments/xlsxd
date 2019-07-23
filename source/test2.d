@@ -207,6 +207,12 @@ private template Identity(T) {
 						uniform(1901, 2037, rnd),
 						uniform(1, 12, rnd),
 						uniform(1, 28, rnd));
+			} else static if(is(typeof(val) == DateTime)) {
+				val = DateTime(
+						uniform(1901, 2037, rnd), uniform(1, 12, rnd),
+						uniform(1, 28, rnd),
+						uniform(1, 23, rnd), uniform(1, 59, rnd),
+						uniform(1, 59, rnd));
 			} else static if(is(typeof(val) == TimeOfDay)) {
 				val = TimeOfDay(uniform(1, 23, rnd), uniform(1, 59, rnd),
 						uniform(1, 59, rnd));

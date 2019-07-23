@@ -21,6 +21,8 @@ private pure string genWriteOverloads() {
 			["Number", "double", "Format"],
 			["Datetime", "Datetime", ""],
 			["Datetime", "Datetime", "Format"],
+			["DateTime", "DateTime", ""],
+			["DateTime", "DateTime", "Format"],
 			["Date", "Date", ""],
 			["Date", "Date", "Format"],
 			["TimeOfDay", "TimeOfDay", ""],
@@ -378,7 +380,7 @@ struct Worksheet {
 	{
 		Datetime theTime;
 		version(No_Overloads_Or_Templates) {
-			theTime = Datetime.fromTimeOfday(tod);
+			theTime = Datetime.fromTimeOfDay(tod);
 		} else {
 			theTime = Datetime(tod);
 		}
@@ -391,9 +393,22 @@ struct Worksheet {
 	{
 		Datetime theTime;
 		version(No_Overloads_Or_Templates) {
-			theTime = Datetime.fromTimeOfday(date);
+			theTime = Datetime.fromDate(date);
 		} else {
 			theTime = Datetime(date);
+		}
+		enforce(worksheet_write_datetime(this.handle, row, col,
+					&theTime.handle, format.handle) == LXW_NO_ERROR);
+	}
+
+	void writeDateTimeImpl(RowType row, ColType col, DateTime dt,
+			Format format) @trusted
+	{
+		Datetime theTime;
+		version(No_Overloads_Or_Templates) {
+			theTime = Datetime.fromDateTime(dt);
+		} else {
+			theTime = Datetime(dt);
 		}
 		enforce(worksheet_write_datetime(this.handle, row, col,
 					&theTime.handle, format.handle) == LXW_NO_ERROR);

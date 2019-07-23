@@ -38,11 +38,23 @@ unittest {
 	dt.hour = 13;
 	dt.minute = 37;
 
-	worksheet.write(7, 3, Datetime(dt));
+	version(No_Overloads_Or_Templates) {
+		worksheet.write(7, 3, Datetime.fromDateTime(dt));
 
-	worksheet.write(7, 3, Date(2038, 2, 13));
-	worksheet.write(8, 3, DateTime(2038, 2, 13, 15, 14, 13));
-	worksheet.write(9, 3, TimeOfDay(16, 14, 13));
+		worksheet.write(7, 3, Datetime.fromDate(Date(2038, 2, 13)));
+		worksheet.write(8, 3, Datetime.fromDateTime(
+				DateTime(2038, 2, 13, 15, 14, 13))
+			);
+		worksheet.write(9, 3, Datetime.fromTimeOfDay(
+				TimeOfDay(16, 14, 13))
+			);
+	} else {
+		worksheet.write(7, 3, Datetime(dt));
+
+		worksheet.write(7, 3, Date(2038, 2, 13));
+		worksheet.write(8, 3, DateTime(2038, 2, 13, 15, 14, 13));
+		worksheet.write(9, 3, TimeOfDay(16, 14, 13));
+	}
 
     /* Text with formatting. */
 	version(No_Overloads_Or_Templates) {
