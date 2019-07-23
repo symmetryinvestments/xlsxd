@@ -12,7 +12,7 @@ struct Datetime {
 	lxw_datetime handle;
 
 	version(No_Overloads_Or_Templates) {
-		static Datetime fromDateTime(DateTime ddt) @trusted {
+		static Datetime fromDateTime(DateTime ddt) @safe {
 			Datetime ret;
 			ret.handle.year = ddt.year;
 			ret.handle.month = ddt.month;
@@ -23,7 +23,7 @@ struct Datetime {
 			return ret;
 		}
 
-		static Datetime fromDate(Date d) @trusted {
+		static Datetime fromDate(Date d) @safe {
 			Datetime ret;
 			ret.handle.year = d.year;
 			ret.handle.month = d.month;
@@ -34,7 +34,7 @@ struct Datetime {
 			return ret;
 		}
 
-		static Datetime fromTimeOfday(TimeOfDay tod) @trusted {
+		static Datetime fromTimeOfday(TimeOfDay tod) @safe {
 			Datetime ret;
 			ret.handle.year = 0;
 			ret.handle.month = 0;
@@ -45,7 +45,7 @@ struct Datetime {
 			return ret;
 		}
 
-		static Datetime fromLXW_Datetime(lxw_datetime lxw) @trusted {
+		static Datetime fromLXW_Datetime(lxw_datetime lxw) @safe {
 			Datetime ret;
 			ret.handle = lxw;
 			return ret;
@@ -55,7 +55,7 @@ struct Datetime {
 			this.handle = handle;
 		}
 
-		this(DateTime ddt) @trusted {
+		this(DateTime ddt) @safe {
 			this.handle.year = ddt.year;
 			this.handle.month = ddt.month;
 			this.handle.day = ddt.day;
@@ -64,7 +64,7 @@ struct Datetime {
 			this.handle.sec = to!double(ddt.second);
 		}
 
-		this(Date d) @trusted {
+		this(Date d) @safe {
 			this.handle.year = d.year;
 			this.handle.month = d.month;
 			this.handle.day = d.day;
@@ -73,7 +73,7 @@ struct Datetime {
 			this.handle.sec = 0;
 		}
 
-		this(TimeOfDay tod) @trusted {
+		this(TimeOfDay tod) @safe {
 			this.handle.year = 0;
 			this.handle.month = 0;
 			this.handle.day = 0;
