@@ -34,7 +34,7 @@ struct Datetime {
 			return ret;
 		}
 
-		static Datetime fromTimeOfday(TimeOfDay tod) @safe {
+		static Datetime fromTimeOfDay(TimeOfDay tod) @safe {
 			Datetime ret;
 			ret.handle.year = 0;
 			ret.handle.month = 0;
