@@ -226,7 +226,7 @@ struct Worksheet {
 			format = format.handle == null ? *this.tf : format;
 			Datetime theTime;
 			version(No_Overloads_Or_Templates) {
-				theTime = Datetime.fromTimeOfday(value);
+				theTime = Datetime.fromTimeOfDay(value);
 			} else {
 				theTime = Datetime(value);
 			}
@@ -235,7 +235,7 @@ struct Worksheet {
 			format = format.handle == null ? *this.df : format;
 			Datetime theTime;
 			version(No_Overloads_Or_Templates) {
-				theTime = Datetime.fromTimeOfday(value);
+				theTime = Datetime.fromDate(value);
 			} else {
 				theTime = Datetime(value);
 			}
