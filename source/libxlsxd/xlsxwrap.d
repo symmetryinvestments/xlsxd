@@ -3746,42 +3746,48 @@ extern(C)
     alias __sig_atomic_t = int;
     alias FILE = _IO_FILE;
     int abs(int) @nogc nothrow;
-	version(LDC) {
+
+	private struct _IO_FILE_DUMMY
+    {
+        int _flags;
+        char* _IO_read_ptr;
+        char* _IO_read_end;
+        char* _IO_read_base;
+        char* _IO_write_base;
+        char* _IO_write_ptr;
+        char* _IO_write_end;
+        char* _IO_buf_base;
+        char* _IO_buf_end;
+        char* _IO_save_base;
+        char* _IO_backup_base;
+        char* _IO_save_end;
+        _IO_marker* _markers;
+        _IO_FILE* _chain;
+        int _fileno;
+        int _flags2;
+        c_long _old_offset;
+        ushort _cur_column;
+        byte _vtable_offset;
+        char[1] _shortbuf;
+        void* _lock;
+        c_long _offset;
+        _IO_codecvt* _codecvt;
+        _IO_wide_data* _wide_data;
+        _IO_FILE* _freeres_list;
+        void* _freeres_buf;
+        c_ulong __pad5;
+        int _mode;
+        char[20] _unused2;
+    }
+
+	version(Windows) {
+		alias _IO_FILE = _IO_FILE_DUMMY;
+	} else version(LDC) {
 		import core.stdc.stdio : _IO_FILE;
 	} else {
-		struct _IO_FILE
-    	{
-    	    int _flags;
-    	    char* _IO_read_ptr;
-    	    char* _IO_read_end;
-    	    char* _IO_read_base;
-    	    char* _IO_write_base;
-    	    char* _IO_write_ptr;
-    	    char* _IO_write_end;
-    	    char* _IO_buf_base;
-    	    char* _IO_buf_end;
-    	    char* _IO_save_base;
-    	    char* _IO_backup_base;
-    	    char* _IO_save_end;
-    	    _IO_marker* _markers;
-    	    _IO_FILE* _chain;
-    	    int _fileno;
-    	    int _flags2;
-    	    c_long _old_offset;
-    	    ushort _cur_column;
-    	    byte _vtable_offset;
-    	    char[1] _shortbuf;
-    	    void* _lock;
-    	    c_long _offset;
-    	    _IO_codecvt* _codecvt;
-    	    _IO_wide_data* _wide_data;
-    	    _IO_FILE* _freeres_list;
-    	    void* _freeres_buf;
-    	    c_ulong __pad5;
-    	    int _mode;
-    	    char[20] _unused2;
-    	}
+		alias _IO_FILE = _IO_FILE_DUMMY;
 	}
+
     alias __FILE = _IO_FILE;
     alias __fpos64_t = _G_fpos64_t;
     struct _G_fpos64_t
