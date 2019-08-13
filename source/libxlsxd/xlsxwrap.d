@@ -4142,1366 +4142,3401 @@ extern(C)
     void clearerr(_IO_FILE*) @nogc nothrow;
     int feof(_IO_FILE*) @nogc nothrow;
     int ferror(_IO_FILE*) @nogc nothrow;
-    enum DPP_ENUM_SEEK_END = 2;
+    static if(!is(typeof(P_tmpdir))) {
+        enum P_tmpdir = "/tmp";
+    }
 
 
-    enum DPP_ENUM_SEEK_CUR = 1;
 
 
-    enum DPP_ENUM_SEEK_SET = 0;
+    static if(!is(typeof(SEEK_END))) {
+        enum SEEK_END = 2;
+    }
 
 
 
 
-    enum DPP_ENUM_BUFSIZ = 8192;
+    static if(!is(typeof(SEEK_CUR))) {
+        enum SEEK_CUR = 1;
+    }
 
 
-    enum DPP_ENUM__IONBF = 2;
 
 
-    enum DPP_ENUM__IOLBF = 1;
+    static if(!is(typeof(SEEK_SET))) {
+        enum SEEK_SET = 0;
+    }
 
 
-    enum DPP_ENUM__IOFBF = 0;
-    enum DPP_ENUM__STDIO_H = 1;
-    enum DPP_ENUM__STDLIB_H = 1;
-    enum DPP_ENUM___ldiv_t_defined = 1;
-    enum DPP_ENUM___lldiv_t_defined = 1;
 
 
-    enum DPP_ENUM_RAND_MAX = 2147483647;
 
 
-    enum DPP_ENUM_EXIT_FAILURE = 1;
+    static if(!is(typeof(BUFSIZ))) {
+        enum BUFSIZ = 8192;
+    }
 
 
-    enum DPP_ENUM_EXIT_SUCCESS = 0;
-    enum DPP_ENUM__STDINT_H = 1;
 
 
-    enum DPP_ENUM__STDC_PREDEF_H = 1;
+    static if(!is(typeof(_IONBF))) {
+        enum _IONBF = 2;
+    }
 
 
-    enum DPP_ENUM_RTSIG_MAX = 32;
 
 
-    enum DPP_ENUM_XATTR_LIST_MAX = 65536;
+    static if(!is(typeof(_IOLBF))) {
+        enum _IOLBF = 1;
+    }
 
 
-    enum DPP_ENUM_XATTR_SIZE_MAX = 65536;
 
 
-    enum DPP_ENUM_XATTR_NAME_MAX = 255;
+    static if(!is(typeof(_IOFBF))) {
+        enum _IOFBF = 0;
+    }
+    static if(!is(typeof(_STDIO_H))) {
+        enum _STDIO_H = 1;
+    }
+    static if(!is(typeof(_STDLIB_H))) {
+        enum _STDLIB_H = 1;
+    }
+    static if(!is(typeof(__ldiv_t_defined))) {
+        enum __ldiv_t_defined = 1;
+    }
+    static if(!is(typeof(__lldiv_t_defined))) {
+        enum __lldiv_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM_PIPE_BUF = 4096;
 
 
-    enum DPP_ENUM_PATH_MAX = 4096;
+    static if(!is(typeof(RAND_MAX))) {
+        enum RAND_MAX = 2147483647;
+    }
 
 
-    enum DPP_ENUM_NAME_MAX = 255;
 
 
-    enum DPP_ENUM_MAX_INPUT = 255;
+    static if(!is(typeof(EXIT_FAILURE))) {
+        enum EXIT_FAILURE = 1;
+    }
 
 
-    enum DPP_ENUM_MAX_CANON = 255;
 
 
-    enum DPP_ENUM_LINK_MAX = 127;
+    static if(!is(typeof(EXIT_SUCCESS))) {
+        enum EXIT_SUCCESS = 0;
+    }
+    static if(!is(typeof(_STDINT_H))) {
+        enum _STDINT_H = 1;
+    }
 
 
-    enum DPP_ENUM_ARG_MAX = 131072;
 
 
-    enum DPP_ENUM_NGROUPS_MAX = 65536;
+    static if(!is(typeof(_STDC_PREDEF_H))) {
+        enum _STDC_PREDEF_H = 1;
+    }
 
 
-    enum DPP_ENUM_NR_OPEN = 1024;
-    enum DPP_ENUM_MB_LEN_MAX = 16;
 
 
-    enum DPP_ENUM__LIBC_LIMITS_H_ = 1;
-    enum DPP_ENUM___GLIBC_MINOR__ = 29;
+    static if(!is(typeof(RTSIG_MAX))) {
+        enum RTSIG_MAX = 32;
+    }
 
 
-    enum DPP_ENUM___GLIBC__ = 2;
 
 
-    enum DPP_ENUM___GNU_LIBRARY__ = 6;
+    static if(!is(typeof(XATTR_LIST_MAX))) {
+        enum XATTR_LIST_MAX = 65536;
+    }
 
 
-    enum DPP_ENUM___GLIBC_USE_DEPRECATED_SCANF = 0;
 
 
-    enum DPP_ENUM___GLIBC_USE_DEPRECATED_GETS = 0;
+    static if(!is(typeof(XATTR_SIZE_MAX))) {
+        enum XATTR_SIZE_MAX = 65536;
+    }
 
 
-    enum DPP_ENUM___USE_FORTIFY_LEVEL = 0;
 
 
-    enum DPP_ENUM___USE_ATFILE = 1;
+    static if(!is(typeof(XATTR_NAME_MAX))) {
+        enum XATTR_NAME_MAX = 255;
+    }
 
 
-    enum DPP_ENUM___USE_MISC = 1;
 
 
-    enum DPP_ENUM__ATFILE_SOURCE = 1;
+    static if(!is(typeof(PIPE_BUF))) {
+        enum PIPE_BUF = 4096;
+    }
 
 
-    enum DPP_ENUM___USE_XOPEN2K8 = 1;
 
 
-    enum DPP_ENUM___USE_ISOC99 = 1;
+    static if(!is(typeof(PATH_MAX))) {
+        enum PATH_MAX = 4096;
+    }
 
 
-    enum DPP_ENUM___USE_ISOC95 = 1;
 
 
-    enum DPP_ENUM___USE_XOPEN2K = 1;
+    static if(!is(typeof(NAME_MAX))) {
+        enum NAME_MAX = 255;
+    }
 
 
-    enum DPP_ENUM___USE_POSIX199506 = 1;
 
 
-    enum DPP_ENUM___USE_POSIX199309 = 1;
+    static if(!is(typeof(MAX_INPUT))) {
+        enum MAX_INPUT = 255;
+    }
 
 
-    enum DPP_ENUM___USE_POSIX2 = 1;
 
 
-    enum DPP_ENUM___USE_POSIX = 1;
+    static if(!is(typeof(MAX_CANON))) {
+        enum MAX_CANON = 255;
+    }
 
 
 
 
-    enum DPP_ENUM__POSIX_SOURCE = 1;
+    static if(!is(typeof(LINK_MAX))) {
+        enum LINK_MAX = 127;
+    }
 
 
-    enum DPP_ENUM___USE_POSIX_IMPLICITLY = 1;
 
 
-    enum DPP_ENUM___USE_ISOC11 = 1;
+    static if(!is(typeof(ARG_MAX))) {
+        enum ARG_MAX = 131072;
+    }
 
 
-    enum DPP_ENUM__DEFAULT_SOURCE = 1;
-    enum DPP_ENUM__FEATURES_H = 1;
 
 
+    static if(!is(typeof(NGROUPS_MAX))) {
+        enum NGROUPS_MAX = 65536;
+    }
 
 
-    enum DPP_ENUM__ERRNO_H = 1;
-    enum DPP_ENUM___PDP_ENDIAN = 3412;
 
 
-    enum DPP_ENUM___BIG_ENDIAN = 4321;
+    static if(!is(typeof(NR_OPEN))) {
+        enum NR_OPEN = 1024;
+    }
+    static if(!is(typeof(MB_LEN_MAX))) {
+        enum MB_LEN_MAX = 16;
+    }
 
 
-    enum DPP_ENUM___LITTLE_ENDIAN = 1234;
 
 
-    enum DPP_ENUM__ENDIAN_H = 1;
-    enum DPP_ENUM__CTYPE_H = 1;
+    static if(!is(typeof(_LIBC_LIMITS_H_))) {
+        enum _LIBC_LIMITS_H_ = 1;
+    }
+    static if(!is(typeof(__GLIBC_MINOR__))) {
+        enum __GLIBC_MINOR__ = 29;
+    }
 
 
-    enum DPP_ENUM___SYSCALL_WORDSIZE = 64;
 
 
-    enum DPP_ENUM___WORDSIZE_TIME64_COMPAT32 = 1;
+    static if(!is(typeof(__GLIBC__))) {
+        enum __GLIBC__ = 2;
+    }
 
 
-    enum DPP_ENUM___WORDSIZE = 64;
 
 
+    static if(!is(typeof(__GNU_LIBRARY__))) {
+        enum __GNU_LIBRARY__ = 6;
+    }
 
 
 
 
-    enum DPP_ENUM__BITS_WCHAR_H = 1;
-    enum DPP_ENUM_WCONTINUED = 8;
+    static if(!is(typeof(__GLIBC_USE_DEPRECATED_SCANF))) {
+        enum __GLIBC_USE_DEPRECATED_SCANF = 0;
+    }
 
 
-    enum DPP_ENUM_WEXITED = 4;
 
 
-    enum DPP_ENUM_WSTOPPED = 2;
+    static if(!is(typeof(__GLIBC_USE_DEPRECATED_GETS))) {
+        enum __GLIBC_USE_DEPRECATED_GETS = 0;
+    }
 
 
-    enum DPP_ENUM_WUNTRACED = 2;
 
 
-    enum DPP_ENUM_WNOHANG = 1;
+    static if(!is(typeof(__USE_FORTIFY_LEVEL))) {
+        enum __USE_FORTIFY_LEVEL = 0;
+    }
 
 
-    enum DPP_ENUM__BITS_UINTN_IDENTITY_H = 1;
 
 
-    enum DPP_ENUM___FD_SETSIZE = 1024;
+    static if(!is(typeof(__USE_ATFILE))) {
+        enum __USE_ATFILE = 1;
+    }
 
 
-    enum DPP_ENUM___RLIM_T_MATCHES_RLIM64_T = 1;
 
 
-    enum DPP_ENUM___INO_T_MATCHES_INO64_T = 1;
+    static if(!is(typeof(__USE_MISC))) {
+        enum __USE_MISC = 1;
+    }
 
 
-    enum DPP_ENUM___OFF_T_MATCHES_OFF64_T = 1;
-    enum DPP_ENUM__BITS_TYPESIZES_H = 1;
 
 
-    enum DPP_ENUM___timer_t_defined = 1;
+    static if(!is(typeof(_ATFILE_SOURCE))) {
+        enum _ATFILE_SOURCE = 1;
+    }
 
 
-    enum DPP_ENUM___time_t_defined = 1;
 
 
-    enum DPP_ENUM___struct_tm_defined = 1;
+    static if(!is(typeof(__USE_XOPEN2K8))) {
+        enum __USE_XOPEN2K8 = 1;
+    }
 
 
-    enum DPP_ENUM___timeval_defined = 1;
 
 
-    enum DPP_ENUM__STRUCT_TIMESPEC = 1;
+    static if(!is(typeof(__USE_ISOC99))) {
+        enum __USE_ISOC99 = 1;
+    }
 
 
-    enum DPP_ENUM___itimerspec_defined = 1;
-    enum DPP_ENUM___struct_FILE_defined = 1;
 
 
-    enum DPP_ENUM___sigset_t_defined = 1;
+    static if(!is(typeof(__USE_ISOC95))) {
+        enum __USE_ISOC95 = 1;
+    }
 
 
-    enum DPP_ENUM__BITS_TYPES_LOCALE_T_H = 1;
 
 
-    enum DPP_ENUM___clockid_t_defined = 1;
+    static if(!is(typeof(__USE_XOPEN2K))) {
+        enum __USE_XOPEN2K = 1;
+    }
 
 
-    enum DPP_ENUM___clock_t_defined = 1;
-    enum DPP_ENUM_____mbstate_t_defined = 1;
 
 
-    enum DPP_ENUM__BITS_TYPES___LOCALE_T_H = 1;
+    static if(!is(typeof(__USE_POSIX199506))) {
+        enum __USE_POSIX199506 = 1;
+    }
 
 
-    enum DPP_ENUM______fpos_t_defined = 1;
 
 
-    enum DPP_ENUM______fpos64_t_defined = 1;
+    static if(!is(typeof(__USE_POSIX199309))) {
+        enum __USE_POSIX199309 = 1;
+    }
 
 
-    enum DPP_ENUM_____FILE_defined = 1;
 
 
-    enum DPP_ENUM___FILE_defined = 1;
-    enum DPP_ENUM__BITS_TYPES_H = 1;
+    static if(!is(typeof(__USE_POSIX2))) {
+        enum __USE_POSIX2 = 1;
+    }
 
 
 
 
+    static if(!is(typeof(__USE_POSIX))) {
+        enum __USE_POSIX = 1;
+    }
 
 
-    enum DPP_ENUM__BITS_TIME64_H = 1;
 
 
-    enum DPP_ENUM_TIMER_ABSTIME = 1;
+    static if(!is(typeof(_POSIX_C_SOURCE))) {
+        enum _POSIX_C_SOURCE = 200809L;
+    }
 
 
-    enum DPP_ENUM_CLOCK_TAI = 11;
 
 
-    enum DPP_ENUM_CLOCK_BOOTTIME_ALARM = 9;
+    static if(!is(typeof(_POSIX_SOURCE))) {
+        enum _POSIX_SOURCE = 1;
+    }
 
 
-    enum DPP_ENUM_CLOCK_REALTIME_ALARM = 8;
 
 
-    enum DPP_ENUM_CLOCK_BOOTTIME = 7;
+    static if(!is(typeof(__USE_POSIX_IMPLICITLY))) {
+        enum __USE_POSIX_IMPLICITLY = 1;
+    }
 
 
-    enum DPP_ENUM_CLOCK_MONOTONIC_COARSE = 6;
 
 
-    enum DPP_ENUM_CLOCK_REALTIME_COARSE = 5;
+    static if(!is(typeof(__USE_ISOC11))) {
+        enum __USE_ISOC11 = 1;
+    }
 
 
-    enum DPP_ENUM_CLOCK_MONOTONIC_RAW = 4;
 
 
-    enum DPP_ENUM_CLOCK_THREAD_CPUTIME_ID = 3;
+    static if(!is(typeof(_DEFAULT_SOURCE))) {
+        enum _DEFAULT_SOURCE = 1;
+    }
+    static if(!is(typeof(_FEATURES_H))) {
+        enum _FEATURES_H = 1;
+    }
 
 
-    enum DPP_ENUM_CLOCK_PROCESS_CPUTIME_ID = 2;
 
 
-    enum DPP_ENUM_CLOCK_MONOTONIC = 1;
 
 
-    enum DPP_ENUM_CLOCK_REALTIME = 0;
+    static if(!is(typeof(_ERRNO_H))) {
+        enum _ERRNO_H = 1;
+    }
+    static if(!is(typeof(__PDP_ENDIAN))) {
+        enum __PDP_ENDIAN = 3412;
+    }
 
 
 
 
-    enum DPP_ENUM__BITS_TIME_H = 1;
+    static if(!is(typeof(__BIG_ENDIAN))) {
+        enum __BIG_ENDIAN = 4321;
+    }
 
 
-    enum DPP_ENUM___PTHREAD_MUTEX_HAVE_PREV = 1;
-    enum DPP_ENUM__THREAD_SHARED_TYPES_H = 1;
 
 
-    enum DPP_ENUM_FOPEN_MAX = 16;
+    static if(!is(typeof(__LITTLE_ENDIAN))) {
+        enum __LITTLE_ENDIAN = 1234;
+    }
 
 
-    enum DPP_ENUM_L_ctermid = 9;
 
 
-    enum DPP_ENUM_FILENAME_MAX = 4096;
+    static if(!is(typeof(_ENDIAN_H))) {
+        enum _ENDIAN_H = 1;
+    }
+    static if(!is(typeof(_CTYPE_H))) {
+        enum _CTYPE_H = 1;
+    }
 
 
-    enum DPP_ENUM_TMP_MAX = 238328;
 
 
-    enum DPP_ENUM_L_tmpnam = 20;
+    static if(!is(typeof(__SYSCALL_WORDSIZE))) {
+        enum __SYSCALL_WORDSIZE = 64;
+    }
 
 
-    enum DPP_ENUM__BITS_STDIO_LIM_H = 1;
 
 
-    enum DPP_ENUM__BITS_STDINT_UINTN_H = 1;
+    static if(!is(typeof(__WORDSIZE_TIME64_COMPAT32))) {
+        enum __WORDSIZE_TIME64_COMPAT32 = 1;
+    }
 
 
-    enum DPP_ENUM__BITS_STDINT_INTN_H = 1;
-    enum DPP_ENUM___have_pthread_attr_t = 1;
 
 
-    enum DPP_ENUM__BITS_PTHREADTYPES_COMMON_H = 1;
+    static if(!is(typeof(__WORDSIZE))) {
+        enum __WORDSIZE = 64;
+    }
+    static if(!is(typeof(_BITS_WCHAR_H))) {
+        enum _BITS_WCHAR_H = 1;
+    }
 
 
-    enum DPP_ENUM___PTHREAD_RWLOCK_INT_FLAGS_SHARED = 1;
-    enum DPP_ENUM___PTHREAD_MUTEX_USE_UNION = 0;
 
 
-    enum DPP_ENUM___PTHREAD_MUTEX_NUSERS_AFTER_KIND = 0;
+    static if(!is(typeof(__WCOREFLAG))) {
+        enum __WCOREFLAG = 0x80;
+    }
 
 
-    enum DPP_ENUM___PTHREAD_MUTEX_LOCK_ELISION = 1;
 
 
+    static if(!is(typeof(__W_CONTINUED))) {
+        enum __W_CONTINUED = 0xffff;
+    }
+    static if(!is(typeof(__WCLONE))) {
+        enum __WCLONE = 0x80000000;
+    }
 
 
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_BARRIERATTR_T = 4;
+    static if(!is(typeof(__WALL))) {
+        enum __WALL = 0x40000000;
+    }
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_RWLOCKATTR_T = 8;
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_CONDATTR_T = 4;
+    static if(!is(typeof(__WNOTHREAD))) {
+        enum __WNOTHREAD = 0x20000000;
+    }
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_COND_T = 48;
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_MUTEXATTR_T = 4;
+    static if(!is(typeof(WNOWAIT))) {
+        enum WNOWAIT = 0x01000000;
+    }
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_BARRIER_T = 32;
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_RWLOCK_T = 56;
+    static if(!is(typeof(WCONTINUED))) {
+        enum WCONTINUED = 8;
+    }
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_MUTEX_T = 40;
 
 
-    enum DPP_ENUM___SIZEOF_PTHREAD_ATTR_T = 56;
+    static if(!is(typeof(WEXITED))) {
+        enum WEXITED = 4;
+    }
 
 
-    enum DPP_ENUM__BITS_PTHREADTYPES_ARCH_H = 1;
 
 
-    enum DPP_ENUM__POSIX_TYPED_MEMORY_OBJECTS = -1;
+    static if(!is(typeof(WSTOPPED))) {
+        enum WSTOPPED = 2;
+    }
 
 
-    enum DPP_ENUM__POSIX_TRACE_LOG = -1;
 
 
-    enum DPP_ENUM__POSIX_TRACE_INHERIT = -1;
+    static if(!is(typeof(WUNTRACED))) {
+        enum WUNTRACED = 2;
+    }
 
 
-    enum DPP_ENUM__POSIX_TRACE_EVENT_FILTER = -1;
 
 
-    enum DPP_ENUM__POSIX_TRACE = -1;
+    static if(!is(typeof(WNOHANG))) {
+        enum WNOHANG = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_THREAD_SPORADIC_SERVER = -1;
 
 
-    enum DPP_ENUM__POSIX_SPORADIC_SERVER = -1;
-    enum DPP_ENUM__POSIX_MONOTONIC_CLOCK = 0;
+    static if(!is(typeof(_BITS_UINTN_IDENTITY_H))) {
+        enum _BITS_UINTN_IDENTITY_H = 1;
+    }
 
 
-    enum DPP_ENUM__STRING_H = 1;
-    enum DPP_ENUM__POSIX_SHELL = 1;
 
 
+    static if(!is(typeof(__FD_SETSIZE))) {
+        enum __FD_SETSIZE = 1024;
+    }
 
 
-    enum DPP_ENUM__POSIX_REGEXP = 1;
 
 
-    enum DPP_ENUM__POSIX_THREAD_CPUTIME = 0;
+    static if(!is(typeof(__RLIM_T_MATCHES_RLIM64_T))) {
+        enum __RLIM_T_MATCHES_RLIM64_T = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_CPUTIME = 0;
 
 
+    static if(!is(typeof(__INO_T_MATCHES_INO64_T))) {
+        enum __INO_T_MATCHES_INO64_T = 1;
+    }
 
 
-    enum DPP_ENUM__LFS64_STDIO = 1;
 
 
-    enum DPP_ENUM__LFS64_LARGEFILE = 1;
+    static if(!is(typeof(__OFF_T_MATCHES_OFF64_T))) {
+        enum __OFF_T_MATCHES_OFF64_T = 1;
+    }
+    static if(!is(typeof(_BITS_TYPESIZES_H))) {
+        enum _BITS_TYPESIZES_H = 1;
+    }
 
 
-    enum DPP_ENUM__LFS_LARGEFILE = 1;
 
 
-    enum DPP_ENUM__LFS64_ASYNCHRONOUS_IO = 1;
+    static if(!is(typeof(__timer_t_defined))) {
+        enum __timer_t_defined = 1;
+    }
 
 
 
 
-    enum DPP_ENUM__LFS_ASYNCHRONOUS_IO = 1;
+    static if(!is(typeof(__time_t_defined))) {
+        enum __time_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_ASYNC_IO = 1;
-    enum DPP_ENUM__POSIX_THREAD_ROBUST_PRIO_PROTECT = -1;
-    enum DPP_ENUM__POSIX_REENTRANT_FUNCTIONS = 1;
 
 
+    static if(!is(typeof(__struct_tm_defined))) {
+        enum __struct_tm_defined = 1;
+    }
 
 
-    enum DPP_ENUM__XOPEN_SHM = 1;
 
 
-    enum DPP_ENUM__XOPEN_REALTIME_THREADS = 1;
+    static if(!is(typeof(__timeval_defined))) {
+        enum __timeval_defined = 1;
+    }
 
 
-    enum DPP_ENUM__XOPEN_REALTIME = 1;
 
 
-    enum DPP_ENUM__POSIX_NO_TRUNC = 1;
+    static if(!is(typeof(_STRUCT_TIMESPEC))) {
+        enum _STRUCT_TIMESPEC = 1;
+    }
 
 
 
 
-    enum DPP_ENUM__POSIX_CHOWN_RESTRICTED = 0;
-    enum DPP_ENUM__POSIX_SAVED_IDS = 1;
+    static if(!is(typeof(__itimerspec_defined))) {
+        enum __itimerspec_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_JOB_CONTROL = 1;
 
 
-    enum DPP_ENUM__BITS_POSIX_OPT_H = 1;
+    static if(!is(typeof(_IO_USER_LOCK))) {
+        enum _IO_USER_LOCK = 0x8000;
+    }
 
 
 
 
-    enum DPP_ENUM_CHARCLASS_NAME_MAX = 2048;
 
 
+    static if(!is(typeof(_IO_ERR_SEEN))) {
+        enum _IO_ERR_SEEN = 0x0020;
+    }
 
 
 
 
-    enum DPP_ENUM_COLL_WEIGHTS_MAX = 255;
-    enum DPP_ENUM__POSIX2_CHARCLASS_NAME_MAX = 14;
 
 
-    enum DPP_ENUM__POSIX2_RE_DUP_MAX = 255;
+    static if(!is(typeof(_IO_EOF_SEEN))) {
+        enum _IO_EOF_SEEN = 0x0010;
+    }
+    static if(!is(typeof(__struct_FILE_defined))) {
+        enum __struct_FILE_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX2_LINE_MAX = 2048;
 
 
-    enum DPP_ENUM__POSIX2_EXPR_NEST_MAX = 32;
+    static if(!is(typeof(__sigset_t_defined))) {
+        enum __sigset_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX2_COLL_WEIGHTS_MAX = 2;
 
 
-    enum DPP_ENUM__POSIX2_BC_STRING_MAX = 1000;
+    static if(!is(typeof(_BITS_TYPES_LOCALE_T_H))) {
+        enum _BITS_TYPES_LOCALE_T_H = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX2_BC_SCALE_MAX = 99;
 
 
-    enum DPP_ENUM__POSIX2_BC_DIM_MAX = 2048;
+    static if(!is(typeof(__clockid_t_defined))) {
+        enum __clockid_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX2_BC_BASE_MAX = 99;
 
 
-    enum DPP_ENUM__BITS_POSIX2_LIM_H = 1;
+    static if(!is(typeof(__clock_t_defined))) {
+        enum __clock_t_defined = 1;
+    }
+    static if(!is(typeof(____mbstate_t_defined))) {
+        enum ____mbstate_t_defined = 1;
+    }
 
 
 
 
-    enum DPP_ENUM__POSIX_CLOCKRES_MIN = 20000000;
+    static if(!is(typeof(_BITS_TYPES___LOCALE_T_H))) {
+        enum _BITS_TYPES___LOCALE_T_H = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_TZNAME_MAX = 6;
 
 
-    enum DPP_ENUM__POSIX_TTY_NAME_MAX = 9;
+    static if(!is(typeof(_____fpos_t_defined))) {
+        enum _____fpos_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_TIMER_MAX = 32;
 
 
-    enum DPP_ENUM__POSIX_SYMLOOP_MAX = 8;
+    static if(!is(typeof(_____fpos64_t_defined))) {
+        enum _____fpos64_t_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_SYMLINK_MAX = 255;
 
 
-    enum DPP_ENUM__POSIX_STREAM_MAX = 8;
+    static if(!is(typeof(____FILE_defined))) {
+        enum ____FILE_defined = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_SSIZE_MAX = 32767;
 
 
-    enum DPP_ENUM__POSIX_SIGQUEUE_MAX = 32;
+    static if(!is(typeof(__FILE_defined))) {
+        enum __FILE_defined = 1;
+    }
+    static if(!is(typeof(_BITS_TYPES_H))) {
+        enum _BITS_TYPES_H = 1;
+    }
+    static if(!is(typeof(_BITS_TIME64_H))) {
+        enum _BITS_TIME64_H = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_SEM_VALUE_MAX = 32767;
 
 
-    enum DPP_ENUM__POSIX_SEM_NSEMS_MAX = 256;
+    static if(!is(typeof(TIMER_ABSTIME))) {
+        enum TIMER_ABSTIME = 1;
+    }
 
 
-    enum DPP_ENUM__POSIX_RTSIG_MAX = 8;
 
 
-    enum DPP_ENUM__POSIX_RE_DUP_MAX = 255;
+    static if(!is(typeof(CLOCK_TAI))) {
+        enum CLOCK_TAI = 11;
+    }
 
 
-    enum DPP_ENUM__POSIX_PIPE_BUF = 512;
 
 
-    enum DPP_ENUM__POSIX_PATH_MAX = 256;
+    static if(!is(typeof(CLOCK_BOOTTIME_ALARM))) {
+        enum CLOCK_BOOTTIME_ALARM = 9;
+    }
 
 
-    enum DPP_ENUM__POSIX_OPEN_MAX = 20;
 
 
-    enum DPP_ENUM__POSIX_NGROUPS_MAX = 8;
+    static if(!is(typeof(CLOCK_REALTIME_ALARM))) {
+        enum CLOCK_REALTIME_ALARM = 8;
+    }
 
 
-    enum DPP_ENUM__POSIX_NAME_MAX = 14;
 
 
-    enum DPP_ENUM__POSIX_MQ_PRIO_MAX = 32;
+    static if(!is(typeof(CLOCK_BOOTTIME))) {
+        enum CLOCK_BOOTTIME = 7;
+    }
 
 
-    enum DPP_ENUM__POSIX_MQ_OPEN_MAX = 8;
 
 
-    enum DPP_ENUM__POSIX_MAX_INPUT = 255;
+    static if(!is(typeof(CLOCK_MONOTONIC_COARSE))) {
+        enum CLOCK_MONOTONIC_COARSE = 6;
+    }
 
 
-    enum DPP_ENUM__POSIX_MAX_CANON = 255;
 
 
-    enum DPP_ENUM__POSIX_LOGIN_NAME_MAX = 9;
+    static if(!is(typeof(CLOCK_REALTIME_COARSE))) {
+        enum CLOCK_REALTIME_COARSE = 5;
+    }
 
 
-    enum DPP_ENUM__POSIX_LINK_MAX = 8;
 
 
-    enum DPP_ENUM__POSIX_HOST_NAME_MAX = 255;
+    static if(!is(typeof(CLOCK_MONOTONIC_RAW))) {
+        enum CLOCK_MONOTONIC_RAW = 4;
+    }
 
 
-    enum DPP_ENUM__POSIX_DELAYTIMER_MAX = 32;
 
 
-    enum DPP_ENUM__POSIX_CHILD_MAX = 25;
+    static if(!is(typeof(CLOCK_THREAD_CPUTIME_ID))) {
+        enum CLOCK_THREAD_CPUTIME_ID = 3;
+    }
 
 
-    enum DPP_ENUM__POSIX_ARG_MAX = 4096;
 
 
-    enum DPP_ENUM__POSIX_AIO_MAX = 1;
+    static if(!is(typeof(CLOCK_PROCESS_CPUTIME_ID))) {
+        enum CLOCK_PROCESS_CPUTIME_ID = 2;
+    }
 
 
-    enum DPP_ENUM__POSIX_AIO_LISTIO_MAX = 2;
 
 
-    enum DPP_ENUM__BITS_POSIX1_LIM_H = 1;
+    static if(!is(typeof(CLOCK_MONOTONIC))) {
+        enum CLOCK_MONOTONIC = 1;
+    }
 
 
 
 
-    enum DPP_ENUM_MQ_PRIO_MAX = 32768;
+    static if(!is(typeof(CLOCK_REALTIME))) {
+        enum CLOCK_REALTIME = 0;
+    }
 
 
-    enum DPP_ENUM_HOST_NAME_MAX = 64;
 
 
-    enum DPP_ENUM_LOGIN_NAME_MAX = 256;
 
 
-    enum DPP_ENUM_TTY_NAME_MAX = 32;
+    static if(!is(typeof(_BITS_TIME_H))) {
+        enum _BITS_TIME_H = 1;
+    }
 
 
-    enum DPP_ENUM_DELAYTIMER_MAX = 2147483647;
 
 
-    enum DPP_ENUM_PTHREAD_STACK_MIN = 16384;
+    static if(!is(typeof(__PTHREAD_MUTEX_HAVE_PREV))) {
+        enum __PTHREAD_MUTEX_HAVE_PREV = 1;
+    }
+    static if(!is(typeof(_THREAD_SHARED_TYPES_H))) {
+        enum _THREAD_SHARED_TYPES_H = 1;
+    }
 
 
-    enum DPP_ENUM_AIO_PRIO_DELTA_MAX = 20;
 
 
-    enum DPP_ENUM__POSIX_THREAD_THREADS_MAX = 64;
+    static if(!is(typeof(FOPEN_MAX))) {
+        enum FOPEN_MAX = 16;
+    }
 
 
 
 
-    enum DPP_ENUM__POSIX_THREAD_DESTRUCTOR_ITERATIONS = 4;
+    static if(!is(typeof(L_ctermid))) {
+        enum L_ctermid = 9;
+    }
 
 
-    enum DPP_ENUM_PTHREAD_KEYS_MAX = 1024;
 
 
-    enum DPP_ENUM__POSIX_THREAD_KEYS_MAX = 128;
-    enum DPP_ENUM___GLIBC_USE_IEC_60559_TYPES_EXT = 0;
+    static if(!is(typeof(FILENAME_MAX))) {
+        enum FILENAME_MAX = 4096;
+    }
 
 
-    enum DPP_ENUM___GLIBC_USE_IEC_60559_FUNCS_EXT = 0;
 
 
-    enum DPP_ENUM___GLIBC_USE_IEC_60559_BFP_EXT = 0;
+    static if(!is(typeof(TMP_MAX))) {
+        enum TMP_MAX = 238328;
+    }
 
 
-    enum DPP_ENUM___GLIBC_USE_LIB_EXT2 = 0;
 
 
-    enum DPP_ENUM__GETOPT_POSIX_H = 1;
+    static if(!is(typeof(L_tmpnam))) {
+        enum L_tmpnam = 20;
+    }
 
 
-    enum DPP_ENUM__GETOPT_CORE_H = 1;
 
 
-    enum DPP_ENUM___HAVE_FLOAT64X_LONG_DOUBLE = 1;
+    static if(!is(typeof(_BITS_STDIO_LIM_H))) {
+        enum _BITS_STDIO_LIM_H = 1;
+    }
 
 
-    enum DPP_ENUM___HAVE_FLOAT64X = 1;
 
 
-    enum DPP_ENUM___HAVE_DISTINCT_FLOAT128 = 0;
+    static if(!is(typeof(_BITS_STDINT_UINTN_H))) {
+        enum _BITS_STDINT_UINTN_H = 1;
+    }
 
 
-    enum DPP_ENUM___HAVE_FLOAT128 = 0;
-    enum DPP_ENUM__STRINGS_H = 1;
-    enum DPP_ENUM___HAVE_FLOATN_NOT_TYPEDEF = 0;
 
 
+    static if(!is(typeof(_BITS_STDINT_INTN_H))) {
+        enum _BITS_STDINT_INTN_H = 1;
+    }
+    static if(!is(typeof(__FD_ZERO_STOS))) {
+        enum __FD_ZERO_STOS = "stosq";
+    }
 
 
 
 
+    static if(!is(typeof(__have_pthread_attr_t))) {
+        enum __have_pthread_attr_t = 1;
+    }
 
-    enum DPP_ENUM___HAVE_DISTINCT_FLOAT64X = 0;
 
 
-    enum DPP_ENUM___HAVE_DISTINCT_FLOAT32X = 0;
 
+    static if(!is(typeof(_BITS_PTHREADTYPES_COMMON_H))) {
+        enum _BITS_PTHREADTYPES_COMMON_H = 1;
+    }
 
-    enum DPP_ENUM___HAVE_DISTINCT_FLOAT64 = 0;
 
 
-    enum DPP_ENUM___HAVE_DISTINCT_FLOAT32 = 0;
 
+    static if(!is(typeof(__PTHREAD_RWLOCK_INT_FLAGS_SHARED))) {
+        enum __PTHREAD_RWLOCK_INT_FLAGS_SHARED = 1;
+    }
+    static if(!is(typeof(__PTHREAD_MUTEX_USE_UNION))) {
+        enum __PTHREAD_MUTEX_USE_UNION = 0;
+    }
 
 
 
-    enum DPP_ENUM___HAVE_FLOAT128X = 0;
 
+    static if(!is(typeof(__PTHREAD_MUTEX_NUSERS_AFTER_KIND))) {
+        enum __PTHREAD_MUTEX_NUSERS_AFTER_KIND = 0;
+    }
 
-    enum DPP_ENUM___HAVE_FLOAT32X = 1;
 
 
-    enum DPP_ENUM___HAVE_FLOAT64 = 1;
 
+    static if(!is(typeof(__PTHREAD_MUTEX_LOCK_ELISION))) {
+        enum __PTHREAD_MUTEX_LOCK_ELISION = 1;
+    }
+    static if(!is(typeof(__SIZEOF_PTHREAD_BARRIERATTR_T))) {
+        enum __SIZEOF_PTHREAD_BARRIERATTR_T = 4;
+    }
 
-    enum DPP_ENUM___HAVE_FLOAT32 = 1;
 
 
-    enum DPP_ENUM___HAVE_FLOAT16 = 0;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_RWLOCKATTR_T))) {
+        enum __SIZEOF_PTHREAD_RWLOCKATTR_T = 8;
+    }
 
 
 
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_CONDATTR_T))) {
+        enum __SIZEOF_PTHREAD_CONDATTR_T = 4;
+    }
 
-    enum DPP_ENUM__BITS_ERRNO_H = 1;
-    enum DPP_ENUM__XBS5_LP64_OFF64 = 1;
 
 
-    enum DPP_ENUM__POSIX_V6_LP64_OFF64 = 1;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_COND_T))) {
+        enum __SIZEOF_PTHREAD_COND_T = 48;
+    }
 
-    enum DPP_ENUM__POSIX_V7_LP64_OFF64 = 1;
 
 
-    enum DPP_ENUM__XBS5_LPBIG_OFFBIG = -1;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_MUTEXATTR_T))) {
+        enum __SIZEOF_PTHREAD_MUTEXATTR_T = 4;
+    }
 
-    enum DPP_ENUM__POSIX_V6_LPBIG_OFFBIG = -1;
 
 
-    enum DPP_ENUM__POSIX_V7_LPBIG_OFFBIG = -1;
-    enum DPP_ENUM__SYS_CDEFS_H = 1;
-    enum DPP_ENUM___glibc_c99_flexarr_available = 1;
-    enum DPP_ENUM___HAVE_GENERIC_SELECTION = 1;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_BARRIER_T))) {
+        enum __SIZEOF_PTHREAD_BARRIER_T = 32;
+    }
 
-    enum DPP_ENUM__SYS_SELECT_H = 1;
-    enum DPP_ENUM__SYS_TYPES_H = 1;
-    enum DPP_ENUM___BIT_TYPES_DEFINED__ = 1;
-    enum DPP_ENUM__TIME_H = 1;
-    enum DPP_ENUM_TIME_UTC = 1;
-    enum DPP_ENUM__UNISTD_H = 1;
-    enum DPP_ENUM__XOPEN_VERSION = 700;
 
 
-    enum DPP_ENUM__XOPEN_XCU_VERSION = 4;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_RWLOCK_T))) {
+        enum __SIZEOF_PTHREAD_RWLOCK_T = 56;
+    }
 
-    enum DPP_ENUM__XOPEN_XPG2 = 1;
 
 
-    enum DPP_ENUM__XOPEN_XPG3 = 1;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_MUTEX_T))) {
+        enum __SIZEOF_PTHREAD_MUTEX_T = 40;
+    }
 
-    enum DPP_ENUM__XOPEN_XPG4 = 1;
 
 
-    enum DPP_ENUM__XOPEN_UNIX = 1;
 
+    static if(!is(typeof(__SIZEOF_PTHREAD_ATTR_T))) {
+        enum __SIZEOF_PTHREAD_ATTR_T = 56;
+    }
 
-    enum DPP_ENUM__XOPEN_ENH_I18N = 1;
 
 
-    enum DPP_ENUM__XOPEN_LEGACY = 1;
-    enum DPP_ENUM_STDIN_FILENO = 0;
 
+    static if(!is(typeof(_BITS_PTHREADTYPES_ARCH_H))) {
+        enum _BITS_PTHREADTYPES_ARCH_H = 1;
+    }
+    static if(!is(typeof(_POSIX2_CHAR_TERM))) {
+        enum _POSIX2_CHAR_TERM = 200809L;
+    }
 
-    enum DPP_ENUM_STDOUT_FILENO = 1;
 
 
-    enum DPP_ENUM_STDERR_FILENO = 2;
-    enum DPP_ENUM_R_OK = 4;
 
+    static if(!is(typeof(_POSIX_RAW_SOCKETS))) {
+        enum _POSIX_RAW_SOCKETS = 200809L;
+    }
 
-    enum DPP_ENUM_W_OK = 2;
 
 
-    enum DPP_ENUM_X_OK = 1;
 
+    static if(!is(typeof(_POSIX_IPV6))) {
+        enum _POSIX_IPV6 = 200809L;
+    }
 
-    enum DPP_ENUM_F_OK = 0;
-    enum DPP_ENUM__BITS_BYTESWAP_H = 1;
 
 
-    enum DPP_ENUM_EHWPOISON = 133;
 
+    static if(!is(typeof(_POSIX_ADVISORY_INFO))) {
+        enum _POSIX_ADVISORY_INFO = 200809L;
+    }
 
-    enum DPP_ENUM_ERFKILL = 132;
 
 
-    enum DPP_ENUM_ENOTRECOVERABLE = 131;
 
+    static if(!is(typeof(_POSIX_CLOCK_SELECTION))) {
+        enum _POSIX_CLOCK_SELECTION = 200809L;
+    }
 
-    enum DPP_ENUM_EOWNERDEAD = 130;
 
 
-    enum DPP_ENUM_EKEYREJECTED = 129;
 
+    static if(!is(typeof(_POSIX_MONOTONIC_CLOCK))) {
+        enum _POSIX_MONOTONIC_CLOCK = 0;
+    }
 
-    enum DPP_ENUM_EKEYREVOKED = 128;
 
 
-    enum DPP_ENUM_EKEYEXPIRED = 127;
 
+    static if(!is(typeof(_STRING_H))) {
+        enum _STRING_H = 1;
+    }
 
-    enum DPP_ENUM_ENOKEY = 126;
 
 
-    enum DPP_ENUM_ECANCELED = 125;
 
+    static if(!is(typeof(_POSIX_THREAD_PROCESS_SHARED))) {
+        enum _POSIX_THREAD_PROCESS_SHARED = 200809L;
+    }
 
-    enum DPP_ENUM_EMEDIUMTYPE = 124;
 
 
-    enum DPP_ENUM_ENOMEDIUM = 123;
 
+    static if(!is(typeof(_POSIX_MESSAGE_PASSING))) {
+        enum _POSIX_MESSAGE_PASSING = 200809L;
+    }
 
-    enum DPP_ENUM_EDQUOT = 122;
 
 
-    enum DPP_ENUM_EREMOTEIO = 121;
 
+    static if(!is(typeof(_POSIX_BARRIERS))) {
+        enum _POSIX_BARRIERS = 200809L;
+    }
 
-    enum DPP_ENUM_EISNAM = 120;
 
 
-    enum DPP_ENUM_ENAVAIL = 119;
 
+    static if(!is(typeof(_POSIX_TIMERS))) {
+        enum _POSIX_TIMERS = 200809L;
+    }
 
-    enum DPP_ENUM_ENOTNAM = 118;
 
 
-    enum DPP_ENUM_EUCLEAN = 117;
 
+    static if(!is(typeof(_POSIX_SPAWN))) {
+        enum _POSIX_SPAWN = 200809L;
+    }
 
-    enum DPP_ENUM_ESTALE = 116;
 
 
-    enum DPP_ENUM_EINPROGRESS = 115;
 
+    static if(!is(typeof(_POSIX_SPIN_LOCKS))) {
+        enum _POSIX_SPIN_LOCKS = 200809L;
+    }
 
-    enum DPP_ENUM_EALREADY = 114;
 
 
-    enum DPP_ENUM_EHOSTUNREACH = 113;
 
+    static if(!is(typeof(_POSIX_TIMEOUTS))) {
+        enum _POSIX_TIMEOUTS = 200809L;
+    }
 
-    enum DPP_ENUM_EHOSTDOWN = 112;
 
 
-    enum DPP_ENUM_ECONNREFUSED = 111;
 
+    static if(!is(typeof(_POSIX_SHELL))) {
+        enum _POSIX_SHELL = 1;
+    }
 
-    enum DPP_ENUM_ETIMEDOUT = 110;
 
 
-    enum DPP_ENUM_ETOOMANYREFS = 109;
 
+    static if(!is(typeof(_POSIX_READER_WRITER_LOCKS))) {
+        enum _POSIX_READER_WRITER_LOCKS = 200809L;
+    }
 
-    enum DPP_ENUM_ESHUTDOWN = 108;
 
 
-    enum DPP_ENUM_ENOTCONN = 107;
 
+    static if(!is(typeof(_POSIX_REGEXP))) {
+        enum _POSIX_REGEXP = 1;
+    }
 
-    enum DPP_ENUM_EISCONN = 106;
 
 
-    enum DPP_ENUM_ENOBUFS = 105;
 
+    static if(!is(typeof(_POSIX_THREAD_CPUTIME))) {
+        enum _POSIX_THREAD_CPUTIME = 0;
+    }
 
-    enum DPP_ENUM_ECONNRESET = 104;
 
 
-    enum DPP_ENUM_ECONNABORTED = 103;
 
+    static if(!is(typeof(_POSIX_CPUTIME))) {
+        enum _POSIX_CPUTIME = 0;
+    }
 
-    enum DPP_ENUM_ENETRESET = 102;
 
 
-    enum DPP_ENUM_ENETUNREACH = 101;
 
+    static if(!is(typeof(_POSIX_SHARED_MEMORY_OBJECTS))) {
+        enum _POSIX_SHARED_MEMORY_OBJECTS = 200809L;
+    }
 
-    enum DPP_ENUM_ENETDOWN = 100;
 
 
-    enum DPP_ENUM_EADDRNOTAVAIL = 99;
 
+    static if(!is(typeof(_LFS64_STDIO))) {
+        enum _LFS64_STDIO = 1;
+    }
 
-    enum DPP_ENUM_EADDRINUSE = 98;
 
 
-    enum DPP_ENUM_EAFNOSUPPORT = 97;
 
+    static if(!is(typeof(_LFS64_LARGEFILE))) {
+        enum _LFS64_LARGEFILE = 1;
+    }
 
-    enum DPP_ENUM_EPFNOSUPPORT = 96;
 
 
-    enum DPP_ENUM_EOPNOTSUPP = 95;
 
+    static if(!is(typeof(_LFS_LARGEFILE))) {
+        enum _LFS_LARGEFILE = 1;
+    }
 
-    enum DPP_ENUM_ESOCKTNOSUPPORT = 94;
 
 
-    enum DPP_ENUM_EPROTONOSUPPORT = 93;
 
+    static if(!is(typeof(_LFS64_ASYNCHRONOUS_IO))) {
+        enum _LFS64_ASYNCHRONOUS_IO = 1;
+    }
 
-    enum DPP_ENUM_ENOPROTOOPT = 92;
 
 
-    enum DPP_ENUM_EPROTOTYPE = 91;
 
+    static if(!is(typeof(_POSIX_PRIORITIZED_IO))) {
+        enum _POSIX_PRIORITIZED_IO = 200809L;
+    }
 
-    enum DPP_ENUM_EMSGSIZE = 90;
 
 
-    enum DPP_ENUM_EDESTADDRREQ = 89;
 
+    static if(!is(typeof(_LFS_ASYNCHRONOUS_IO))) {
+        enum _LFS_ASYNCHRONOUS_IO = 1;
+    }
 
-    enum DPP_ENUM_ENOTSOCK = 88;
 
 
-    enum DPP_ENUM_EUSERS = 87;
 
+    static if(!is(typeof(_POSIX_ASYNC_IO))) {
+        enum _POSIX_ASYNC_IO = 1;
+    }
 
-    enum DPP_ENUM_ESTRPIPE = 86;
 
 
-    enum DPP_ENUM_ERESTART = 85;
 
+    static if(!is(typeof(_POSIX_ASYNCHRONOUS_IO))) {
+        enum _POSIX_ASYNCHRONOUS_IO = 200809L;
+    }
 
-    enum DPP_ENUM_EILSEQ = 84;
 
 
-    enum DPP_ENUM_ELIBEXEC = 83;
 
+    static if(!is(typeof(_POSIX_REALTIME_SIGNALS))) {
+        enum _POSIX_REALTIME_SIGNALS = 200809L;
+    }
 
-    enum DPP_ENUM_ELIBMAX = 82;
 
 
-    enum DPP_ENUM_ELIBSCN = 81;
 
+    static if(!is(typeof(_POSIX_SEMAPHORES))) {
+        enum _POSIX_SEMAPHORES = 200809L;
+    }
 
-    enum DPP_ENUM_ELIBBAD = 80;
 
 
-    enum DPP_ENUM_ELIBACC = 79;
 
 
-    enum DPP_ENUM_EREMCHG = 78;
 
+    static if(!is(typeof(_POSIX_THREAD_ROBUST_PRIO_INHERIT))) {
+        enum _POSIX_THREAD_ROBUST_PRIO_INHERIT = 200809L;
+    }
 
-    enum DPP_ENUM_EBADFD = 77;
 
 
-    enum DPP_ENUM_ENOTUNIQ = 76;
 
+    static if(!is(typeof(_POSIX_THREAD_PRIO_PROTECT))) {
+        enum _POSIX_THREAD_PRIO_PROTECT = 200809L;
+    }
 
-    enum DPP_ENUM_EOVERFLOW = 75;
 
 
-    enum DPP_ENUM_EBADMSG = 74;
 
+    static if(!is(typeof(_POSIX_THREAD_PRIO_INHERIT))) {
+        enum _POSIX_THREAD_PRIO_INHERIT = 200809L;
+    }
 
-    enum DPP_ENUM_EDOTDOT = 73;
 
 
-    enum DPP_ENUM_EMULTIHOP = 72;
 
+    static if(!is(typeof(_POSIX_THREAD_ATTR_STACKADDR))) {
+        enum _POSIX_THREAD_ATTR_STACKADDR = 200809L;
+    }
 
-    enum DPP_ENUM_EPROTO = 71;
 
 
-    enum DPP_ENUM_ECOMM = 70;
 
+    static if(!is(typeof(_POSIX_THREAD_ATTR_STACKSIZE))) {
+        enum _POSIX_THREAD_ATTR_STACKSIZE = 200809L;
+    }
 
-    enum DPP_ENUM_ESRMNT = 69;
 
 
-    enum DPP_ENUM_EADV = 68;
 
+    static if(!is(typeof(_POSIX_THREAD_PRIORITY_SCHEDULING))) {
+        enum _POSIX_THREAD_PRIORITY_SCHEDULING = 200809L;
+    }
 
-    enum DPP_ENUM_ENOLINK = 67;
 
 
-    enum DPP_ENUM_EREMOTE = 66;
 
+    static if(!is(typeof(_POSIX_THREAD_SAFE_FUNCTIONS))) {
+        enum _POSIX_THREAD_SAFE_FUNCTIONS = 200809L;
+    }
 
-    enum DPP_ENUM_ENOPKG = 65;
 
 
-    enum DPP_ENUM_ENONET = 64;
 
+    static if(!is(typeof(_POSIX_REENTRANT_FUNCTIONS))) {
+        enum _POSIX_REENTRANT_FUNCTIONS = 1;
+    }
 
-    enum DPP_ENUM_ENOSR = 63;
 
 
-    enum DPP_ENUM_ETIME = 62;
 
+    static if(!is(typeof(_POSIX_THREADS))) {
+        enum _POSIX_THREADS = 200809L;
+    }
 
-    enum DPP_ENUM_ENODATA = 61;
 
 
-    enum DPP_ENUM_ENOSTR = 60;
 
+    static if(!is(typeof(_XOPEN_SHM))) {
+        enum _XOPEN_SHM = 1;
+    }
 
-    enum DPP_ENUM_EBFONT = 59;
 
 
 
+    static if(!is(typeof(_XOPEN_REALTIME_THREADS))) {
+        enum _XOPEN_REALTIME_THREADS = 1;
+    }
 
-    enum DPP_ENUM_EBADSLT = 57;
 
 
-    enum DPP_ENUM_EBADRQC = 56;
 
+    static if(!is(typeof(_XOPEN_REALTIME))) {
+        enum _XOPEN_REALTIME = 1;
+    }
 
-    enum DPP_ENUM_ENOANO = 55;
 
 
-    enum DPP_ENUM_EXFULL = 54;
 
+    static if(!is(typeof(_POSIX_NO_TRUNC))) {
+        enum _POSIX_NO_TRUNC = 1;
+    }
 
-    enum DPP_ENUM_EBADR = 53;
 
 
-    enum DPP_ENUM_EBADE = 52;
 
+    static if(!is(typeof(_POSIX_VDISABLE))) {
+        enum _POSIX_VDISABLE = '\0';
+    }
 
-    enum DPP_ENUM_EL2HLT = 51;
 
 
-    enum DPP_ENUM_ENOCSI = 50;
 
+    static if(!is(typeof(_POSIX_CHOWN_RESTRICTED))) {
+        enum _POSIX_CHOWN_RESTRICTED = 0;
+    }
 
-    enum DPP_ENUM_EUNATCH = 49;
 
 
-    enum DPP_ENUM_ELNRNG = 48;
 
+    static if(!is(typeof(_POSIX_MEMORY_PROTECTION))) {
+        enum _POSIX_MEMORY_PROTECTION = 200809L;
+    }
 
-    enum DPP_ENUM_EL3RST = 47;
 
 
-    enum DPP_ENUM_EL3HLT = 46;
 
+    static if(!is(typeof(_POSIX_MEMLOCK_RANGE))) {
+        enum _POSIX_MEMLOCK_RANGE = 200809L;
+    }
 
-    enum DPP_ENUM_EL2NSYNC = 45;
 
 
-    enum DPP_ENUM_ECHRNG = 44;
 
+    static if(!is(typeof(_POSIX_MEMLOCK))) {
+        enum _POSIX_MEMLOCK = 200809L;
+    }
 
-    enum DPP_ENUM_EIDRM = 43;
 
 
-    enum DPP_ENUM_ENOMSG = 42;
 
+    static if(!is(typeof(_POSIX_MAPPED_FILES))) {
+        enum _POSIX_MAPPED_FILES = 200809L;
+    }
 
 
 
-    enum DPP_ENUM_ELOOP = 40;
 
+    static if(!is(typeof(_POSIX_FSYNC))) {
+        enum _POSIX_FSYNC = 200809L;
+    }
 
-    enum DPP_ENUM_ENOTEMPTY = 39;
 
 
-    enum DPP_ENUM_ENOSYS = 38;
 
+    static if(!is(typeof(_POSIX_SYNCHRONIZED_IO))) {
+        enum _POSIX_SYNCHRONIZED_IO = 200809L;
+    }
 
-    enum DPP_ENUM_ENOLCK = 37;
 
 
-    enum DPP_ENUM_ENAMETOOLONG = 36;
 
+    static if(!is(typeof(_POSIX_PRIORITY_SCHEDULING))) {
+        enum _POSIX_PRIORITY_SCHEDULING = 200809L;
+    }
 
-    enum DPP_ENUM_EDEADLK = 35;
 
 
 
+    static if(!is(typeof(_POSIX_SAVED_IDS))) {
+        enum _POSIX_SAVED_IDS = 1;
+    }
 
-    enum DPP_ENUM_ERANGE = 34;
 
 
-    enum DPP_ENUM_EDOM = 33;
 
+    static if(!is(typeof(_POSIX_JOB_CONTROL))) {
+        enum _POSIX_JOB_CONTROL = 1;
+    }
 
-    enum DPP_ENUM_EPIPE = 32;
 
 
-    enum DPP_ENUM_EMLINK = 31;
 
+    static if(!is(typeof(_BITS_POSIX_OPT_H))) {
+        enum _BITS_POSIX_OPT_H = 1;
+    }
 
-    enum DPP_ENUM_EROFS = 30;
 
 
-    enum DPP_ENUM_ESPIPE = 29;
 
 
-    enum DPP_ENUM_ENOSPC = 28;
 
+    static if(!is(typeof(CHARCLASS_NAME_MAX))) {
+        enum CHARCLASS_NAME_MAX = 2048;
+    }
+    static if(!is(typeof(COLL_WEIGHTS_MAX))) {
+        enum COLL_WEIGHTS_MAX = 255;
+    }
+    static if(!is(typeof(_POSIX2_CHARCLASS_NAME_MAX))) {
+        enum _POSIX2_CHARCLASS_NAME_MAX = 14;
+    }
 
-    enum DPP_ENUM_EFBIG = 27;
 
 
-    enum DPP_ENUM_ETXTBSY = 26;
 
+    static if(!is(typeof(_POSIX2_RE_DUP_MAX))) {
+        enum _POSIX2_RE_DUP_MAX = 255;
+    }
 
-    enum DPP_ENUM_ENOTTY = 25;
 
 
-    enum DPP_ENUM_EMFILE = 24;
 
+    static if(!is(typeof(_POSIX2_LINE_MAX))) {
+        enum _POSIX2_LINE_MAX = 2048;
+    }
 
-    enum DPP_ENUM_ENFILE = 23;
 
 
-    enum DPP_ENUM_EINVAL = 22;
 
+    static if(!is(typeof(_POSIX2_EXPR_NEST_MAX))) {
+        enum _POSIX2_EXPR_NEST_MAX = 32;
+    }
 
-    enum DPP_ENUM_EISDIR = 21;
 
 
-    enum DPP_ENUM_ENOTDIR = 20;
 
+    static if(!is(typeof(_POSIX2_COLL_WEIGHTS_MAX))) {
+        enum _POSIX2_COLL_WEIGHTS_MAX = 2;
+    }
 
-    enum DPP_ENUM_ENODEV = 19;
 
 
-    enum DPP_ENUM_EXDEV = 18;
 
+    static if(!is(typeof(_POSIX2_BC_STRING_MAX))) {
+        enum _POSIX2_BC_STRING_MAX = 1000;
+    }
 
-    enum DPP_ENUM_EEXIST = 17;
 
 
-    enum DPP_ENUM_EBUSY = 16;
 
+    static if(!is(typeof(_POSIX2_BC_SCALE_MAX))) {
+        enum _POSIX2_BC_SCALE_MAX = 99;
+    }
 
-    enum DPP_ENUM_ENOTBLK = 15;
 
 
-    enum DPP_ENUM_EFAULT = 14;
 
+    static if(!is(typeof(_POSIX2_BC_DIM_MAX))) {
+        enum _POSIX2_BC_DIM_MAX = 2048;
+    }
 
-    enum DPP_ENUM_EACCES = 13;
 
 
-    enum DPP_ENUM_ENOMEM = 12;
 
+    static if(!is(typeof(_POSIX2_BC_BASE_MAX))) {
+        enum _POSIX2_BC_BASE_MAX = 99;
+    }
 
-    enum DPP_ENUM_EAGAIN = 11;
 
 
-    enum DPP_ENUM_ECHILD = 10;
 
+    static if(!is(typeof(_BITS_POSIX2_LIM_H))) {
+        enum _BITS_POSIX2_LIM_H = 1;
+    }
 
-    enum DPP_ENUM_EBADF = 9;
 
 
-    enum DPP_ENUM_ENOEXEC = 8;
 
 
-    enum DPP_ENUM_E2BIG = 7;
 
+    static if(!is(typeof(_POSIX_CLOCKRES_MIN))) {
+        enum _POSIX_CLOCKRES_MIN = 20000000;
+    }
 
-    enum DPP_ENUM_ENXIO = 6;
 
 
-    enum DPP_ENUM_EIO = 5;
 
+    static if(!is(typeof(_POSIX_TZNAME_MAX))) {
+        enum _POSIX_TZNAME_MAX = 6;
+    }
 
-    enum DPP_ENUM_EINTR = 4;
 
 
-    enum DPP_ENUM_ESRCH = 3;
 
+    static if(!is(typeof(_POSIX_TTY_NAME_MAX))) {
+        enum _POSIX_TTY_NAME_MAX = 9;
+    }
 
-    enum DPP_ENUM_ENOENT = 2;
 
 
-    enum DPP_ENUM_EPERM = 1;
 
+    static if(!is(typeof(_POSIX_TIMER_MAX))) {
+        enum _POSIX_TIMER_MAX = 32;
+    }
 
 
 
 
+    static if(!is(typeof(_POSIX_SYMLOOP_MAX))) {
+        enum _POSIX_SYMLOOP_MAX = 8;
+    }
 
-    enum DPP_ENUM__ALLOCA_H = 1;
-    enum DPP_ENUM_LXW_ATTR_32 = 32;
 
 
-    enum DPP_ENUM_LXW_MAX_ATTRIBUTE_LENGTH = 256;
-    enum DPP_ENUM_LXW_BREAKS_MAX = 1023;
 
+    static if(!is(typeof(_POSIX_SYMLINK_MAX))) {
+        enum _POSIX_SYMLINK_MAX = 255;
+    }
 
-    enum DPP_ENUM_LXW_PANE_NAME_LENGTH = 12;
 
 
-    enum DPP_ENUM_LXW_MAX_NUMBER_URLS = 65530;
 
+    static if(!is(typeof(_POSIX_STREAM_MAX))) {
+        enum _POSIX_STREAM_MAX = 8;
+    }
 
-    enum DPP_ENUM_LXW_HEADER_FOOTER_MAX = 255;
 
 
-    enum DPP_ENUM_LXW_COL_META_MAX = 128;
 
+    static if(!is(typeof(_POSIX_SSIZE_MAX))) {
+        enum _POSIX_SSIZE_MAX = 32767;
+    }
 
-    enum DPP_ENUM_LXW_COL_MAX = 16384;
 
 
-    enum DPP_ENUM_LXW_ROW_MAX = 1048576;
-    enum DPP_ENUM_LXW_DEFINED_NAME_LENGTH = 128;
-    enum DPP_ENUM_DEF_MEM_LEVEL = 8;
-    enum DPP_ENUM_Z_BZIP2ED = 12;
-    enum DPP_ENUM_RB_INF = 1;
 
+    static if(!is(typeof(_POSIX_SIGQUEUE_MAX))) {
+        enum _POSIX_SIGQUEUE_MAX = 32;
+    }
 
-    enum DPP_ENUM_RB_NEGINF = -1;
-    enum DPP_ENUM_RB_RED = 1;
 
 
-    enum DPP_ENUM_RB_BLACK = 0;
-    enum DPP_ENUM_SPLAY_INF = 1;
 
+    static if(!is(typeof(_POSIX_SEM_VALUE_MAX))) {
+        enum _POSIX_SEM_VALUE_MAX = 32767;
+    }
 
-    enum DPP_ENUM_SPLAY_NEGINF = -1;
-    enum DPP_ENUM_F_ULOCK = 0;
 
 
-    enum DPP_ENUM_F_LOCK = 1;
 
+    static if(!is(typeof(_POSIX_SEM_NSEMS_MAX))) {
+        enum _POSIX_SEM_NSEMS_MAX = 256;
+    }
 
-    enum DPP_ENUM_F_TLOCK = 2;
 
 
-    enum DPP_ENUM_F_TEST = 3;
-    enum DPP_ENUM_MAX_MEM_LEVEL = 9;
 
+    static if(!is(typeof(_POSIX_RTSIG_MAX))) {
+        enum _POSIX_RTSIG_MAX = 8;
+    }
 
-    enum DPP_ENUM_MAX_WBITS = 15;
-    enum DPP_ENUM_ZLIB_VER_MAJOR = 1;
 
 
-    enum DPP_ENUM_ZLIB_VER_MINOR = 2;
 
+    static if(!is(typeof(_POSIX_RE_DUP_MAX))) {
+        enum _POSIX_RE_DUP_MAX = 255;
+    }
 
-    enum DPP_ENUM_ZLIB_VER_REVISION = 11;
 
 
-    enum DPP_ENUM_ZLIB_VER_SUBREVISION = 0;
-    enum DPP_ENUM_Z_NO_FLUSH = 0;
 
+    static if(!is(typeof(_POSIX_PIPE_BUF))) {
+        enum _POSIX_PIPE_BUF = 512;
+    }
 
-    enum DPP_ENUM_Z_PARTIAL_FLUSH = 1;
 
 
-    enum DPP_ENUM_Z_SYNC_FLUSH = 2;
 
+    static if(!is(typeof(_POSIX_PATH_MAX))) {
+        enum _POSIX_PATH_MAX = 256;
+    }
 
-    enum DPP_ENUM_Z_FULL_FLUSH = 3;
 
 
-    enum DPP_ENUM_Z_FINISH = 4;
 
+    static if(!is(typeof(_POSIX_OPEN_MAX))) {
+        enum _POSIX_OPEN_MAX = 20;
+    }
 
-    enum DPP_ENUM_Z_BLOCK = 5;
 
 
-    enum DPP_ENUM_Z_TREES = 6;
 
+    static if(!is(typeof(_POSIX_NGROUPS_MAX))) {
+        enum _POSIX_NGROUPS_MAX = 8;
+    }
 
-    enum DPP_ENUM_Z_OK = 0;
 
 
-    enum DPP_ENUM_Z_STREAM_END = 1;
 
+    static if(!is(typeof(_POSIX_NAME_MAX))) {
+        enum _POSIX_NAME_MAX = 14;
+    }
 
-    enum DPP_ENUM_Z_NEED_DICT = 2;
-    enum DPP_ENUM_Z_NO_COMPRESSION = 0;
 
 
-    enum DPP_ENUM_Z_BEST_SPEED = 1;
 
+    static if(!is(typeof(_POSIX_MQ_PRIO_MAX))) {
+        enum _POSIX_MQ_PRIO_MAX = 32;
+    }
 
-    enum DPP_ENUM_Z_BEST_COMPRESSION = 9;
 
 
 
+    static if(!is(typeof(_POSIX_MQ_OPEN_MAX))) {
+        enum _POSIX_MQ_OPEN_MAX = 8;
+    }
 
-    enum DPP_ENUM_Z_FILTERED = 1;
 
 
-    enum DPP_ENUM_Z_HUFFMAN_ONLY = 2;
 
+    static if(!is(typeof(_POSIX_MAX_INPUT))) {
+        enum _POSIX_MAX_INPUT = 255;
+    }
 
-    enum DPP_ENUM_Z_RLE = 3;
 
 
-    enum DPP_ENUM_Z_FIXED = 4;
 
+    static if(!is(typeof(_POSIX_MAX_CANON))) {
+        enum _POSIX_MAX_CANON = 255;
+    }
 
-    enum DPP_ENUM_Z_DEFAULT_STRATEGY = 0;
 
 
-    enum DPP_ENUM_Z_BINARY = 0;
 
+    static if(!is(typeof(_POSIX_LOGIN_NAME_MAX))) {
+        enum _POSIX_LOGIN_NAME_MAX = 9;
+    }
 
-    enum DPP_ENUM_Z_TEXT = 1;
 
 
 
+    static if(!is(typeof(_POSIX_LINK_MAX))) {
+        enum _POSIX_LINK_MAX = 8;
+    }
 
-    enum DPP_ENUM_Z_UNKNOWN = 2;
 
 
-    enum DPP_ENUM_Z_DEFLATED = 8;
 
+    static if(!is(typeof(_POSIX_HOST_NAME_MAX))) {
+        enum _POSIX_HOST_NAME_MAX = 255;
+    }
 
-    enum DPP_ENUM_Z_NULL = 0;
-    enum DPP_ENUM__FILE_OFFSET_BIT = 64;
-    enum DPP_ENUM_LXW_MAX_FONT_SIZE = 409.0;
 
 
-    enum DPP_ENUM_LXW_MIN_FONT_SIZE = 1.0;
 
+    static if(!is(typeof(_POSIX_DELAYTIMER_MAX))) {
+        enum _POSIX_DELAYTIMER_MAX = 32;
+    }
 
 
 
-    enum DPP_ENUM_LXW_COLOR_UNSET = -1;
 
+    static if(!is(typeof(_POSIX_CHILD_MAX))) {
+        enum _POSIX_CHILD_MAX = 25;
+    }
 
-    enum DPP_ENUM_LXW_PROPERTY_UNSET = -1;
 
 
-    enum DPP_ENUM_LXW_DEFAULT_FONT_THEME = 1;
 
+    static if(!is(typeof(_POSIX_ARG_MAX))) {
+        enum _POSIX_ARG_MAX = 4096;
+    }
 
-    enum DPP_ENUM_LXW_DEFAULT_FONT_FAMILY = 2;
 
 
 
+    static if(!is(typeof(_POSIX_AIO_MAX))) {
+        enum _POSIX_AIO_MAX = 1;
+    }
 
-    enum DPP_ENUM_LXW_FORMAT_FIELD_LEN = 128;
-    enum DPP_ENUM_LXW_LANDSCAPE = 0;
 
 
-    enum DPP_ENUM_LXW_PORTRAIT = 1;
 
+    static if(!is(typeof(_POSIX_AIO_LISTIO_MAX))) {
+        enum _POSIX_AIO_LISTIO_MAX = 2;
+    }
 
-    enum DPP_ENUM_LXW_IGNORE = 1;
 
 
-    enum DPP_ENUM_LXW_FILENAME_LENGTH = 128;
 
+    static if(!is(typeof(_BITS_POSIX1_LIM_H))) {
+        enum _BITS_POSIX1_LIM_H = 1;
+    }
 
 
 
-    enum DPP_ENUM_LXW_EPOCH_1904 = 1;
 
 
-    enum DPP_ENUM_LXW_EPOCH_1900 = 0;
-    enum DPP_ENUM_LXW_SHEETNAME_MAX = 31;
-    enum DPP_ENUM_LXW_CHART_DEFAULT_GAP = 501;
 
+    static if(!is(typeof(MQ_PRIO_MAX))) {
+        enum MQ_PRIO_MAX = 32768;
+    }
 
-    enum DPP_ENUM_LXW_CHART_NUM_FORMAT_LEN = 128;
-    enum DPP_ENUM___GNUC_VA_LIST = 1;
+
+
+
+    static if(!is(typeof(HOST_NAME_MAX))) {
+        enum HOST_NAME_MAX = 64;
+    }
+
+
+
+
+    static if(!is(typeof(LOGIN_NAME_MAX))) {
+        enum LOGIN_NAME_MAX = 256;
+    }
+
+
+
+
+    static if(!is(typeof(TTY_NAME_MAX))) {
+        enum TTY_NAME_MAX = 32;
+    }
+
+
+
+
+    static if(!is(typeof(DELAYTIMER_MAX))) {
+        enum DELAYTIMER_MAX = 2147483647;
+    }
+
+
+
+
+    static if(!is(typeof(PTHREAD_STACK_MIN))) {
+        enum PTHREAD_STACK_MIN = 16384;
+    }
+
+
+
+
+    static if(!is(typeof(AIO_PRIO_DELTA_MAX))) {
+        enum AIO_PRIO_DELTA_MAX = 20;
+    }
+
+
+
+
+    static if(!is(typeof(_POSIX_THREAD_THREADS_MAX))) {
+        enum _POSIX_THREAD_THREADS_MAX = 64;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(_POSIX_THREAD_DESTRUCTOR_ITERATIONS))) {
+        enum _POSIX_THREAD_DESTRUCTOR_ITERATIONS = 4;
+    }
+
+
+
+
+    static if(!is(typeof(PTHREAD_KEYS_MAX))) {
+        enum PTHREAD_KEYS_MAX = 1024;
+    }
+
+
+
+
+    static if(!is(typeof(_POSIX_THREAD_KEYS_MAX))) {
+        enum _POSIX_THREAD_KEYS_MAX = 128;
+    }
+    static if(!is(typeof(__GLIBC_USE_IEC_60559_TYPES_EXT))) {
+        enum __GLIBC_USE_IEC_60559_TYPES_EXT = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__GLIBC_USE_IEC_60559_FUNCS_EXT))) {
+        enum __GLIBC_USE_IEC_60559_FUNCS_EXT = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__GLIBC_USE_IEC_60559_BFP_EXT))) {
+        enum __GLIBC_USE_IEC_60559_BFP_EXT = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__GLIBC_USE_LIB_EXT2))) {
+        enum __GLIBC_USE_LIB_EXT2 = 0;
+    }
+
+
+
+
+    static if(!is(typeof(_GETOPT_POSIX_H))) {
+        enum _GETOPT_POSIX_H = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_GETOPT_CORE_H))) {
+        enum _GETOPT_CORE_H = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT64X_LONG_DOUBLE))) {
+        enum __HAVE_FLOAT64X_LONG_DOUBLE = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT64X))) {
+        enum __HAVE_FLOAT64X = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_DISTINCT_FLOAT128))) {
+        enum __HAVE_DISTINCT_FLOAT128 = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT128))) {
+        enum __HAVE_FLOAT128 = 0;
+    }
+    static if(!is(typeof(_STRINGS_H))) {
+        enum _STRINGS_H = 1;
+    }
+    static if(!is(typeof(__HAVE_FLOATN_NOT_TYPEDEF))) {
+        enum __HAVE_FLOATN_NOT_TYPEDEF = 0;
+    }
+    static if(!is(typeof(__HAVE_DISTINCT_FLOAT64X))) {
+        enum __HAVE_DISTINCT_FLOAT64X = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_DISTINCT_FLOAT32X))) {
+        enum __HAVE_DISTINCT_FLOAT32X = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_DISTINCT_FLOAT64))) {
+        enum __HAVE_DISTINCT_FLOAT64 = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_DISTINCT_FLOAT32))) {
+        enum __HAVE_DISTINCT_FLOAT32 = 0;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT128X))) {
+        enum __HAVE_FLOAT128X = 0;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT32X))) {
+        enum __HAVE_FLOAT32X = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT64))) {
+        enum __HAVE_FLOAT64 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT32))) {
+        enum __HAVE_FLOAT32 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__HAVE_FLOAT16))) {
+        enum __HAVE_FLOAT16 = 0;
+    }
+    static if(!is(typeof(_BITS_ERRNO_H))) {
+        enum _BITS_ERRNO_H = 1;
+    }
+
+
+
+
+    static if(!is(typeof(__LP64_OFF64_LDFLAGS))) {
+        enum __LP64_OFF64_LDFLAGS = "-m64";
+    }
+
+
+
+
+    static if(!is(typeof(__LP64_OFF64_CFLAGS))) {
+        enum __LP64_OFF64_CFLAGS = "-m64";
+    }
+
+
+
+
+    static if(!is(typeof(__ILP32_OFFBIG_LDFLAGS))) {
+        enum __ILP32_OFFBIG_LDFLAGS = "-m32";
+    }
+
+
+
+
+    static if(!is(typeof(__ILP32_OFFBIG_CFLAGS))) {
+        enum __ILP32_OFFBIG_CFLAGS = "-m32 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64";
+    }
+
+
+
+
+    static if(!is(typeof(__ILP32_OFF32_LDFLAGS))) {
+        enum __ILP32_OFF32_LDFLAGS = "-m32";
+    }
+
+
+
+
+    static if(!is(typeof(__ILP32_OFF32_CFLAGS))) {
+        enum __ILP32_OFF32_CFLAGS = "-m32";
+    }
+
+
+
+
+    static if(!is(typeof(_XBS5_LP64_OFF64))) {
+        enum _XBS5_LP64_OFF64 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_POSIX_V6_LP64_OFF64))) {
+        enum _POSIX_V6_LP64_OFF64 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_POSIX_V7_LP64_OFF64))) {
+        enum _POSIX_V7_LP64_OFF64 = 1;
+    }
+    static if(!is(typeof(_SYS_CDEFS_H))) {
+        enum _SYS_CDEFS_H = 1;
+    }
+    static if(!is(typeof(__glibc_c99_flexarr_available))) {
+        enum __glibc_c99_flexarr_available = 1;
+    }
+    static if(!is(typeof(__HAVE_GENERIC_SELECTION))) {
+        enum __HAVE_GENERIC_SELECTION = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_SYS_SELECT_H))) {
+        enum _SYS_SELECT_H = 1;
+    }
+    static if(!is(typeof(_SYS_TYPES_H))) {
+        enum _SYS_TYPES_H = 1;
+    }
+    static if(!is(typeof(__BIT_TYPES_DEFINED__))) {
+        enum __BIT_TYPES_DEFINED__ = 1;
+    }
+    static if(!is(typeof(_TIME_H))) {
+        enum _TIME_H = 1;
+    }
+    static if(!is(typeof(TIME_UTC))) {
+        enum TIME_UTC = 1;
+    }
+    static if(!is(typeof(_UNISTD_H))) {
+        enum _UNISTD_H = 1;
+    }
+    static if(!is(typeof(_POSIX_VERSION))) {
+        enum _POSIX_VERSION = 200809L;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(__POSIX2_THIS_VERSION))) {
+        enum __POSIX2_THIS_VERSION = 200809L;
+    }
+    static if(!is(typeof(_XOPEN_VERSION))) {
+        enum _XOPEN_VERSION = 700;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_XCU_VERSION))) {
+        enum _XOPEN_XCU_VERSION = 4;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_XPG2))) {
+        enum _XOPEN_XPG2 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_XPG3))) {
+        enum _XOPEN_XPG3 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_XPG4))) {
+        enum _XOPEN_XPG4 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_UNIX))) {
+        enum _XOPEN_UNIX = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_ENH_I18N))) {
+        enum _XOPEN_ENH_I18N = 1;
+    }
+
+
+
+
+    static if(!is(typeof(_XOPEN_LEGACY))) {
+        enum _XOPEN_LEGACY = 1;
+    }
+    static if(!is(typeof(STDIN_FILENO))) {
+        enum STDIN_FILENO = 0;
+    }
+
+
+
+
+    static if(!is(typeof(STDOUT_FILENO))) {
+        enum STDOUT_FILENO = 1;
+    }
+
+
+
+
+    static if(!is(typeof(STDERR_FILENO))) {
+        enum STDERR_FILENO = 2;
+    }
+    static if(!is(typeof(R_OK))) {
+        enum R_OK = 4;
+    }
+
+
+
+
+    static if(!is(typeof(W_OK))) {
+        enum W_OK = 2;
+    }
+
+
+
+
+    static if(!is(typeof(X_OK))) {
+        enum X_OK = 1;
+    }
+
+
+
+
+    static if(!is(typeof(F_OK))) {
+        enum F_OK = 0;
+    }
+    static if(!is(typeof(_BITS_BYTESWAP_H))) {
+        enum _BITS_BYTESWAP_H = 1;
+    }
+
+
+
+
+    static if(!is(typeof(EHWPOISON))) {
+        enum EHWPOISON = 133;
+    }
+
+
+
+
+    static if(!is(typeof(ERFKILL))) {
+        enum ERFKILL = 132;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTRECOVERABLE))) {
+        enum ENOTRECOVERABLE = 131;
+    }
+
+
+
+
+    static if(!is(typeof(EOWNERDEAD))) {
+        enum EOWNERDEAD = 130;
+    }
+
+
+
+
+    static if(!is(typeof(EKEYREJECTED))) {
+        enum EKEYREJECTED = 129;
+    }
+
+
+
+
+    static if(!is(typeof(EKEYREVOKED))) {
+        enum EKEYREVOKED = 128;
+    }
+
+
+
+
+    static if(!is(typeof(EKEYEXPIRED))) {
+        enum EKEYEXPIRED = 127;
+    }
+
+
+
+
+    static if(!is(typeof(ENOKEY))) {
+        enum ENOKEY = 126;
+    }
+
+
+
+
+    static if(!is(typeof(ECANCELED))) {
+        enum ECANCELED = 125;
+    }
+
+
+
+
+    static if(!is(typeof(EMEDIUMTYPE))) {
+        enum EMEDIUMTYPE = 124;
+    }
+
+
+
+
+    static if(!is(typeof(ENOMEDIUM))) {
+        enum ENOMEDIUM = 123;
+    }
+
+
+
+
+    static if(!is(typeof(EDQUOT))) {
+        enum EDQUOT = 122;
+    }
+
+
+
+
+    static if(!is(typeof(EREMOTEIO))) {
+        enum EREMOTEIO = 121;
+    }
+
+
+
+
+    static if(!is(typeof(EISNAM))) {
+        enum EISNAM = 120;
+    }
+
+
+
+
+    static if(!is(typeof(ENAVAIL))) {
+        enum ENAVAIL = 119;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTNAM))) {
+        enum ENOTNAM = 118;
+    }
+
+
+
+
+    static if(!is(typeof(EUCLEAN))) {
+        enum EUCLEAN = 117;
+    }
+
+
+
+
+    static if(!is(typeof(ESTALE))) {
+        enum ESTALE = 116;
+    }
+
+
+
+
+    static if(!is(typeof(EINPROGRESS))) {
+        enum EINPROGRESS = 115;
+    }
+
+
+
+
+    static if(!is(typeof(EALREADY))) {
+        enum EALREADY = 114;
+    }
+
+
+
+
+    static if(!is(typeof(EHOSTUNREACH))) {
+        enum EHOSTUNREACH = 113;
+    }
+
+
+
+
+    static if(!is(typeof(EHOSTDOWN))) {
+        enum EHOSTDOWN = 112;
+    }
+
+
+
+
+    static if(!is(typeof(ECONNREFUSED))) {
+        enum ECONNREFUSED = 111;
+    }
+
+
+
+
+    static if(!is(typeof(ETIMEDOUT))) {
+        enum ETIMEDOUT = 110;
+    }
+
+
+
+
+    static if(!is(typeof(ETOOMANYREFS))) {
+        enum ETOOMANYREFS = 109;
+    }
+
+
+
+
+    static if(!is(typeof(ESHUTDOWN))) {
+        enum ESHUTDOWN = 108;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTCONN))) {
+        enum ENOTCONN = 107;
+    }
+
+
+
+
+    static if(!is(typeof(EISCONN))) {
+        enum EISCONN = 106;
+    }
+
+
+
+
+    static if(!is(typeof(ENOBUFS))) {
+        enum ENOBUFS = 105;
+    }
+
+
+
+
+    static if(!is(typeof(ECONNRESET))) {
+        enum ECONNRESET = 104;
+    }
+
+
+
+
+    static if(!is(typeof(ECONNABORTED))) {
+        enum ECONNABORTED = 103;
+    }
+
+
+
+
+    static if(!is(typeof(ENETRESET))) {
+        enum ENETRESET = 102;
+    }
+
+
+
+
+    static if(!is(typeof(ENETUNREACH))) {
+        enum ENETUNREACH = 101;
+    }
+
+
+
+
+    static if(!is(typeof(ENETDOWN))) {
+        enum ENETDOWN = 100;
+    }
+
+
+
+
+    static if(!is(typeof(EADDRNOTAVAIL))) {
+        enum EADDRNOTAVAIL = 99;
+    }
+
+
+
+
+    static if(!is(typeof(EADDRINUSE))) {
+        enum EADDRINUSE = 98;
+    }
+
+
+
+
+    static if(!is(typeof(EAFNOSUPPORT))) {
+        enum EAFNOSUPPORT = 97;
+    }
+
+
+
+
+    static if(!is(typeof(EPFNOSUPPORT))) {
+        enum EPFNOSUPPORT = 96;
+    }
+
+
+
+
+    static if(!is(typeof(EOPNOTSUPP))) {
+        enum EOPNOTSUPP = 95;
+    }
+
+
+
+
+    static if(!is(typeof(ESOCKTNOSUPPORT))) {
+        enum ESOCKTNOSUPPORT = 94;
+    }
+
+
+
+
+    static if(!is(typeof(EPROTONOSUPPORT))) {
+        enum EPROTONOSUPPORT = 93;
+    }
+
+
+
+
+    static if(!is(typeof(ENOPROTOOPT))) {
+        enum ENOPROTOOPT = 92;
+    }
+
+
+
+
+    static if(!is(typeof(EPROTOTYPE))) {
+        enum EPROTOTYPE = 91;
+    }
+
+
+
+
+    static if(!is(typeof(EMSGSIZE))) {
+        enum EMSGSIZE = 90;
+    }
+
+
+
+
+    static if(!is(typeof(EDESTADDRREQ))) {
+        enum EDESTADDRREQ = 89;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTSOCK))) {
+        enum ENOTSOCK = 88;
+    }
+
+
+
+
+    static if(!is(typeof(EUSERS))) {
+        enum EUSERS = 87;
+    }
+
+
+
+
+    static if(!is(typeof(ESTRPIPE))) {
+        enum ESTRPIPE = 86;
+    }
+
+
+
+
+    static if(!is(typeof(ERESTART))) {
+        enum ERESTART = 85;
+    }
+
+
+
+
+    static if(!is(typeof(EILSEQ))) {
+        enum EILSEQ = 84;
+    }
+
+
+
+
+    static if(!is(typeof(ELIBEXEC))) {
+        enum ELIBEXEC = 83;
+    }
+
+
+
+
+    static if(!is(typeof(ELIBMAX))) {
+        enum ELIBMAX = 82;
+    }
+
+
+
+
+    static if(!is(typeof(ELIBSCN))) {
+        enum ELIBSCN = 81;
+    }
+
+
+
+
+    static if(!is(typeof(ELIBBAD))) {
+        enum ELIBBAD = 80;
+    }
+
+
+
+
+    static if(!is(typeof(ELIBACC))) {
+        enum ELIBACC = 79;
+    }
+
+
+
+
+    static if(!is(typeof(EREMCHG))) {
+        enum EREMCHG = 78;
+    }
+
+
+
+
+    static if(!is(typeof(EBADFD))) {
+        enum EBADFD = 77;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTUNIQ))) {
+        enum ENOTUNIQ = 76;
+    }
+
+
+
+
+    static if(!is(typeof(EOVERFLOW))) {
+        enum EOVERFLOW = 75;
+    }
+
+
+
+
+    static if(!is(typeof(EBADMSG))) {
+        enum EBADMSG = 74;
+    }
+
+
+
+
+    static if(!is(typeof(EDOTDOT))) {
+        enum EDOTDOT = 73;
+    }
+
+
+
+
+    static if(!is(typeof(EMULTIHOP))) {
+        enum EMULTIHOP = 72;
+    }
+
+
+
+
+    static if(!is(typeof(EPROTO))) {
+        enum EPROTO = 71;
+    }
+
+
+
+
+    static if(!is(typeof(ECOMM))) {
+        enum ECOMM = 70;
+    }
+
+
+
+
+    static if(!is(typeof(ESRMNT))) {
+        enum ESRMNT = 69;
+    }
+
+
+
+
+    static if(!is(typeof(EADV))) {
+        enum EADV = 68;
+    }
+
+
+
+
+    static if(!is(typeof(ENOLINK))) {
+        enum ENOLINK = 67;
+    }
+
+
+
+
+    static if(!is(typeof(EREMOTE))) {
+        enum EREMOTE = 66;
+    }
+
+
+
+
+    static if(!is(typeof(ENOPKG))) {
+        enum ENOPKG = 65;
+    }
+
+
+
+
+    static if(!is(typeof(ENONET))) {
+        enum ENONET = 64;
+    }
+
+
+
+
+    static if(!is(typeof(ENOSR))) {
+        enum ENOSR = 63;
+    }
+
+
+
+
+    static if(!is(typeof(ETIME))) {
+        enum ETIME = 62;
+    }
+
+
+
+
+    static if(!is(typeof(ENODATA))) {
+        enum ENODATA = 61;
+    }
+
+
+
+
+    static if(!is(typeof(ENOSTR))) {
+        enum ENOSTR = 60;
+    }
+
+
+
+
+    static if(!is(typeof(EBFONT))) {
+        enum EBFONT = 59;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(EBADSLT))) {
+        enum EBADSLT = 57;
+    }
+
+
+
+
+    static if(!is(typeof(EBADRQC))) {
+        enum EBADRQC = 56;
+    }
+
+
+
+
+    static if(!is(typeof(ENOANO))) {
+        enum ENOANO = 55;
+    }
+
+
+
+
+    static if(!is(typeof(EXFULL))) {
+        enum EXFULL = 54;
+    }
+
+
+
+
+    static if(!is(typeof(EBADR))) {
+        enum EBADR = 53;
+    }
+
+
+
+
+    static if(!is(typeof(EBADE))) {
+        enum EBADE = 52;
+    }
+
+
+
+
+    static if(!is(typeof(EL2HLT))) {
+        enum EL2HLT = 51;
+    }
+
+
+
+
+    static if(!is(typeof(ENOCSI))) {
+        enum ENOCSI = 50;
+    }
+
+
+
+
+    static if(!is(typeof(EUNATCH))) {
+        enum EUNATCH = 49;
+    }
+
+
+
+
+    static if(!is(typeof(ELNRNG))) {
+        enum ELNRNG = 48;
+    }
+
+
+
+
+    static if(!is(typeof(EL3RST))) {
+        enum EL3RST = 47;
+    }
+
+
+
+
+    static if(!is(typeof(EL3HLT))) {
+        enum EL3HLT = 46;
+    }
+
+
+
+
+    static if(!is(typeof(EL2NSYNC))) {
+        enum EL2NSYNC = 45;
+    }
+
+
+
+
+    static if(!is(typeof(ECHRNG))) {
+        enum ECHRNG = 44;
+    }
+
+
+
+
+    static if(!is(typeof(EIDRM))) {
+        enum EIDRM = 43;
+    }
+
+
+
+
+    static if(!is(typeof(ENOMSG))) {
+        enum ENOMSG = 42;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(ELOOP))) {
+        enum ELOOP = 40;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTEMPTY))) {
+        enum ENOTEMPTY = 39;
+    }
+
+
+
+
+    static if(!is(typeof(ENOSYS))) {
+        enum ENOSYS = 38;
+    }
+
+
+
+
+    static if(!is(typeof(ENOLCK))) {
+        enum ENOLCK = 37;
+    }
+
+
+
+
+    static if(!is(typeof(ENAMETOOLONG))) {
+        enum ENAMETOOLONG = 36;
+    }
+
+
+
+
+    static if(!is(typeof(EDEADLK))) {
+        enum EDEADLK = 35;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(ERANGE))) {
+        enum ERANGE = 34;
+    }
+
+
+
+
+    static if(!is(typeof(EDOM))) {
+        enum EDOM = 33;
+    }
+
+
+
+
+    static if(!is(typeof(EPIPE))) {
+        enum EPIPE = 32;
+    }
+
+
+
+
+    static if(!is(typeof(EMLINK))) {
+        enum EMLINK = 31;
+    }
+
+
+
+
+    static if(!is(typeof(EROFS))) {
+        enum EROFS = 30;
+    }
+
+
+
+
+    static if(!is(typeof(ESPIPE))) {
+        enum ESPIPE = 29;
+    }
+
+
+
+
+    static if(!is(typeof(ENOSPC))) {
+        enum ENOSPC = 28;
+    }
+
+
+
+
+    static if(!is(typeof(EFBIG))) {
+        enum EFBIG = 27;
+    }
+
+
+
+
+    static if(!is(typeof(ETXTBSY))) {
+        enum ETXTBSY = 26;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTTY))) {
+        enum ENOTTY = 25;
+    }
+
+
+
+
+    static if(!is(typeof(EMFILE))) {
+        enum EMFILE = 24;
+    }
+
+
+
+
+    static if(!is(typeof(ENFILE))) {
+        enum ENFILE = 23;
+    }
+
+
+
+
+    static if(!is(typeof(EINVAL))) {
+        enum EINVAL = 22;
+    }
+
+
+
+
+    static if(!is(typeof(EISDIR))) {
+        enum EISDIR = 21;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTDIR))) {
+        enum ENOTDIR = 20;
+    }
+
+
+
+
+    static if(!is(typeof(ENODEV))) {
+        enum ENODEV = 19;
+    }
+
+
+
+
+    static if(!is(typeof(EXDEV))) {
+        enum EXDEV = 18;
+    }
+
+
+
+
+    static if(!is(typeof(EEXIST))) {
+        enum EEXIST = 17;
+    }
+
+
+
+
+    static if(!is(typeof(EBUSY))) {
+        enum EBUSY = 16;
+    }
+
+
+
+
+    static if(!is(typeof(ENOTBLK))) {
+        enum ENOTBLK = 15;
+    }
+
+
+
+
+    static if(!is(typeof(EFAULT))) {
+        enum EFAULT = 14;
+    }
+
+
+
+
+    static if(!is(typeof(EACCES))) {
+        enum EACCES = 13;
+    }
+
+
+
+
+    static if(!is(typeof(ENOMEM))) {
+        enum ENOMEM = 12;
+    }
+
+
+
+
+    static if(!is(typeof(EAGAIN))) {
+        enum EAGAIN = 11;
+    }
+
+
+
+
+    static if(!is(typeof(ECHILD))) {
+        enum ECHILD = 10;
+    }
+
+
+
+
+    static if(!is(typeof(EBADF))) {
+        enum EBADF = 9;
+    }
+
+
+
+
+    static if(!is(typeof(ENOEXEC))) {
+        enum ENOEXEC = 8;
+    }
+
+
+
+
+    static if(!is(typeof(E2BIG))) {
+        enum E2BIG = 7;
+    }
+
+
+
+
+    static if(!is(typeof(ENXIO))) {
+        enum ENXIO = 6;
+    }
+
+
+
+
+    static if(!is(typeof(EIO))) {
+        enum EIO = 5;
+    }
+
+
+
+
+    static if(!is(typeof(EINTR))) {
+        enum EINTR = 4;
+    }
+
+
+
+
+    static if(!is(typeof(ESRCH))) {
+        enum ESRCH = 3;
+    }
+
+
+
+
+    static if(!is(typeof(ENOENT))) {
+        enum ENOENT = 2;
+    }
+
+
+
+
+    static if(!is(typeof(EPERM))) {
+        enum EPERM = 1;
+    }
+    static if(!is(typeof(_ALLOCA_H))) {
+        enum _ALLOCA_H = 1;
+    }
+    static if(!is(typeof(LXW_ATTR_32))) {
+        enum LXW_ATTR_32 = 32;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_MAX_ATTRIBUTE_LENGTH))) {
+        enum LXW_MAX_ATTRIBUTE_LENGTH = 256;
+    }
+    static if(!is(typeof(LXW_BREAKS_MAX))) {
+        enum LXW_BREAKS_MAX = 1023;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_PANE_NAME_LENGTH))) {
+        enum LXW_PANE_NAME_LENGTH = 12;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_MAX_NUMBER_URLS))) {
+        enum LXW_MAX_NUMBER_URLS = 65530;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_HEADER_FOOTER_MAX))) {
+        enum LXW_HEADER_FOOTER_MAX = 255;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_COL_META_MAX))) {
+        enum LXW_COL_META_MAX = 128;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_COL_MAX))) {
+        enum LXW_COL_MAX = 16384;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_ROW_MAX))) {
+        enum LXW_ROW_MAX = 1048576;
+    }
+    static if(!is(typeof(LXW_DEFINED_NAME_LENGTH))) {
+        enum LXW_DEFINED_NAME_LENGTH = 128;
+    }
+    static if(!is(typeof(DEF_MEM_LEVEL))) {
+        enum DEF_MEM_LEVEL = 8;
+    }
+    static if(!is(typeof(Z_BZIP2ED))) {
+        enum Z_BZIP2ED = 12;
+    }
+    static if(!is(typeof(RB_INF))) {
+        enum RB_INF = 1;
+    }
+    static if(!is(typeof(RB_RED))) {
+        enum RB_RED = 1;
+    }
+
+
+
+
+    static if(!is(typeof(RB_BLACK))) {
+        enum RB_BLACK = 0;
+    }
+    static if(!is(typeof(SPLAY_INF))) {
+        enum SPLAY_INF = 1;
+    }
+    static if(!is(typeof(F_ULOCK))) {
+        enum F_ULOCK = 0;
+    }
+
+
+
+
+    static if(!is(typeof(F_LOCK))) {
+        enum F_LOCK = 1;
+    }
+
+
+
+
+    static if(!is(typeof(F_TLOCK))) {
+        enum F_TLOCK = 2;
+    }
+
+
+
+
+    static if(!is(typeof(F_TEST))) {
+        enum F_TEST = 3;
+    }
+    static if(!is(typeof(MAX_MEM_LEVEL))) {
+        enum MAX_MEM_LEVEL = 9;
+    }
+
+
+
+
+    static if(!is(typeof(MAX_WBITS))) {
+        enum MAX_WBITS = 15;
+    }
+    static if(!is(typeof(ZLIB_VERSION))) {
+        enum ZLIB_VERSION = "1.2.11";
+    }
+
+
+
+
+    static if(!is(typeof(ZLIB_VERNUM))) {
+        enum ZLIB_VERNUM = 0x12b0;
+    }
+
+
+
+
+    static if(!is(typeof(ZLIB_VER_MAJOR))) {
+        enum ZLIB_VER_MAJOR = 1;
+    }
+
+
+
+
+    static if(!is(typeof(ZLIB_VER_MINOR))) {
+        enum ZLIB_VER_MINOR = 2;
+    }
+
+
+
+
+    static if(!is(typeof(ZLIB_VER_REVISION))) {
+        enum ZLIB_VER_REVISION = 11;
+    }
+
+
+
+
+    static if(!is(typeof(ZLIB_VER_SUBREVISION))) {
+        enum ZLIB_VER_SUBREVISION = 0;
+    }
+    static if(!is(typeof(Z_NO_FLUSH))) {
+        enum Z_NO_FLUSH = 0;
+    }
+
+
+
+
+    static if(!is(typeof(Z_PARTIAL_FLUSH))) {
+        enum Z_PARTIAL_FLUSH = 1;
+    }
+
+
+
+
+    static if(!is(typeof(Z_SYNC_FLUSH))) {
+        enum Z_SYNC_FLUSH = 2;
+    }
+
+
+
+
+    static if(!is(typeof(Z_FULL_FLUSH))) {
+        enum Z_FULL_FLUSH = 3;
+    }
+
+
+
+
+    static if(!is(typeof(Z_FINISH))) {
+        enum Z_FINISH = 4;
+    }
+
+
+
+
+    static if(!is(typeof(Z_BLOCK))) {
+        enum Z_BLOCK = 5;
+    }
+
+
+
+
+    static if(!is(typeof(Z_TREES))) {
+        enum Z_TREES = 6;
+    }
+
+
+
+
+    static if(!is(typeof(Z_OK))) {
+        enum Z_OK = 0;
+    }
+
+
+
+
+    static if(!is(typeof(Z_STREAM_END))) {
+        enum Z_STREAM_END = 1;
+    }
+
+
+
+
+    static if(!is(typeof(Z_NEED_DICT))) {
+        enum Z_NEED_DICT = 2;
+    }
+    static if(!is(typeof(Z_NO_COMPRESSION))) {
+        enum Z_NO_COMPRESSION = 0;
+    }
+
+
+
+
+    static if(!is(typeof(Z_BEST_SPEED))) {
+        enum Z_BEST_SPEED = 1;
+    }
+
+
+
+
+    static if(!is(typeof(Z_BEST_COMPRESSION))) {
+        enum Z_BEST_COMPRESSION = 9;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(Z_FILTERED))) {
+        enum Z_FILTERED = 1;
+    }
+
+
+
+
+    static if(!is(typeof(Z_HUFFMAN_ONLY))) {
+        enum Z_HUFFMAN_ONLY = 2;
+    }
+
+
+
+
+    static if(!is(typeof(Z_RLE))) {
+        enum Z_RLE = 3;
+    }
+
+
+
+
+    static if(!is(typeof(Z_FIXED))) {
+        enum Z_FIXED = 4;
+    }
+
+
+
+
+    static if(!is(typeof(Z_DEFAULT_STRATEGY))) {
+        enum Z_DEFAULT_STRATEGY = 0;
+    }
+
+
+
+
+    static if(!is(typeof(Z_BINARY))) {
+        enum Z_BINARY = 0;
+    }
+
+
+
+
+    static if(!is(typeof(Z_TEXT))) {
+        enum Z_TEXT = 1;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(Z_UNKNOWN))) {
+        enum Z_UNKNOWN = 2;
+    }
+
+
+
+
+    static if(!is(typeof(Z_DEFLATED))) {
+        enum Z_DEFLATED = 8;
+    }
+
+
+
+
+    static if(!is(typeof(Z_NULL))) {
+        enum Z_NULL = 0;
+    }
+    static if(!is(typeof(MAXU32))) {
+        enum MAXU32 = 0xffffffff;
+    }
+
+
+
+
+    static if(!is(typeof(_FILE_OFFSET_BIT))) {
+        enum _FILE_OFFSET_BIT = 64;
+    }
+    static if(!is(typeof(LXW_MAX_FONT_SIZE))) {
+        enum LXW_MAX_FONT_SIZE = 409.0;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_MIN_FONT_SIZE))) {
+        enum LXW_MIN_FONT_SIZE = 1.0;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_COLOR_MASK))) {
+        enum LXW_COLOR_MASK = 0xFFFFFF;
+    }
+    static if(!is(typeof(LXW_DEFAULT_FONT_THEME))) {
+        enum LXW_DEFAULT_FONT_THEME = 1;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_DEFAULT_FONT_FAMILY))) {
+        enum LXW_DEFAULT_FONT_FAMILY = 2;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_DEFAULT_FONT_NAME))) {
+        enum LXW_DEFAULT_FONT_NAME = "Calibri";
+    }
+
+
+
+
+    static if(!is(typeof(LXW_FORMAT_FIELD_LEN))) {
+        enum LXW_FORMAT_FIELD_LEN = 128;
+    }
+    static if(!is(typeof(LXW_APP_DOCUMENT))) {
+        enum LXW_APP_DOCUMENT = "application/vnd.openxmlformats-officedocument.";
+    }
+
+
+
+
+    static if(!is(typeof(LXW_APP_PACKAGE))) {
+        enum LXW_APP_PACKAGE = "application/vnd.openxmlformats-package.";
+    }
+    static if(!is(typeof(LXW_SCHEMA_ROOT))) {
+        enum LXW_SCHEMA_ROOT = "http://schemas.openxmlformats.org";
+    }
+
+
+
+
+    static if(!is(typeof(LXW_SCHEMA_MS))) {
+        enum LXW_SCHEMA_MS = "http://schemas.microsoft.com/office/2006/relationships";
+    }
+
+
+
+
+    static if(!is(typeof(LXW_LANDSCAPE))) {
+        enum LXW_LANDSCAPE = 0;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_PORTRAIT))) {
+        enum LXW_PORTRAIT = 1;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_IGNORE))) {
+        enum LXW_IGNORE = 1;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_FILENAME_LENGTH))) {
+        enum LXW_FILENAME_LENGTH = 128;
+    }
+
+
+
+
+
+
+    static if(!is(typeof(LXW_EPOCH_1904))) {
+        enum LXW_EPOCH_1904 = 1;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_EPOCH_1900))) {
+        enum LXW_EPOCH_1900 = 0;
+    }
+    static if(!is(typeof(LXW_SHEETNAME_MAX))) {
+        enum LXW_SHEETNAME_MAX = 31;
+    }
+    static if(!is(typeof(LXW_CHART_DEFAULT_GAP))) {
+        enum LXW_CHART_DEFAULT_GAP = 501;
+    }
+
+
+
+
+    static if(!is(typeof(LXW_CHART_NUM_FORMAT_LEN))) {
+        enum LXW_CHART_NUM_FORMAT_LEN = 128;
+    }
+    static if(!is(typeof(__GNUC_VA_LIST))) {
+        enum __GNUC_VA_LIST = 1;
+    }
 }
 
 
