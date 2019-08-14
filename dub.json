@@ -7,8 +7,8 @@
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
 	"preBuildCommands-posix" : [
-		"make -C $PACKAGE_DIR",
-		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"],
+		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"
+	],
 	"preBuildCommands-windows" : [
 		"$PACKAGE_DIR\\windepbuild.bat"
 	],
