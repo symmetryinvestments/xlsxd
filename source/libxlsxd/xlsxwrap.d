@@ -54,7 +54,18 @@ extern(C)
 {
     alias wchar_t = int;
 	version(Posix) {
-		alias size_t = c_ulong;
+		version(X86) {
+			alias c_ulong = uint;
+		}
+		version(X86_64) {
+			alias c_ulong = size_t;
+		}
+	}
+	version(Win32) {
+		alias c_ulong = uint;
+	}
+	version(Win64) {
+		alias c_ulong = size_t;
 	}
     alias ptrdiff_t = c_long;
     struct max_align_t
@@ -3525,7 +3536,7 @@ extern(C)
     void* memset(void*, int, c_ulong) @nogc nothrow;
     void* memccpy(void*, const(void)*, int, c_ulong) @nogc nothrow;
     void* memmove(void*, const(void)*, c_ulong) @nogc nothrow;
-	void* memcpy(void*, const(void)*, size_t) @nogc nothrow;
+	void* memcpy(void*, const(void)*, c_ulong) @nogc nothrow;
     int getloadavg(double*, int) @nogc nothrow;
     int getsubopt(char**, char**, char**) @nogc nothrow;
     int rpmatch(const(char)*) @nogc nothrow;
