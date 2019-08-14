@@ -192,6 +192,7 @@ struct WorksheetFluent {
 }
 
 struct Worksheet {
+	import core.stdc.config : c_ulong;
 	import std.datetime;
 	import std.string : toStringz;
 	import std.exception : enforce;
@@ -588,7 +589,7 @@ struct Worksheet {
 			size_t bufSize) @trusted
 	{
 		enforce(worksheet_insert_image_buffer(this.handle, row,
-					col, buf, bufSize
+					col, buf, cast(c_ulong)bufSize
 				)
 				== LXW_NO_ERROR
 			);
@@ -598,7 +599,7 @@ struct Worksheet {
 			size_t bufSize, lxw_image_options* options) @trusted
 	{
 		enforce(worksheet_insert_image_buffer_opt(this.handle, row,
-					col, buf, bufSize, options
+					col, buf, cast(c_ulong)bufSize, options
 				)
 				== LXW_NO_ERROR
 			);
