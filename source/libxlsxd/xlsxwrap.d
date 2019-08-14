@@ -3525,7 +3525,7 @@ extern(C)
     void* memset(void*, int, c_ulong) @nogc nothrow;
     void* memccpy(void*, const(void)*, int, c_ulong) @nogc nothrow;
     void* memmove(void*, const(void)*, c_ulong) @nogc nothrow;
-    void* memcpy(void*, const(void)*, c_ulong) @nogc nothrow;
+	void* memcpy(void*, const(void)*, size_t) @nogc nothrow;
     int getloadavg(double*, int) @nogc nothrow;
     int getsubopt(char**, char**, char**) @nogc nothrow;
     int rpmatch(const(char)*) @nogc nothrow;
