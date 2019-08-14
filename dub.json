@@ -10,8 +10,7 @@
 		"make -C $PACKAGE_DIR",
 		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"],
 	"preBuildCommands-windows" : [
-		"$PACKAGE_DIR\\windepbuild.bat",
-		"cd $PACKAGE_DIR && dmd -run sizetdisable.d"
+		"$PACKAGE_DIR\\windepbuild.bat"
 	],
 	"libs-posix" : ["xlsxwriter"],
 	"lflags-posix": [
