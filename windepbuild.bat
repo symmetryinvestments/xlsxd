@@ -4,7 +4,7 @@ setlocal EnableDelayedExpansion
 set    WORK_DIR=%~dp0
 set INSTALL_DIR=%~dp0\install_dir
 
-pushd "%WORK_DIR%"
+cd /d "%WORK_DIR%"
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 Rem git clone https://github.com/madler/zlib.git
