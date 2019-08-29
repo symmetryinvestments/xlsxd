@@ -16,9 +16,13 @@
 	"lflags-posix": [
 		"-L$PACKAGE_DIR/libxlsxwriter/build/"
 	],
-	"lflags-windows": [
-		"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release",
-		"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib"
+	"lflags-windows-x86_64-dmd": [
+		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release\\\"",
+		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\\\""
+	],
+	"lflags-windows-x86_64-ldc": [
+		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release\"\"",
+		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\"\""
 	],
 	"libs-windows" : [ "msvcrt", "xlsxwriter", "zlibstatic" ]
 }
