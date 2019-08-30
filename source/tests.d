@@ -151,3 +151,16 @@ unittest {
 	}
 	workbook.close();
 }
+
+// #Issue 49
+unittest {
+	import std.conv : to;
+    /* Create a new workbook and add a worksheet. */
+    auto workbook  = newWorkbook("formula.xlsx");
+    auto worksheet = workbook.addWorksheet("one");
+	worksheet.write(0,0, 1);
+	worksheet.write(1,0, 2);
+	worksheet.write(2,0, 3);
+	worksheet.writeFormula(0,1, "=SUM(A1,A2,A3)");
+	worksheet.writeFormulaNum(1,1, "=SUM(A1,A2,A3)", 6.0);
+}

@@ -37,23 +37,49 @@ private pure string genWriteOverloads() {
 	string ret;
 	version(No_Overloads_Or_Templates) {
 		immutable overloads = false;
-		ret ~= `void writeBlank(RowType row, ColType col) @safe {
+		ret ~= `
+	void writeBlank(RowType row, ColType col) @safe {
 		this.writeBlankImpl(row, col, Format(null));
 	}
 
 	void writeBlankFormat(RowType row, ColType col, Format f) @safe {
 		this.writeBlankImpl(row, col, f);
 	}
+
+	void writeFormulaNum(RowType row, ColType col, string formula, double num)
+			@safe
+	{
+		this.writeFormulaNumImpl(row, col, formula, num, Format(null));
+	}
+
+	void writeFormulaNumFormat(RowType row, ColType col, string formula,
+			double num, Format f) @safe
+	{
+		this.writeFormulaNumImpl(row, col, formula, num, f);
+	}
 `;
 
 	} else {
 		immutable overloads = true;
-		ret ~= `void writeBlank(RowType row, ColType col) @safe {
+		ret ~= `
+	void writeBlank(RowType row, ColType col) @safe {
 		this.writeBlankImpl(row, col, Format(null));
 	}
 
 	void writeBlank(RowType row, ColType col, Format f) @safe {
 		this.writeBlankImpl(row, col, f);
+	}
+
+	void writeFormulaNum(RowType row, ColType col, string formula, double num)
+			@safe
+	{
+		this.writeFormulaNumImpl(row, col, formula, num, Format(null));
+	}
+
+	void writeFormulaNum(RowType row, ColType col, string formula,
+			double num, Format f) @safe
+	{
+		this.writeFormulaNumImpl(row, col, formula, num, f);
 	}
 `;
 	}
