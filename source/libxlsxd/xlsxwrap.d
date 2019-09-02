@@ -233,6 +233,11 @@ extern(C)
         }
         _Anonymous_2 list_pointers;
     }
+    struct lxw_series_data_points
+    {
+        lxw_series_data_point* stqh_first;
+        lxw_series_data_point** stqh_last;
+    }
     struct lxw_series_data_point
     {
         ubyte is_string;
@@ -244,11 +249,6 @@ extern(C)
             lxw_series_data_point* stqe_next;
         }
         _Anonymous_3 list_pointers;
-    }
-    struct lxw_series_data_points
-    {
-        lxw_series_data_point* stqh_first;
-        lxw_series_data_point** stqh_last;
     }
     int inflatePrime(z_stream_s*, int, int) @nogc nothrow;
     enum lxw_chart_type
@@ -1039,22 +1039,27 @@ extern(C)
         LXW_ERROR_CREATING_TMPFILE = 3,
         LXW_ERROR_READING_TMPFILE = 4,
         LXW_ERROR_ZIP_FILE_OPERATION = 5,
-        LXW_ERROR_ZIP_FILE_ADD = 6,
-        LXW_ERROR_ZIP_CLOSE = 7,
-        LXW_ERROR_NULL_PARAMETER_IGNORED = 8,
-        LXW_ERROR_PARAMETER_VALIDATION = 9,
-        LXW_ERROR_SHEETNAME_LENGTH_EXCEEDED = 10,
-        LXW_ERROR_INVALID_SHEETNAME_CHARACTER = 11,
-        LXW_ERROR_SHEETNAME_ALREADY_USED = 12,
-        LXW_ERROR_32_STRING_LENGTH_EXCEEDED = 13,
-        LXW_ERROR_128_STRING_LENGTH_EXCEEDED = 14,
-        LXW_ERROR_255_STRING_LENGTH_EXCEEDED = 15,
-        LXW_ERROR_MAX_STRING_LENGTH_EXCEEDED = 16,
-        LXW_ERROR_SHARED_STRING_INDEX_NOT_FOUND = 17,
-        LXW_ERROR_WORKSHEET_INDEX_OUT_OF_RANGE = 18,
-        LXW_ERROR_WORKSHEET_MAX_NUMBER_URLS_EXCEEDED = 19,
-        LXW_ERROR_IMAGE_DIMENSIONS = 20,
-        LXW_MAX_ERRNO = 21,
+        LXW_ERROR_ZIP_PARAMETER_ERROR = 6,
+        LXW_ERROR_ZIP_BAD_ZIP_FILE = 7,
+        LXW_ERROR_ZIP_INTERNAL_ERROR = 8,
+        LXW_ERROR_ZIP_FILE_ADD = 9,
+        LXW_ERROR_ZIP_CLOSE = 10,
+        LXW_ERROR_NULL_PARAMETER_IGNORED = 11,
+        LXW_ERROR_PARAMETER_VALIDATION = 12,
+        LXW_ERROR_SHEETNAME_LENGTH_EXCEEDED = 13,
+        LXW_ERROR_INVALID_SHEETNAME_CHARACTER = 14,
+        LXW_ERROR_SHEETNAME_START_END_APOSTROPHE = 15,
+        LXW_ERROR_SHEETNAME_ALREADY_USED = 16,
+        LXW_ERROR_SHEETNAME_RESERVED = 17,
+        LXW_ERROR_32_STRING_LENGTH_EXCEEDED = 18,
+        LXW_ERROR_128_STRING_LENGTH_EXCEEDED = 19,
+        LXW_ERROR_255_STRING_LENGTH_EXCEEDED = 20,
+        LXW_ERROR_MAX_STRING_LENGTH_EXCEEDED = 21,
+        LXW_ERROR_SHARED_STRING_INDEX_NOT_FOUND = 22,
+        LXW_ERROR_WORKSHEET_INDEX_OUT_OF_RANGE = 23,
+        LXW_ERROR_WORKSHEET_MAX_NUMBER_URLS_EXCEEDED = 24,
+        LXW_ERROR_IMAGE_DIMENSIONS = 25,
+        LXW_MAX_ERRNO = 26,
     }
     enum LXW_NO_ERROR = lxw_error.LXW_NO_ERROR;
     enum LXW_ERROR_MEMORY_MALLOC_FAILED = lxw_error.LXW_ERROR_MEMORY_MALLOC_FAILED;
@@ -1062,13 +1067,18 @@ extern(C)
     enum LXW_ERROR_CREATING_TMPFILE = lxw_error.LXW_ERROR_CREATING_TMPFILE;
     enum LXW_ERROR_READING_TMPFILE = lxw_error.LXW_ERROR_READING_TMPFILE;
     enum LXW_ERROR_ZIP_FILE_OPERATION = lxw_error.LXW_ERROR_ZIP_FILE_OPERATION;
+    enum LXW_ERROR_ZIP_PARAMETER_ERROR = lxw_error.LXW_ERROR_ZIP_PARAMETER_ERROR;
+    enum LXW_ERROR_ZIP_BAD_ZIP_FILE = lxw_error.LXW_ERROR_ZIP_BAD_ZIP_FILE;
+    enum LXW_ERROR_ZIP_INTERNAL_ERROR = lxw_error.LXW_ERROR_ZIP_INTERNAL_ERROR;
     enum LXW_ERROR_ZIP_FILE_ADD = lxw_error.LXW_ERROR_ZIP_FILE_ADD;
     enum LXW_ERROR_ZIP_CLOSE = lxw_error.LXW_ERROR_ZIP_CLOSE;
     enum LXW_ERROR_NULL_PARAMETER_IGNORED = lxw_error.LXW_ERROR_NULL_PARAMETER_IGNORED;
     enum LXW_ERROR_PARAMETER_VALIDATION = lxw_error.LXW_ERROR_PARAMETER_VALIDATION;
     enum LXW_ERROR_SHEETNAME_LENGTH_EXCEEDED = lxw_error.LXW_ERROR_SHEETNAME_LENGTH_EXCEEDED;
     enum LXW_ERROR_INVALID_SHEETNAME_CHARACTER = lxw_error.LXW_ERROR_INVALID_SHEETNAME_CHARACTER;
+    enum LXW_ERROR_SHEETNAME_START_END_APOSTROPHE = lxw_error.LXW_ERROR_SHEETNAME_START_END_APOSTROPHE;
     enum LXW_ERROR_SHEETNAME_ALREADY_USED = lxw_error.LXW_ERROR_SHEETNAME_ALREADY_USED;
+    enum LXW_ERROR_SHEETNAME_RESERVED = lxw_error.LXW_ERROR_SHEETNAME_RESERVED;
     enum LXW_ERROR_32_STRING_LENGTH_EXCEEDED = lxw_error.LXW_ERROR_32_STRING_LENGTH_EXCEEDED;
     enum LXW_ERROR_128_STRING_LENGTH_EXCEEDED = lxw_error.LXW_ERROR_128_STRING_LENGTH_EXCEEDED;
     enum LXW_ERROR_255_STRING_LENGTH_EXCEEDED = lxw_error.LXW_ERROR_255_STRING_LENGTH_EXCEEDED;
@@ -1113,11 +1123,6 @@ extern(C)
     int deflatePending(z_stream_s*, uint*, int*) @nogc nothrow;
     c_ulong deflateBound(z_stream_s*, c_ulong) @nogc nothrow;
     int deflateTune(z_stream_s*, int, int, int, int) @nogc nothrow;
-    struct lxw_formats
-    {
-        lxw_format* stqh_first;
-        lxw_format** stqh_last;
-    }
     struct lxw_format
     {
         _IO_FILE* file;
@@ -1189,6 +1194,11 @@ extern(C)
         }
         _Anonymous_7 list_pointers;
     }
+    struct lxw_formats
+    {
+        lxw_format* stqh_first;
+        lxw_format** stqh_last;
+    }
     struct lxw_tuples
     {
         lxw_tuple* stqh_first;
@@ -1255,6 +1265,7 @@ extern(C)
     lxw_core* lxw_core_new() @nogc nothrow;
     void lxw_core_free(lxw_core*) @nogc nothrow;
     void lxw_core_assemble_xml_file(lxw_core*) @nogc nothrow;
+    int deflateReset(z_stream_s*) @nogc nothrow;
     struct lxw_custom
     {
         _IO_FILE* file;
@@ -1264,7 +1275,11 @@ extern(C)
     lxw_custom* lxw_custom_new() @nogc nothrow;
     void lxw_custom_free(lxw_custom*) @nogc nothrow;
     void lxw_custom_assemble_xml_file(lxw_custom*) @nogc nothrow;
-    int deflateReset(z_stream_s*) @nogc nothrow;
+    struct lxw_drawing_objects
+    {
+        lxw_drawing_object* stqh_first;
+        lxw_drawing_object** stqh_last;
+    }
     struct lxw_drawing_object
     {
         ubyte anchor_type;
@@ -1284,11 +1299,6 @@ extern(C)
             lxw_drawing_object* stqe_next;
         }
         _Anonymous_11 list_pointers;
-    }
-    struct lxw_drawing_objects
-    {
-        lxw_drawing_object* stqh_first;
-        lxw_drawing_object** stqh_last;
     }
     enum lxw_drawing_types
     {
@@ -1653,8 +1663,9 @@ extern(C)
         char* filename;
         char* buffer;
         char* tmpdir;
+        ubyte use_zip64;
     }
-    lxw_packager* lxw_packager_new(const(char)*, char*) @nogc nothrow;
+    lxw_packager* lxw_packager_new(const(char)*, char*, ubyte) @nogc nothrow;
     void lxw_packager_free(lxw_packager*) @nogc nothrow;
     lxw_error lxw_create_package(lxw_packager*) @nogc nothrow;
     struct lxw_rel_tuple
@@ -1681,10 +1692,6 @@ extern(C)
     void lxw_add_package_relationship(lxw_relationships*, const(char)*, const(char)*) @nogc nothrow;
     void lxw_add_ms_package_relationship(lxw_relationships*, const(char)*, const(char)*) @nogc nothrow;
     void lxw_add_worksheet_relationship(lxw_relationships*, const(char)*, const(char)*, const(char)*) @nogc nothrow;
-    struct sst_rb_tree
-    {
-        sst_element* rbh_root;
-    }
     struct sst_element
     {
         uint index;
@@ -1704,11 +1711,16 @@ extern(C)
         }
         _Anonymous_16 sst_tree_pointers;
     }
+    struct sst_rb_tree
+    {
+        sst_element* rbh_root;
+    }
     struct sst_order_list
     {
         sst_element* stqh_first;
         sst_element** stqh_last;
     }
+    int inflate(z_stream_s*, int) @nogc nothrow;
     struct lxw_sst
     {
         _IO_FILE* file;
@@ -1721,7 +1733,6 @@ extern(C)
     void lxw_sst_free(lxw_sst*) @nogc nothrow;
     sst_element* lxw_get_sst_index(lxw_sst*, const(char)*, ubyte) @nogc nothrow;
     void lxw_sst_assemble_xml_file(lxw_sst*) @nogc nothrow;
-    int inflate(z_stream_s*, int) @nogc nothrow;
     struct lxw_styles
     {
         _IO_FILE* file;
@@ -1768,6 +1779,7 @@ extern(C)
         int hcrc;
         int done;
     }
+    alias gz_header = gz_header_s;
     alias open_file_func = void* function(void*, const(char)*, int);
     alias read_file_func = c_ulong function(void*, void*, void*, c_ulong);
     alias write_file_func = c_ulong function(void*, void*, const(void)*, c_ulong);
@@ -1812,7 +1824,6 @@ extern(C)
         c_long function(void*, void*) ztell32_file;
         c_long function(void*, void*, c_ulong, int) zseek32_file;
     }
-    alias gz_header = gz_header_s;
     alias z_streamp = z_stream_s*;
     void* call_zopen64(const(zlib_filefunc64_32_def_s)*, const(void)*, int) @nogc nothrow;
     c_long call_zseek64(const(zlib_filefunc64_32_def_s)*, void*, ulong, int) @nogc nothrow;
@@ -1928,6 +1939,7 @@ extern(C)
     int zipCloseFileInZipRaw64(void*, ulong, c_ulong) @nogc nothrow;
     int zipClose(void*, const(char)*) @nogc nothrow;
     int zipRemoveExtraInfoBlock(char*, int*, short) @nogc nothrow;
+    c_long readlink(const(char)*, char*, c_ulong) @nogc nothrow;
     const(char)* lxw_version() @nogc nothrow;
     char* lxw_strerror(lxw_error) @nogc nothrow;
     char* lxw_quote_sheetname(const(char)*) @nogc nothrow;
@@ -1947,8 +1959,8 @@ extern(C)
     c_ulong lxw_utf8_strlen(const(char)*) @nogc nothrow;
     void lxw_str_tolower(char*) @nogc nothrow;
     _IO_FILE* lxw_tmpfile(char*) @nogc nothrow;
-    c_long readlink(const(char)*, char*, c_ulong) @nogc nothrow;
     ushort lxw_hash_password(const(char)*) @nogc nothrow;
+    int symlink(const(char)*, const(char)*) @nogc nothrow;
     struct lxw_worksheet_name
     {
         const(char)* name;
@@ -2018,6 +2030,11 @@ extern(C)
         lxw_chart* stqh_first;
         lxw_chart** stqh_last;
     }
+    struct lxw_defined_names
+    {
+        lxw_defined_name* tqh_first;
+        lxw_defined_name** tqh_last;
+    }
     struct lxw_defined_name
     {
         short index;
@@ -2034,12 +2051,6 @@ extern(C)
         }
         _Anonymous_21 list_pointers;
     }
-    struct lxw_defined_names
-    {
-        lxw_defined_name* tqh_first;
-        lxw_defined_name** tqh_last;
-    }
-    int symlink(const(char)*, const(char)*) @nogc nothrow;
     struct lxw_doc_properties
     {
         char* title;
@@ -2058,6 +2069,7 @@ extern(C)
     {
         ubyte constant_memory;
         char* tmpdir;
+        ubyte use_zip64;
     }
     struct lxw_workbook
     {
@@ -2092,6 +2104,8 @@ extern(C)
         ubyte has_jpeg;
         ubyte has_bmp;
         lxw_hash_table* used_xf_formats;
+        char* vba_project;
+        char* vba_codename;
     }
     lxw_workbook* workbook_new(const(char)*) @nogc nothrow;
     lxw_workbook* workbook_new_opt(const(char)*, lxw_workbook_options*) @nogc nothrow;
@@ -2112,11 +2126,14 @@ extern(C)
     lxw_worksheet* workbook_get_worksheet_by_name(lxw_workbook*, const(char)*) @nogc nothrow;
     lxw_chartsheet* workbook_get_chartsheet_by_name(lxw_workbook*, const(char)*) @nogc nothrow;
     lxw_error workbook_validate_sheet_name(lxw_workbook*, const(char)*) @nogc nothrow;
+    lxw_error workbook_add_vba_project(lxw_workbook*, const(char)*) @nogc nothrow;
+    lxw_error workbook_set_vba_name(lxw_workbook*, const(char)*) @nogc nothrow;
     void lxw_workbook_free(lxw_workbook*) @nogc nothrow;
     void lxw_workbook_assemble_xml_file(lxw_workbook*) @nogc nothrow;
     void lxw_workbook_set_default_xf_indices(lxw_workbook*) @nogc nothrow;
     int linkat(int, const(char)*, int, const(char)*, int) @nogc nothrow;
     int link(const(char)*, const(char)*) @nogc nothrow;
+    int ttyslot() @nogc nothrow;
     enum lxw_gridlines
     {
         LXW_HIDE_ALL_GRIDLINES = 0,
@@ -2297,12 +2314,7 @@ extern(C)
         }
         _Anonymous_24 tree_pointers;
     }
-    int ttyslot() @nogc nothrow;
-    struct lxw_merged_ranges
-    {
-        lxw_merged_range* stqh_first;
-        lxw_merged_range** stqh_last;
-    }
+    int isatty(int) @nogc nothrow;
     struct lxw_merged_range
     {
         uint first_row;
@@ -2315,10 +2327,10 @@ extern(C)
         }
         _Anonymous_25 list_pointers;
     }
-    struct lxw_selections
+    struct lxw_merged_ranges
     {
-        lxw_selection* stqh_first;
-        lxw_selection** stqh_last;
+        lxw_merged_range* stqh_first;
+        lxw_merged_range** stqh_last;
     }
     struct lxw_selection
     {
@@ -2330,6 +2342,16 @@ extern(C)
             lxw_selection* stqe_next;
         }
         _Anonymous_26 list_pointers;
+    }
+    struct lxw_selections
+    {
+        lxw_selection* stqh_first;
+        lxw_selection** stqh_last;
+    }
+    struct lxw_data_validations
+    {
+        lxw_data_validation* stqh_first;
+        lxw_data_validation** stqh_last;
     }
     struct lxw_data_validation
     {
@@ -2361,11 +2383,6 @@ extern(C)
             lxw_data_validation* stqe_next;
         }
         _Anonymous_27 list_pointers;
-    }
-    struct lxw_data_validations
-    {
-        lxw_data_validation* stqh_first;
-        lxw_data_validation** stqh_last;
     }
     struct lxw_image_data
     {
@@ -2558,10 +2575,10 @@ extern(C)
         ubyte right_to_left;
         ubyte screen_gridlines;
         ubyte show_zeros;
-        ubyte vba_codename;
         ubyte vcenter;
         ubyte zoom_scale_normal;
         ubyte num_validations;
+        char* vba_codename;
         int tab_color;
         double margin_left;
         double margin_right;
@@ -2681,12 +2698,13 @@ extern(C)
     void worksheet_protect(lxw_worksheet*, const(char)*, lxw_protection*) @nogc nothrow;
     void worksheet_outline_settings(lxw_worksheet*, ubyte, ubyte, ubyte, ubyte) @nogc nothrow;
     void worksheet_set_default_row(lxw_worksheet*, double, ubyte) @nogc nothrow;
+    lxw_error worksheet_set_vba_name(lxw_worksheet*, const(char)*) @nogc nothrow;
     lxw_worksheet* lxw_worksheet_new(lxw_worksheet_init_data*) @nogc nothrow;
     void lxw_worksheet_free(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_assemble_xml_file(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_single_row(lxw_worksheet*) @nogc nothrow;
-    void lxw_worksheet_prepare_image(lxw_worksheet*, ushort, ushort, lxw_image_options*) @nogc nothrow;
-    void lxw_worksheet_prepare_chart(lxw_worksheet*, ushort, ushort, lxw_image_options*, ubyte) @nogc nothrow;
+    void lxw_worksheet_prepare_image(lxw_worksheet*, uint, uint, lxw_image_options*) @nogc nothrow;
+    void lxw_worksheet_prepare_chart(lxw_worksheet*, uint, uint, lxw_image_options*, ubyte) @nogc nothrow;
     lxw_row* lxw_worksheet_find_row(lxw_worksheet*, uint) @nogc nothrow;
     lxw_cell* lxw_worksheet_find_cell(lxw_row*, ushort) @nogc nothrow;
     void lxw_worksheet_write_sheet_views(lxw_worksheet*) @nogc nothrow;
@@ -2696,7 +2714,7 @@ extern(C)
     void lxw_worksheet_write_sheet_pr(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_page_setup(lxw_worksheet*) @nogc nothrow;
     void lxw_worksheet_write_header_footer(lxw_worksheet*) @nogc nothrow;
-    int isatty(int) @nogc nothrow;
+    int ttyname_r(int, char*, c_ulong) @nogc nothrow;
     struct xml_attribute
     {
         char[256] key;
@@ -2715,8 +2733,8 @@ extern(C)
     xml_attribute* lxw_new_attribute_str(const(char)*, const(char)*) @nogc nothrow;
     xml_attribute* lxw_new_attribute_int(const(char)*, uint) @nogc nothrow;
     xml_attribute* lxw_new_attribute_dbl(const(char)*, double) @nogc nothrow;
-    int ttyname_r(int, char*, c_ulong) @nogc nothrow;
     char* ttyname(int) @nogc nothrow;
+    int vfork() @nogc nothrow;
     void lxw_xml_declaration(_IO_FILE*) @nogc nothrow;
     void lxw_xml_start_tag(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
     void lxw_xml_start_tag_unencoded(_IO_FILE*, const(char)*, xml_attribute_list*) @nogc nothrow;
@@ -2727,7 +2745,6 @@ extern(C)
     void lxw_xml_rich_si_element(_IO_FILE*, const(char)*) @nogc nothrow;
     char* lxw_escape_control_characters(const(char)*) @nogc nothrow;
     char* lxw_escape_data(const(char)*) @nogc nothrow;
-    int vfork() @nogc nothrow;
     pragma(mangle, "alloca") void* alloca_(c_ulong) @nogc nothrow;
     int fork() @nogc nothrow;
     int setegid(uint) @nogc nothrow;
@@ -2776,9 +2793,9 @@ extern(C)
     int chown(const(char)*, uint, uint) @nogc nothrow;
     int pause() @nogc nothrow;
     int usleep(uint) @nogc nothrow;
+    uint ualarm(uint, uint) @nogc nothrow;
     static ushort __bswap_16(ushort) @nogc nothrow;
     static uint __bswap_32(uint) @nogc nothrow;
-    uint ualarm(uint, uint) @nogc nothrow;
     static c_ulong __bswap_64(c_ulong) @nogc nothrow;
     enum _Anonymous_31
     {
@@ -3497,12 +3514,12 @@ extern(C)
     char* __stpncpy(char*, const(char)*, c_ulong) @nogc nothrow;
     char* stpcpy(char*, const(char)*) @nogc nothrow;
     char* __stpcpy(char*, const(char)*) @nogc nothrow;
+    char* strsignal(int) @nogc nothrow;
     extern __gshared char* optarg;
     extern __gshared int optind;
     extern __gshared int opterr;
     extern __gshared int optopt;
     int getopt(int, char**, const(char)*) @nogc nothrow;
-    char* strsignal(int) @nogc nothrow;
     char* strsep(char**, const(char)*) @nogc nothrow;
     void explicit_bzero(void*, c_ulong) @nogc nothrow;
     char* strerror_l(int, __locale_struct*) @nogc nothrow;
@@ -3536,7 +3553,7 @@ extern(C)
     void* memset(void*, int, c_ulong) @nogc nothrow;
     void* memccpy(void*, const(void)*, int, c_ulong) @nogc nothrow;
     void* memmove(void*, const(void)*, c_ulong) @nogc nothrow;
-	void* memcpy(void*, const(void)*, c_ulong) @nogc nothrow;
+    void* memcpy(void*, const(void)*, c_ulong) @nogc nothrow;
     int getloadavg(double*, int) @nogc nothrow;
     int getsubopt(char**, char**, char**) @nogc nothrow;
     int rpmatch(const(char)*) @nogc nothrow;
@@ -3545,6 +3562,7 @@ extern(C)
     int wctomb(char*, int) @nogc nothrow;
     int mbtowc(int*, const(char)*, c_ulong) @nogc nothrow;
     int mblen(const(char)*, c_ulong) @nogc nothrow;
+    int qfcvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
     struct __pthread_rwlock_arch_t
     {
         uint __readers;
@@ -3560,7 +3578,7 @@ extern(C)
         c_ulong __pad2;
         uint __flags;
     }
-    int qfcvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
+    int qecvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
     alias pthread_t = c_ulong;
     union pthread_mutexattr_t
     {
@@ -3579,7 +3597,6 @@ extern(C)
         char[56] __size;
         c_long __align;
     }
-    int qecvt_r(real, int, int*, int*, char*, c_ulong) @nogc nothrow;
     union pthread_mutex_t
     {
         __pthread_mutex_s __data;
@@ -3625,15 +3642,16 @@ extern(C)
     alias uint32_t = uint;
     alias uint64_t = ulong;
     char* qgcvt(real, int, char*) @nogc nothrow;
+    char* qfcvt(real, int, int*, int*) @nogc nothrow;
     extern __gshared int sys_nerr;
     extern __gshared const(const(char)*)[0] sys_errlist;
-    char* qfcvt(real, int, int*, int*) @nogc nothrow;
     alias __pthread_list_t = __pthread_internal_list;
     struct __pthread_internal_list
     {
         __pthread_internal_list* __prev;
         __pthread_internal_list* __next;
     }
+    char* qecvt(real, int, int*, int*) @nogc nothrow;
     struct __pthread_mutex_s
     {
         int __lock;
@@ -3683,10 +3701,10 @@ extern(C)
         uint __wrefs;
         uint[2] __g_signals;
     }
-    char* qecvt(real, int, int*, int*) @nogc nothrow;
     char* gcvt(double, int, char*) @nogc nothrow;
     char* fcvt(double, int, int*, int*) @nogc nothrow;
     char* ecvt(double, int, int*, int*) @nogc nothrow;
+    lldiv_t lldiv(long, long) @nogc nothrow;
     alias __u_char = ubyte;
     alias __u_short = ushort;
     alias __u_int = uint;
@@ -3711,7 +3729,6 @@ extern(C)
     alias __u_quad_t = c_ulong;
     alias __intmax_t = c_long;
     alias __uintmax_t = c_ulong;
-    lldiv_t lldiv(long, long) @nogc nothrow;
     ldiv_t ldiv(c_long, c_long) @nogc nothrow;
     div_t div(int, int) @nogc nothrow;
     long llabs(long) @nogc nothrow;
@@ -3757,10 +3774,10 @@ extern(C)
     alias __intptr_t = c_long;
     alias __socklen_t = uint;
     alias __sig_atomic_t = int;
-    alias FILE = _IO_FILE;
     int abs(int) @nogc nothrow;
-
-	private struct _IO_FILE_DUMMY
+    alias FILE = _IO_FILE;
+    void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
+    struct _IO_FILE_DUMMY
     {
         int _flags;
         char* _IO_read_ptr;
@@ -3792,15 +3809,13 @@ extern(C)
         int _mode;
         char[20] _unused2;
     }
-
 	version(Windows) {
-		alias _IO_FILE = _IO_FILE_DUMMY;
+			alias _IO_FILE = _IO_FILE_DUMMY;
 	} else version(LDC) {
 		import core.stdc.stdio : _IO_FILE;
 	} else {
 		alias _IO_FILE = _IO_FILE_DUMMY;
 	}
-
     alias __FILE = _IO_FILE;
     alias __fpos64_t = _G_fpos64_t;
     struct _G_fpos64_t
@@ -3808,13 +3823,13 @@ extern(C)
         c_long __pos;
         __mbstate_t __state;
     }
-    void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
     alias __fpos_t = _G_fpos_t;
     struct _G_fpos_t
     {
         c_long __pos;
         __mbstate_t __state;
     }
+    void* bsearch(const(void)*, const(void)*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
     struct __locale_struct
     {
         __locale_data*[13] __locales;
@@ -3824,6 +3839,7 @@ extern(C)
         const(char)*[13] __names;
     }
     alias __locale_t = __locale_struct*;
+    alias __compar_fn_t = int function(const(void)*, const(void)*);
     struct __mbstate_t
     {
         int __count;
@@ -3834,29 +3850,27 @@ extern(C)
         }
         _Anonymous_40 __value;
     }
-    void* bsearch(const(void)*, const(void)*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
-    alias __compar_fn_t = int function(const(void)*, const(void)*);
     struct __sigset_t
     {
         c_ulong[16] __val;
     }
+    char* realpath(const(char)*, char*) @nogc nothrow;
     alias clock_t = c_long;
     alias clockid_t = int;
-    char* realpath(const(char)*, char*) @nogc nothrow;
     alias locale_t = __locale_struct*;
+    int system(const(char)*) @nogc nothrow;
     alias sigset_t = __sigset_t;
     struct _IO_marker;
     struct _IO_codecvt;
     struct _IO_wide_data;
     alias _IO_lock_t = void;
-    int system(const(char)*) @nogc nothrow;
     char* mkdtemp(char*) @nogc nothrow;
+    int mkstemps(char*, int) @nogc nothrow;
     struct itimerspec
     {
         timespec it_interval;
         timespec it_value;
     }
-    int mkstemps(char*, int) @nogc nothrow;
     struct timespec
     {
         c_long tv_sec;
@@ -3867,6 +3881,7 @@ extern(C)
         c_long tv_sec;
         c_long tv_usec;
     }
+    int mkstemp(char*) @nogc nothrow;
     struct tm
     {
         int tm_sec;
@@ -3882,7 +3897,6 @@ extern(C)
         const(char)* tm_zone;
     }
     alias time_t = c_long;
-    int mkstemp(char*) @nogc nothrow;
     alias timer_t = void*;
     char* mktemp(char*) @nogc nothrow;
     int clearenv() @nogc nothrow;
@@ -3941,6 +3955,7 @@ extern(C)
     const(int)** __ctype_tolower_loc() @nogc nothrow;
     const(int)** __ctype_toupper_loc() @nogc nothrow;
     int srand48_r(c_long, drand48_data*) @nogc nothrow;
+    int jrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
     pragma(mangle, "isalnum") int isalnum_(int) @nogc nothrow;
     pragma(mangle, "isalpha") int isalpha_(int) @nogc nothrow;
     pragma(mangle, "iscntrl") int iscntrl_(int) @nogc nothrow;
@@ -3959,7 +3974,6 @@ extern(C)
     pragma(mangle, "toascii") int toascii_(int) @nogc nothrow;
     pragma(mangle, "_toupper") int _toupper_(int) @nogc nothrow;
     pragma(mangle, "_tolower") int _tolower_(int) @nogc nothrow;
-    int jrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
     int mrand48_r(drand48_data*, c_long*) @nogc nothrow;
     int nrand48_r(ushort*, drand48_data*, c_long*) @nogc nothrow;
     int lrand48_r(drand48_data*, c_long*) @nogc nothrow;
@@ -4017,8 +4031,8 @@ extern(C)
     }
     char* setstate(char*) @nogc nothrow;
     char* initstate(uint, char*, c_ulong) @nogc nothrow;
-    int* __errno_location() @nogc nothrow;
     void srandom(uint) @nogc nothrow;
+    int* __errno_location() @nogc nothrow;
     c_long random() @nogc nothrow;
     c_long a64l(const(char)*) @nogc nothrow;
     char* l64a(c_long) @nogc nothrow;
@@ -4047,10 +4061,10 @@ extern(C)
     alias uint_fast32_t = c_ulong;
     alias uint_fast64_t = c_ulong;
     alias intptr_t = c_long;
+    double strtod(const(char)*, char**) @nogc nothrow;
     alias uintptr_t = c_ulong;
     alias intmax_t = c_long;
     alias uintmax_t = c_ulong;
-    double strtod(const(char)*, char**) @nogc nothrow;
     long atoll(const(char)*) @nogc nothrow;
     c_long atol(const(char)*) @nogc nothrow;
     int atoi(const(char)*) @nogc nothrow;
@@ -4080,17 +4094,18 @@ extern(C)
     int pclose(_IO_FILE*) @nogc nothrow;
     _IO_FILE* popen(const(char)*, const(char)*) @nogc nothrow;
     int fileno_unlocked(_IO_FILE*) @nogc nothrow;
-    alias off_t = c_long;
     int fileno(_IO_FILE*) @nogc nothrow;
+    alias off_t = c_long;
     alias ssize_t = c_long;
-    alias fpos_t = _G_fpos_t;
     void perror(const(char)*) @nogc nothrow;
+    alias fpos_t = _G_fpos_t;
     int ferror_unlocked(_IO_FILE*) @nogc nothrow;
     int feof_unlocked(_IO_FILE*) @nogc nothrow;
+    void clearerr_unlocked(_IO_FILE*) @nogc nothrow;
     extern __gshared _IO_FILE* stdin;
     extern __gshared _IO_FILE* stdout;
     extern __gshared _IO_FILE* stderr;
-    void clearerr_unlocked(_IO_FILE*) @nogc nothrow;
+    int ferror(_IO_FILE*) @nogc nothrow;
     int remove(const(char)*) @nogc nothrow;
     int rename(const(char)*, const(char)*) @nogc nothrow;
     int renameat(int, const(char)*, int, const(char)*) @nogc nothrow;
@@ -4160,7 +4175,6 @@ extern(C)
     int fsetpos(_IO_FILE*, const(_G_fpos_t)*) @nogc nothrow;
     void clearerr(_IO_FILE*) @nogc nothrow;
     int feof(_IO_FILE*) @nogc nothrow;
-    int ferror(_IO_FILE*) @nogc nothrow;
     static if(!is(typeof(P_tmpdir))) {
         enum P_tmpdir = "/tmp";
     }
@@ -5133,13 +5147,6 @@ extern(C)
 
 
 
-    static if(!is(typeof(_STRING_H))) {
-        enum _STRING_H = 1;
-    }
-
-
-
-
     static if(!is(typeof(_POSIX_THREAD_PROCESS_SHARED))) {
         enum _POSIX_THREAD_PROCESS_SHARED = 200809L;
     }
@@ -5149,6 +5156,13 @@ extern(C)
 
     static if(!is(typeof(_POSIX_MESSAGE_PASSING))) {
         enum _POSIX_MESSAGE_PASSING = 200809L;
+    }
+
+
+
+
+    static if(!is(typeof(_STRING_H))) {
+        enum _STRING_H = 1;
     }
 
 
@@ -7476,6 +7490,13 @@ extern(C)
     static if(!is(typeof(LXW_FORMAT_FIELD_LEN))) {
         enum LXW_FORMAT_FIELD_LEN = 128;
     }
+    static if(!is(typeof(LXW_APP_MSEXCEL))) {
+        enum LXW_APP_MSEXCEL = "application/vnd.ms-excel.";
+    }
+
+
+
+
     static if(!is(typeof(LXW_APP_DOCUMENT))) {
         enum LXW_APP_DOCUMENT = "application/vnd.openxmlformats-officedocument.";
     }

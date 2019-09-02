@@ -448,6 +448,7 @@ lxw_worksheet_free(lxw_worksheet *worksheet)
     free(worksheet->vbreaks);
     free(worksheet->name);
     free(worksheet->quoted_name);
+    free(worksheet->vba_codename);
 
     free(worksheet);
     worksheet = NULL;
@@ -1507,7 +1508,8 @@ _worksheet_write_optimized_sheet_data(lxw_worksheet *self)
         while (read_size) {
             read_size =
                 fread(buffer, 1, LXW_BUFFER_SIZE, self->optimize_tmpfile);
-            fwrite(buffer, 1, read_size, self->file);
+            /* Ignore return value. There is no easy way to raise error. */
+            (void) fwrite(buffer, 1, read_size, self->file);
         }
 
         fclose(self->optimize_tmpfile);
@@ -1992,7 +1994,7 @@ _worksheet_position_object_emus(lxw_worksheet *self,
  */
 void
 lxw_worksheet_prepare_image(lxw_worksheet *self,
-                            uint16_t image_ref_id, uint16_t drawing_id,
+                            uint32_t image_ref_id, uint32_t drawing_id,
                             lxw_image_options *image_data)
 {
     lxw_drawing_object *drawing_object;
@@ -2079,8 +2081,8 @@ mem_error:
  */
 void
 lxw_worksheet_prepare_chart(lxw_worksheet *self,
-                            uint16_t chart_ref_id,
-                            uint16_t drawing_id,
+                            uint32_t chart_ref_id,
+                            uint32_t drawing_id,
                             lxw_image_options *image_data,
                             uint8_t is_chartsheet)
 {
@@ -3147,7 +3149,7 @@ _worksheet_write_sheet_pr(lxw_worksheet *self)
     LXW_INIT_ATTRIBUTES();
 
     if (self->vba_codename)
-        LXW_PUSH_ATTRIBUTES_INT("codeName", self->vba_codename);
+        LXW_PUSH_ATTRIBUTES_STR("codeName", self->vba_codename);
 
     if (self->filter_on)
         LXW_PUSH_ATTRIBUTES_STR("filterMode", "1");
@@ -5629,7 +5631,14 @@ worksheet_insert_image_buffer_opt(lxw_worksheet *self,
     /* Write the image buffer to a temporary file so we can read the
      * dimensions like an ordinary file. */
     image_stream = lxw_tmpfile(self->tmpdir);
-    fwrite(image_buffer, 1, image_size, image_stream);
+    if (!image_stream)
+        return LXW_ERROR_CREATING_TMPFILE;
+
+    if (fwrite(image_buffer, 1, image_size, image_stream) != image_size) {
+        fclose(image_stream);
+        return LXW_ERROR_CREATING_TMPFILE;
+    }
+
     rewind(image_stream);
 
     /* Create a new object to hold the image options. */
@@ -6065,4 +6074,20 @@ worksheet_data_validation_cell(lxw_worksheet *self, lxw_row_t row,
 {
     return worksheet_data_validation_range(self, row, col,
                                            row, col, validation);
+}
+
+/*
+ * Set the VBA name for the worksheet.
+ */
+lxw_error
+worksheet_set_vba_name(lxw_worksheet *self, const char *name)
+{
+    if (!name) {
+        LXW_WARN("worksheet_set_vba_name(): " "name must be specified.");
+        return LXW_ERROR_NULL_PARAMETER_IGNORED;
+    }
+
+    self->vba_codename = lxw_strdup(name);
+
+    return LXW_NO_ERROR;
 }
