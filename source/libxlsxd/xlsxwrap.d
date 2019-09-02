@@ -3777,7 +3777,7 @@ extern(C)
     int abs(int) @nogc nothrow;
     alias FILE = _IO_FILE;
     void qsort(void*, c_ulong, c_ulong, int function(const(void)*, const(void)*)) @nogc nothrow;
-    struct _IO_FILE
+    struct _IO_FILE_DUMMY
     {
         int _flags;
         char* _IO_read_ptr;
@@ -3809,6 +3809,13 @@ extern(C)
         int _mode;
         char[20] _unused2;
     }
+	version(Windows) {
+			alias _IO_FILE = _IO_FILE_DUMMY;
+	} else version(LDC) {
+		import core.stdc.stdio : _IO_FILE;
+	} else {
+		alias _IO_FILE = _IO_FILE_DUMMY;
+	}
     alias __FILE = _IO_FILE;
     alias __fpos64_t = _G_fpos64_t;
     struct _G_fpos64_t
