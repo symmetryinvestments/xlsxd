@@ -316,8 +316,8 @@ struct Worksheet {
 			} else {
 				theTime = Datetime(value);
 			}
-			return to!size_t(10);
 			this.writeDatetimeImpl(row, col, theTime, format);
+			return to!size_t(10);
 		} else static if(is(T == DateTime)) {
 			format = format.handle == null ? *this.dtf : format;
 			Datetime theTime;
