@@ -9,24 +9,20 @@
 	"preBuildCommands-posix" : [
 		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"
 	],
-	"preBuildCommands-windows" : [
-		"$PACKAGE_DIR\\windepbuild.bat"
+	"preBuildCommands-windows-x86_mscoff" : [
+		"$PACKAGE_DIR\\windepbuild.bat Win32"
 	],
-	"libs-posix" : ["xlsxwriter"],
+	"preBuildCommands-windows-x86_64" : [
+		"$PACKAGE_DIR\\windepbuild.bat x64"
+	],
+	"libs" : ["xlsxwriter"],
 	"lflags-posix": [
 		"-L$PACKAGE_DIR/libxlsxwriter/build/"
 	],
-	"lflags-windows-x86_mscoff-dmd": [
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\win32\\lib\\\"",
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\win32\\lib\\\""
+	"lflags-windows-x86_mscoff": [
+"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\Win32\\Release"
 	],
-	"lflags-windows-x86_64-dmd": [
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\\"",
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\\\""
-	],
-	"lflags-windows-x86_64-ldc": [
-		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release\"\"",
-		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\"\""
-	],
-	"libs-windows" : [ "msvcrt", "xlsxwriter", "zlibstatic" ]
+	"lflags-windows-x86_64": [
+		"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release"
+	]
 }
