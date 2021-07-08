@@ -9,8 +9,11 @@
 	"preBuildCommands-posix" : [
 		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"
 	],
-	"preBuildCommands-windows" : [
-		"$PACKAGE_DIR\\windepbuild.bat"
+	"preBuildCommands-windows-x86_mscoff" : [
+		"$PACKAGE_DIR\\windepbuild.bat Win32"
+	],
+	"preBuildCommands-windows-x86_64" : [
+		"$PACKAGE_DIR\\windepbuild.bat x64"
 	],
 	"libs" : ["xlsxwriter"],
 	"lflags-posix": [
