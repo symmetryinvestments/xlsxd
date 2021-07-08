@@ -158,9 +158,15 @@ enable_language(CXX)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # ZLIB
-find_package(ZLIB REQUIRED "1.0")
-list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS})
-message("zlib version: " ${ZLIB_VERSION})
+if(WIN32)
+    # xlsxd-specific simplification on Windows: use zconf.h and zlib.h from ../zlib.
+    # This enables skipping the zlib build; the library is included in Phobos.
+    list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../zlib)
+else()
+    find_package(ZLIB REQUIRED "1.0")
+    list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS})
+    message("zlib version: " ${ZLIB_VERSION})
+endif()
 
 # MINIZIP
 if (USE_SYSTEM_MINIZIP)

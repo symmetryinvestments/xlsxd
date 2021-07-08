@@ -12,21 +12,14 @@
 	"preBuildCommands-windows" : [
 		"$PACKAGE_DIR\\windepbuild.bat"
 	],
-	"libs-posix" : ["xlsxwriter"],
+	"libs" : ["xlsxwriter"],
 	"lflags-posix": [
 		"-L$PACKAGE_DIR/libxlsxwriter/build/"
 	],
-	"lflags-windows-x86_mscoff-dmd": [
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\win32\\lib\\\"",
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\win32\\lib\\\""
+	"lflags-windows-x86_mscoff": [
+		"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\win32\\lib"
 	],
-	"lflags-windows-x86_64-dmd": [
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\\"",
-		"\\\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\\\""
-	],
-	"lflags-windows-x86_64-ldc": [
-		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\x64\\Release\"\"",
-		"\"\"/LIBPATH:$PACKAGE_DIR\\install_dir\\zlib\\lib\"\""
-	],
-	"libs-windows" : [ "msvcrt", "xlsxwriter", "zlibstatic" ]
+	"lflags-windows-x86_64": [
+		"/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib"
+	]
 }
