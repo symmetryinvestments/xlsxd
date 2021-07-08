@@ -9,17 +9,17 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 
 Rem git clone https://github.com/jmcnamara/libxlsxwriter.git
 Rem x86
-if exist "%INSTALL_DIR%\libxlsxwriter\win32\lib\xlsxwriter.lib" (
-	echo libxlsxwriter already build
+if exist "%INSTALL_DIR%\libxlsxwriter\lib\Win32\Release\xlsxwriter.lib" (
+	echo 32-bit libxlsxwriter already built
 ) else (
-	echo libxlsxwriter does not exist
+	echo 32-bit libxlsxwriter does not exist
 	cd libxlsxwriter
 	if !errorlevel! neq 0 exit /b !errorlevel!
 	mkdir build86
 	if !errorlevel! neq 0 exit /b !errorlevel!
 	cd    build86
 	if !errorlevel! neq 0 exit /b !errorlevel!
-	cmake .. -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\libxlsxwriter\win32" -DCMAKE_GENERATOR_PLATFORM=Win32
+	cmake .. -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\libxlsxwriter" -DCMAKE_GENERATOR_PLATFORM=Win32
 	if !errorlevel! neq 0 exit /b !errorlevel!
 
 	cmake --build . --config Release --target install
@@ -30,10 +30,10 @@ if exist "%INSTALL_DIR%\libxlsxwriter\win32\lib\xlsxwriter.lib" (
 )
 
 Rem x64
-if exist "%INSTALL_DIR%\libxlsxwriter\lib\xlsxwriter.lib" (
-	echo libxlsxwriter already build
+if exist "%INSTALL_DIR%\libxlsxwriter\lib\x64\Release\xlsxwriter.lib" (
+	echo 64-bit libxlsxwriter already built
 ) else (
-	echo libxlsxwriter does not exist
+	echo 64-bit libxlsxwriter does not exist
 	cd libxlsxwriter
 	if !errorlevel! neq 0 exit /b !errorlevel!
 	mkdir build
