@@ -1,8 +1,7 @@
+dist: bionic
 language: d
-sudo: false
 
-os:
-  - linux
+os: linux
 
 d:
   - dmd
