@@ -3810,7 +3810,8 @@ extern(C)
         char[20] _unused2;
     }
 	version(LDC) {
-		import core.stdc.stdio : _IO_FILE;
+		//import core.stdc.stdio : _IO_FILE;
+		alias _IO_FILE = _IO_FILE_DUMMY;
 	} else version(Windows) {
 		alias _IO_FILE = _IO_FILE_DUMMY;
 	} else {
