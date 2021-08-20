@@ -18,7 +18,6 @@ jobs:
         os:
           - windows-latest
           - ubuntu-latest
-          - macOS-latest
         compiler:
           - 'dmd-latest'
           - 'ldc-latest'
