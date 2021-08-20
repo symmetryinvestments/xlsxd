@@ -3812,7 +3812,7 @@ extern(C)
 	version(Windows) {
 		alias _IO_FILE = _IO_FILE_DUMMY;
 	} else version(LDC) {
-		alias _IO_FILE = _IO_FILE_DUMMY;
+		import core.stdc.stdio : _IO_FILE = FILE;
 	} else {
 		alias _IO_FILE = _IO_FILE_DUMMY;
 	}
