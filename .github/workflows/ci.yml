@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Test:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+        compiler:
+          - 'dmd-latest'
+          - 'ldc-latest'
+          - 'dmd-beta'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install compiler
+      uses: dlang-community/setup-dlang@v1
+      with:
+        compiler: ${{ matrix.compiler }}
+
+    - name: Test
+      run: |
+        dub test

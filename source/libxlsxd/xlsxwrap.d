@@ -3809,10 +3809,10 @@ extern(C)
         int _mode;
         char[20] _unused2;
     }
-	version(Windows) {
-			alias _IO_FILE = _IO_FILE_DUMMY;
-	} else version(LDC) {
-		import core.stdc.stdio : _IO_FILE;
+	version(LDC) {
+		import core.stdc.stdio : _IO_FILE = FILE;
+	} else version(Windows) {
+		alias _IO_FILE = _IO_FILE_DUMMY;
 	} else {
 		alias _IO_FILE = _IO_FILE_DUMMY;
 	}

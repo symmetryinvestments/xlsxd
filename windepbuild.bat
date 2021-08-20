@@ -20,7 +20,7 @@ if exist "%INSTALL_DIR%\libxlsxwriter\lib\%ARCH%\Release\xlsxwriter.lib" (
 	if !errorlevel! neq 0 exit /b !errorlevel!
 	cd    build_%ARCH%
 	if !errorlevel! neq 0 exit /b !errorlevel!
-	cmake .. -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\libxlsxwriter" -DCMAKE_GENERATOR_PLATFORM=%ARCH%
+	cmake .. -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%\libxlsxwriter" -DCMAKE_GENERATOR_PLATFORM=%ARCH% -DUSE_STATIC_MSVC_RUNTIME=ON
 	if !errorlevel! neq 0 exit /b !errorlevel!
 
 	cmake --build . --config Release --target install
