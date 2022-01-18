@@ -67,7 +67,10 @@ struct WorkbookOpen {
 	}
 
 	void close() @trusted {
-		workbook_close(this.handle);
+		if(this.handle !is null) {
+			workbook_close(this.handle);
+		}
+		this.handle = null;
 	}
 
 	WorksheetFluent addFluentWorksheet(string name) @trusted {
