@@ -163,14 +163,14 @@ if(WIN32)
     # This enables skipping the zlib build; the library is included in Phobos.
     list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../zlib)
 else()
-    find_package(ZLIB REQUIRED "1.0")
+    find_package(ZLIB 1.0 REQUIRED)
     list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS})
     message("zlib version: " ${ZLIB_VERSION})
 endif()
 
 # MINIZIP
 if (USE_SYSTEM_MINIZIP)
-    find_package(MINIZIP REQUIRED "1.0")
+    find_package(MINIZIP 1.0 REQUIRED)
     list(APPEND LXW_PRIVATE_INCLUDE_DIRS ${MINIZIP_INCLUDE_DIRS})
 endif()
 
