@@ -487,7 +487,11 @@ typedef uLong FAR uLongf;
 #endif
 #ifndef Z_SOLO
 #  if defined(Z_HAVE_UNISTD_H)
-#    include <unistd.h>         /* for SEEK_*, off_t, and _LFS64_LARGEFILE */
+#    if defined(__WIN32)
+#      include <io.h>
+#    else
+#      include <unistd.h>         /* for SEEK_*, off_t, and _LFS64_LARGEFILE */
+#    endif
 #    ifdef VMS
 #      include <unixio.h>       /* for off_t */
 #    endif
