@@ -1,14 +1,14 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/workbook.h"
+#include "../../../include/xlsxwriter/workbook.h"
 
 // Test the _write_book_views() function.
 CTEST(workbook, write_book_views) {

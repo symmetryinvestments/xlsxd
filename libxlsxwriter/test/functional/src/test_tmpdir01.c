@@ -3,7 +3,7 @@
  *
  * Simple test case to test data writing.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -11,7 +11,7 @@
 
 int main() {
 
-    lxw_workbook_options options = {LXW_FALSE, ".", LXW_FALSE};
+    lxw_workbook_options options = {LXW_FALSE, ".", LXW_FALSE, NULL, NULL};
 
     lxw_workbook  *workbook  = workbook_new_opt("test_tmpdir01.xlsx", &options);
     lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);

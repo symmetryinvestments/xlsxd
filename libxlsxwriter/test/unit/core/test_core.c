@@ -1,18 +1,19 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/core.h"
-#include "xlsxwriter/workbook.h"
+#include "../../../include/xlsxwriter/core.h"
+#include "../../../include/xlsxwriter/workbook.h"
 
 #ifdef _WIN32
 #define timegm _mkgmtime
+#define strdup _strdup
 #endif
 
 // Test assembling a complete core file.

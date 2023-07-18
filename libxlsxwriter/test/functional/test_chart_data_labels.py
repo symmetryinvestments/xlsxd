@@ -2,7 +2,7 @@
 #
 # Tests for libxlsxwriter.
 #
-# Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+# Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
 #
 
 import base_test_class
@@ -86,3 +86,75 @@ class TestCompareXLSXFiles(base_test_class.XLSXBaseTest):
 
     def test_chart_data_labels25(self):
         self.run_exe_test('test_chart_data_labels25')
+
+    def test_chart_data_labels26(self):
+        self.run_exe_test('test_chart_data_labels26')
+
+    def test_chart_data_labels27(self):
+        self.run_exe_test('test_chart_data_labels27')
+
+    def test_chart_data_labels28(self):
+        self.run_exe_test('test_chart_data_labels28')
+
+    def test_chart_data_labels29(self):
+        self.run_exe_test('test_chart_data_labels29')
+
+    def test_chart_data_labels30(self):
+        self.run_exe_test('test_chart_data_labels30')
+
+    def test_chart_data_labels31(self):
+        self.run_exe_test('test_chart_data_labels31')
+
+    def test_chart_data_labels32(self):
+        self.run_exe_test('test_chart_data_labels32')
+
+    def test_chart_data_labels33(self):
+        self.run_exe_test('test_chart_data_labels33')
+
+    def test_chart_data_labels34(self):
+        self.run_exe_test('test_chart_data_labels34')
+
+    def test_chart_data_labels35(self):
+        self.run_exe_test('test_chart_data_labels35')
+
+    def test_chart_data_labels36(self):
+        self.run_exe_test('test_chart_data_labels36')
+
+    def test_chart_data_labels37(self):
+        self.run_exe_test('test_chart_data_labels37')
+
+    def test_chart_data_labels38(self):
+        self.run_exe_test('test_chart_data_labels38')
+
+    def test_chart_data_labels40(self):
+        self.run_exe_test('test_chart_data_labels40')
+
+    def test_chart_data_labels41(self):
+        self.run_exe_test('test_chart_data_labels41')
+
+    def test_chart_data_labels42(self):
+        self.run_exe_test('test_chart_data_labels42')
+
+    def test_chart_data_labels43(self):
+        self.run_exe_test('test_chart_data_labels43')
+
+    def test_chart_data_labels44(self):
+        self.run_exe_test('test_chart_data_labels44')
+
+    def test_chart_data_labels45(self):
+        self.run_exe_test('test_chart_data_labels45')
+
+    def test_chart_data_labels46(self):
+        self.run_exe_test('test_chart_data_labels46')
+
+    def test_chart_data_labels47(self):
+        self.run_exe_test('test_chart_data_labels47')
+
+    def test_chart_data_labels48(self):
+        self.run_exe_test('test_chart_data_labels48')
+
+    def test_chart_data_labels49(self):
+        self.run_exe_test('test_chart_data_labels49')
+
+    def test_chart_data_labels50(self):
+        self.run_exe_test('test_chart_data_labels50')

@@ -1,15 +1,15 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/styles.h"
-#include "xlsxwriter/format.h"
+#include "../../../include/xlsxwriter/styles.h"
+#include "../../../include/xlsxwriter/format.h"
 
 // Test the _write_xf() method. Default properties.
 CTEST(styles, write_xf01) {

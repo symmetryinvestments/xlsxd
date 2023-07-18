@@ -4,7 +4,7 @@
  *
  * These include Drop Lines and High-Low Lines.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2021, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -40,7 +40,7 @@ void write_worksheet_data(lxw_worksheet *worksheet, lxw_format *bold) {
  */
 int main() {
 
-    lxw_workbook     *workbook  = new_workbook("chart_data_tools.xlsx");
+    lxw_workbook     *workbook  = workbook_new("chart_data_tools.xlsx");
     lxw_worksheet    *worksheet = workbook_add_worksheet(workbook, NULL);
     lxw_chart_series *series;
     /* Add a bold format to use to highlight the header cells. */

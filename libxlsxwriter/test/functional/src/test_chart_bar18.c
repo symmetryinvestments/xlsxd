@@ -3,7 +3,7 @@
  *
  * Test to compare output against Excel files.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -11,7 +11,7 @@
 
 int main() {
 
-    lxw_workbook   *workbook   = new_workbook("test_chart_bar18.xlsx");
+    lxw_workbook   *workbook   = workbook_new("test_chart_bar18.xlsx");
     lxw_worksheet  *worksheet  = workbook_add_worksheet(workbook, NULL);
     lxw_chartsheet *chartsheet = workbook_add_chartsheet(workbook, NULL);
     lxw_chart      *chart      = workbook_add_chart(workbook, LXW_CHART_BAR);
@@ -46,7 +46,7 @@ int main() {
 
     chartsheet_set_paper(chartsheet, 9);
 
-    lxw_header_footer_options header_options = { 0.3149606299212598 };
+    lxw_header_footer_options header_options = {.margin = 0.3149606299212598 };
     chartsheet_set_header_opt(chartsheet, "Page &P", &header_options);
     chartsheet_set_footer_opt(chartsheet, "&A",      &header_options);
 

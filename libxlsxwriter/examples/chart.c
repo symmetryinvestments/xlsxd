@@ -1,7 +1,7 @@
 /*
  * An example of a simple Excel chart using the libxlsxwriter library.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2021, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -28,7 +28,7 @@ void write_worksheet_data(lxw_worksheet *worksheet) {
 /* Create a worksheet with a chart. */
 int main() {
 
-    lxw_workbook  *workbook  = new_workbook("chart.xlsx");
+    lxw_workbook  *workbook  = workbook_new("chart.xlsx");
     lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
 
     /* Write some data for the chart. */
@@ -43,6 +43,12 @@ int main() {
     chart_add_series(chart, NULL, "Sheet1!$A$1:$A$5");
     chart_add_series(chart, NULL, "Sheet1!$B$1:$B$5");
     chart_add_series(chart, NULL, "Sheet1!$C$1:$C$5");
+
+
+    lxw_chart_font font = {.bold = LXW_EXPLICIT_FALSE, .color = LXW_COLOR_BLUE};
+
+    chart_title_set_name(chart, "Year End Results");
+    chart_title_set_name_font(chart, &font);
 
     /* Insert the chart into the worksheet. */
     worksheet_insert_chart(worksheet, CELL("B7"), chart);

@@ -3,7 +3,7 @@
  *
  * Test to compare output against Excel files.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -87,7 +87,7 @@ int main() {
     for (i = 0; i < sizeof(data)/sizeof(struct row); i++) {
         worksheet_write_string(worksheet, i + 1, 0, data[i].region, NULL);
         worksheet_write_string(worksheet, i + 1, 1, data[i].item,   NULL);
-        worksheet_write_number(worksheet, i + 1, 2, data[i].volume , NULL);
+        worksheet_write_number(worksheet, i + 1, 2, data[i].volume, NULL);
         worksheet_write_string(worksheet, i + 1, 3, data[i].month,  NULL);
     }
     

@@ -1,14 +1,14 @@
 /*
  * Tests for the libxlsxwriter library.
  *
- * Copyright 2014-2016, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/chartsheet.h"
+#include "../../../include/xlsxwriter/chartsheet.h"
 
 // Test _xml_declaration().
 CTEST(chartsheet, xml_declaration) {

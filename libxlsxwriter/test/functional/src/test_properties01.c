@@ -3,9 +3,12 @@
  *
  * Test to compare output against Excel files.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
+#ifdef _WIN32
+#define strdup _strdup
+#endif
 
 #include "xlsxwriter.h"
 

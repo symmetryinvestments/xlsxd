@@ -1,15 +1,15 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/chartsheet.h"
-#include "xlsxwriter/drawing.h"
+#include "../../../include/xlsxwriter/chartsheet.h"
+#include "../../../include/xlsxwriter/drawing.h"
 
 // Test assembling a complete Chartsheet file.
 CTEST(chartsheet, chartsheet) {

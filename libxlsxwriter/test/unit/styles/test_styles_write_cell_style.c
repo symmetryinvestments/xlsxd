@@ -1,14 +1,14 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/styles.h"
+#include "../../../include/xlsxwriter/styles.h"
 
 // Test the _write_cell_style() function.
 CTEST(styles, write_cell_style) {
@@ -20,7 +20,7 @@ CTEST(styles, write_cell_style) {
     lxw_styles *styles = lxw_styles_new();
     styles->file = testfile;
 
-    _write_cell_style(styles);
+    _write_cell_style(styles, "Normal", 0, 0);
 
     RUN_XLSX_STREQ(exp, got);
 

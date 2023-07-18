@@ -1,15 +1,15 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/workbook.h"
-#include "xlsxwriter/shared_strings.h"
+#include "../../../include/xlsxwriter/workbook.h"
+#include "../../../include/xlsxwriter/shared_strings.h"
 
 // Test assembling a complete Workbook file.
 CTEST(workbook, workbook01) {

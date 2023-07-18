@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "xlsxwriter/utility.h"
+#include "../../include/xlsxwriter/utility.h"
 
 /* Compare expected results with the XML data written to the output
  * test file.
@@ -12,7 +12,7 @@
     got = (char*)calloc(file_size + 1, 1);                          \
                                                                     \
     rewind(testfile);                                               \
-    fread(got, file_size, 1, testfile);                             \
+    (void)fread(got, file_size, 1, testfile);                       \
                                                                     \
     ASSERT_STR((exp), (got));                                       \
                                                                     \
@@ -32,7 +32,7 @@
     got = (char*)calloc(file_size + 1, 1);                          \
                                                                     \
     rewind(testfile);                                               \
-    fread(got, file_size, 1, testfile);                             \
+    (void)fread(got, file_size, 1, testfile);                       \
                                                                     \
     /* Start comparison from first difference. */                   \
     char *got_short = got;                                          \
@@ -76,7 +76,7 @@
 
 
 #define TEST_ROWCOL_TO_FORMULA_ABS(sheet, row1, col1, row2, col2, exp) \
-    lxw_rowcol_to_formula_abs(got, sheet, row1, col1, row2, col2);  \
+    lxw_rowcol_to_formula_abs(got, sheet, row1, col1, row2, col2);     \
     ASSERT_STR(exp, got);
 
 
@@ -86,7 +86,7 @@
     datetime->min   = _min;                                         \
     datetime->sec   = _sec;                                         \
                                                                     \
-    got = lxw_datetime_to_excel_date(datetime, 0);                  \
+    got = lxw_datetime_to_excel_datetime(datetime);                 \
                                                                     \
     ASSERT_DOUBLE(exp, got);                                        \
     free(datetime);
@@ -97,7 +97,7 @@
     datetime->month = _month;                                       \
     datetime->day   = _day;                                         \
                                                                     \
-    got = lxw_datetime_to_excel_date(datetime, 0);                  \
+    got = lxw_datetime_to_excel_datetime(datetime);                 \
                                                                     \
     ASSERT_DOUBLE(exp, got);                                        \
     free(datetime);
@@ -108,7 +108,7 @@
     datetime->month = _month;                                       \
     datetime->day   = _day;                                         \
                                                                     \
-    got = lxw_datetime_to_excel_date(datetime, 1);                  \
+    got = lxw_datetime_to_excel_date_epoch(datetime, 1);            \
                                                                     \
     ASSERT_DOUBLE(exp, got);                                        \
     free(datetime);
@@ -122,7 +122,16 @@
     datetime->min   = _min;                                         \
     datetime->sec   = _sec;                                         \
                                                                     \
-    got = lxw_datetime_to_excel_date(datetime, 0);                  \
+    got = lxw_datetime_to_excel_datetime(datetime);                 \
                                                                     \
     ASSERT_DOUBLE(exp, got);                                        \
     free(datetime);
+
+#define TEST_UNIXTIME(_unixtime, exp)                               \
+    got = lxw_unixtime_to_excel_date(_unixtime);                    \
+    ASSERT_DOUBLE(exp, got);
+
+#define TEST_UNIXTIME_1904(_unixtime, exp)                          \
+    got = lxw_unixtime_to_excel_date_epoch(_unixtime, 1);           \
+    ASSERT_DOUBLE(exp, got);
+

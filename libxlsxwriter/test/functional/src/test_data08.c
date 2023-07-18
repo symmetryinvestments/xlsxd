@@ -3,7 +3,7 @@
  *
  * Simple test case to test data writing.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -13,7 +13,7 @@
 int main() {
 
     /* Test that the module works if the locale is changed. */
-#ifdef USE_DOUBLE_FUNCTION
+#ifdef USE_DTOA_LIBRARY
     setlocale(LC_NUMERIC, "de_DE");
 #endif
 

@@ -2,7 +2,7 @@
 #
 # Makefile for libxlsxwriter library.
 #
-# Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+# Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
 #
 
 # Keep the output quiet by default.
@@ -16,7 +16,7 @@ INC_DIR        = ../../include
 LIB_DIR        = ../../src
 
 # Flags passed to the C compiler.
-CFLAGS += -DTESTING -DCOLOR_OK -g -Wall -Wextra -Wno-unused-parameter
+CFLAGS += -DTESTING -DCOLOR_OK -g -Wall -Wextra -Wno-unused-parameter $(GCOV)
 
 
 # All tests produced by this Makefile.
@@ -38,6 +38,10 @@ SRCS += $(wildcard drawing/test*.c)
 SRCS += $(wildcard chart/test*.c)
 SRCS += $(wildcard custom/test*.c)
 SRCS += $(wildcard chartsheet/test*.c)
+SRCS += $(wildcard vml/test*.c)
+SRCS += $(wildcard comment/test*.c)
+SRCS += $(wildcard metadata/test*.c)
+SRCS += $(wildcard table/test*.c)
 # End of SRCS
 
 OBJS  = $(patsubst %.c,%.o,$(SRCS))
@@ -49,12 +53,11 @@ ifdef USE_SYSTEM_MINIZIP
 LIBS_O += -lminizip
 CFLAGS += -DUSE_SYSTEM_MINIZIP
 endif
-# End of LIBS
-
-# Use a user-defined double number formatting function.
-ifdef USE_DOUBLE_FUNCTION
-CFLAGS += -DUSE_DOUBLE_FUNCTION
+ifdef USE_OPENSSL_MD5
+LIBS_O += -lcrypto
 endif
+
+# End of LIBS
 
 # House-keeping build targets.
 all :
@@ -72,10 +75,14 @@ all :
 	$(Q)$(MAKE) -C chart
 	$(Q)$(MAKE) -C custom
 	$(Q)$(MAKE) -C chartsheet
+	$(Q)$(MAKE) -C vml
+	$(Q)$(MAKE) -C comment
+	$(Q)$(MAKE) -C metadata
+	$(Q)$(MAKE) -C table
 # END make all
 
 clean :
-	$(Q)rm -f $(TESTS) test_all *.o
+	$(Q)rm -f $(TESTS) test_all *.o *.gcno *.gcda
 	$(Q)$(MAKE) clean -C utility
 	$(Q)$(MAKE) clean -C xmlwriter
 	$(Q)$(MAKE) clean -C worksheet
@@ -90,6 +97,10 @@ clean :
 	$(Q)$(MAKE) clean -C chart
 	$(Q)$(MAKE) clean -C custom
 	$(Q)$(MAKE) clean -C chartsheet
+	$(Q)$(MAKE) clean -C vml
+	$(Q)$(MAKE) clean -C comment
+	$(Q)$(MAKE) clean -C metadata
+	$(Q)$(MAKE) clean -C table
 # END make clean
 
 
@@ -98,7 +109,7 @@ clean :
 # Builds the tests.
 #
 test_all : test_all.o $(OBJS) $(LIBS_A)
-	$(Q)$(CC) $(CFLAGS) -I$(INC_DIR) -o $@ $^ $(LIBS_O)
+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -I$(INC_DIR) -o $@ $^ $(LIBS_O)
 
 
 ###############################################################################

@@ -7,7 +7,7 @@
  * each segment is represented as a point so it is necessary to assign
  * formatting to each point in the series.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2021, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -35,7 +35,7 @@ void write_worksheet_data(lxw_worksheet *worksheet, lxw_format *bold) {
  */
 int main() {
 
-    lxw_workbook     *workbook  = new_workbook("chart_doughnut.xlsx");
+    lxw_workbook     *workbook  = workbook_new("chart_doughnut.xlsx");
     lxw_worksheet    *worksheet = workbook_add_worksheet(workbook, NULL);
     lxw_chart *chart ;
     lxw_chart_series *series;

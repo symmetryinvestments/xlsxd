@@ -2,7 +2,7 @@
 #
 # Tests for libxlsxwriter.
 #
-# Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+# Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
 #
 
 import base_test_class
@@ -39,6 +39,12 @@ class TestCompareXLSXFiles(base_test_class.XLSXBaseTest):
 
     def test_format15(self):
         self.run_exe_test('test_format15')
+
+    def test_format16(self):
+        self.run_exe_test('test_format16')
+
+    def test_format17(self):
+        self.run_exe_test('test_format17')
 
     def test_format50(self):
         self.run_exe_test('test_format50')

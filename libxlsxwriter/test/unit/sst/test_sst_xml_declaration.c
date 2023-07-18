@@ -1,14 +1,14 @@
 /*
  * Tests for the libxlsxwriter library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/shared_strings.h"
+#include "../../../include/xlsxwriter/shared_strings.h"
 
 // Test _xml_declaration().
 CTEST(sst, xml_declaration) {

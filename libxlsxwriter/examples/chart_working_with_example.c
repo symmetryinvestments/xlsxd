@@ -2,7 +2,7 @@
  * An example of a simple Excel chart using the libxlsxwriter library. This
  * example is used in the "Working with Charts" section of the docs.
  *
- * Copyright 2014-2018, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2021, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -12,7 +12,7 @@
 /* Create a worksheet with a chart. */
 int main() {
 
-    lxw_workbook  *workbook  = new_workbook("chart_line.xlsx");
+    lxw_workbook  *workbook  = workbook_new("chart_line.xlsx");
     lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
     lxw_chart *chart;
     lxw_chart_series *series;

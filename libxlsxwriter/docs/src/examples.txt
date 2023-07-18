@@ -79,9 +79,17 @@ date formatting.
 ##############################################################
 @example dates_and_times03.c
 
-Example of writing dates and times in Excel using different date formats.
+Example of writing dates and times in Excel using Unix datetimes and
+formatting.
 
 @image html date_example03.png
+
+##############################################################
+@example dates_and_times04.c
+
+Example of writing dates and times in Excel using different date formats.
+
+@image html date_example04.png
 
 ##############################################################
 @example hyperlinks.c
@@ -106,6 +114,14 @@ Example of writing array formulas to a worksheet.
 @image html array_formula.png
 
 ##############################################################
+
+@example dynamic_arrays.c
+
+Example of writing Excel 365 dynamic array formulas to a worksheet.
+
+@image html dynamic_arrays01.png
+
+##############################################################
 @example utf8.c
 A simple Unicode UTF-8 example. Note, the source file is UTF-8 encoded.
 
@@ -118,6 +134,20 @@ Example of using libxlsxwriter for writing large files in constant memory
 mode.
 
 @image html constant_memory.png
+
+##############################################################
+@example output_buffer.c
+
+Example of using libxlsxwriter to write a workbook file to a memory buffer.
+
+@image html hello01.png
+
+##############################################################
+@example image_buffer.c
+
+Example of adding an image to a worksheet from a memory buffer.
+
+@image html image_buffer2.png
 
 ##############################################################
 @example merge_range.c
@@ -136,9 +166,9 @@ Example of merging cells with a rich string in a worksheet.
 ##############################################################
 @example autofilter.c
 
-Example of adding an autofilter to a worksheet.
+Example of adding autofilters to a worksheets and adding filter conditions.
 
-@image html autofilter.png
+@image html autofilter3.png
 
 ##############################################################
 @example data_validate.c
@@ -148,18 +178,41 @@ Example of adding data validations to a worksheet.
 @image html data_validate4.png
 
 ##############################################################
+@example conditional_format1.c
+
+A simple example of how to add a conditional format a
+libxlsxwriter file. Conditional formatting allows you to apply
+a format to a cell or a range of cells based on certain criteria.
+
+@image html conditional_format12.png
+
+
+##############################################################
+@example conditional_format2.c
+
+A more comprehensive example of how to add conditional formatting
+to an libxlsxwriter file. Conditional formatting allows you to
+apply a format to a cell or a range of cells based on certain
+criteria.
+
+@image html conditional_format1.png
+
+##############################################################
+
+@example tables.c
+
+Example of how to add tables to a worksheet. Tables in Excel are used to group
+rows and columns of data into a single structure that can be referenced in a
+formula or formatted collectively.
+
+@image html tables12.png
+
+##############################################################
 @example images.c
 
 Example of adding images to a worksheet.
 
 @image html images.png
-
-##############################################################
-@example image_buffer.c
-
-Example of adding an image to a worksheet from a memory buffer.
-
-@image html image_buffer2.png
 
 ##############################################################
 @example headers_footers.c
@@ -194,11 +247,34 @@ mainly on collapsed outlines.
 @image html outline2.png
 
 ##############################################################
+@example watermark.c
+
+Example of how to a watermark image for a worksheet using the method suggested
+in the Microsoft documentation:
+https://support.microsoft.com/en-us/office/add-a-watermark-in-excel-a372182a-d733-484e-825c-18ddf3edf009
+
+@image html worksheet_watermark.png
+
+##############################################################
+@example background.c
+
+Example of how to set the background image for a worksheet.
+
+@image html background.png
+
+##############################################################
 @example tab_colors.c
 
 Example of how to set Excel worksheet tab colors.
 
 @image html tab_colors.png
+
+##############################################################
+@example diagonal_border.c
+
+Example of how to set a worksheet cell diagonal border.
+
+@image html diagonal_border.png
 
 ##############################################################
 @example hide_sheet.c
@@ -237,6 +313,21 @@ Example adding a VBA macro to a workbook.
 @image html macros.png
 
 ##############################################################
+@example comments1.c
+
+A simple example of adding cell comments to a worksheet.
+
+@image html comments1.png
+
+##############################################################
+@example comments2.c
+
+Another example of adding cell comments to a worksheet. This example
+demonstrates most of the available comment formatting options.
+
+@image html comments2.png
+
+##############################################################
 @example hide_row_col.c
 
 Example of hiding rows and columns in an Excel worksheet.
@@ -250,6 +341,23 @@ An example of how to create panes in a worksheet, both "freeze" panes and
 "split" panes.
 
 @image html panes.png
+
+##############################################################
+@example ignore_errors.c
+
+Example of hiding worksheet errors and warnings.
+
+@image html ignore_errors2.png
+
+##############################################################
+@example lambda.c
+
+Example of using the new Excel `LAMBDA()` function. It demonstrates how to
+create a lambda function in Excel and also how to assign a name to it so that
+it can be called as a user defined function. This particular example converts
+from Fahrenheit to Celsius.
+
+@image html lambda01.png
 
 ##############################################################
 @example chart.c
@@ -306,10 +414,16 @@ Percent stacked column chart:
 ##############################################################
 @example chart_line.c
 
-Example of creating an Excel Line chart.
+Example of creating Excel Line charts. Three types of line chart are shown.
 
 The default line chart:
 @image html chart_line1.png
+
+Stacked line chart:
+@image html chart_line2.png
+
+Percent stacked line chart:
+@image html chart_line3.png
 
 
 ##############################################################
@@ -434,6 +548,43 @@ Chart 6: chart with error bars.
 
 Chart 7: chart with a trendline.
 @image html chart_data_tools9.png
+
+
+##############################################################
+@example chart_data_labels.c
+
+A demo of an various Excel chart data label features that are available via a
+libxlsxwriter chart, including custom data labels.
+
+Chart 1: chart with standard data labels.
+@image html chart_data_labels11.png
+
+Chart 2: chart with Category and Value data labels.
+@image html chart_data_labels12.png
+
+Chart 3: chart with data labels with a user defined font.
+@image html chart_data_labels13.png
+
+Chart 4: chart with data labels and formatting.
+@image html chart_data_labels22.png
+
+Chart 5: chart with custom string data labels.
+@image html chart_data_labels14.png
+
+Chart 6: chart with custom data labels referenced from worksheet cells.
+@image html chart_data_labels15.png
+
+Chart 7: chart with a mix of custom and default labels. The items initialized
+with '{0}' and items without a custom label (points 5 and 6 which come after
+NULL) will get the default value. We also set a font for the custom items as
+an extra example.
+@image html chart_data_labels16.png
+
+Chart 8: chart with some deleted custom labels and defaults.
+@image html chart_data_labels17.png
+
+Chart 9: chart with custom string data labels and formatting.
+@image html chart_data_labels23.png
 
 
 ##############################################################

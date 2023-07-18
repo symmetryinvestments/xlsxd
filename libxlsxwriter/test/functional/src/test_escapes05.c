@@ -3,7 +3,7 @@
  *
  * Test to compare output against Excel files.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -14,6 +14,8 @@ int main() {
     lxw_workbook  *workbook  = workbook_new("test_escapes05.xlsx");
     lxw_worksheet *worksheet1 = workbook_add_worksheet(workbook, "Start");
     lxw_worksheet *worksheet2 = workbook_add_worksheet(workbook, "A & B");
+
+    workbook_unset_default_url_format(workbook);
 
     (void)worksheet2;
 

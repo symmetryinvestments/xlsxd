@@ -1,14 +1,14 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/styles.h"
+#include "../../../include/xlsxwriter/styles.h"
 
 // Test the _write_style_xf() function.
 CTEST(styles, write_style_xf) {
@@ -20,7 +20,7 @@ CTEST(styles, write_style_xf) {
     lxw_styles *styles = lxw_styles_new();
     styles->file = testfile;
 
-    _write_style_xf(styles);
+    _write_style_xf(styles, LXW_FALSE, 0);
 
     RUN_XLSX_STREQ(exp, got);
 

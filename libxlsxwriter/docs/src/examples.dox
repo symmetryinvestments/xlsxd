@@ -174,13 +174,30 @@ date formatting.
 <table  width="600">
 <tr>
   <td>@ref dates_and_times02.c "&lt;&lt; dates_and_times02.c"</td>
+  <td align="right">@ref dates_and_times04.c "dates_and_times04.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of writing dates and times in Excel using Unix datetimes and
+formatting.
+
+@image html date_example03.png
+
+
+
+
+@example dates_and_times04.c
+
+<table  width="600">
+<tr>
+  <td>@ref dates_and_times03.c "&lt;&lt; dates_and_times03.c"</td>
   <td align="right">@ref hyperlinks.c "hyperlinks.c &gt;&gt;"</td>
 </tr>
 </table>
 
 Example of writing dates and times in Excel using different date formats.
 
-@image html date_example03.png
+@image html date_example04.png
 
 
 
@@ -189,7 +206,7 @@ Example of writing dates and times in Excel using different date formats.
 
 <table  width="600">
 <tr>
-  <td>@ref dates_and_times03.c "&lt;&lt; dates_and_times03.c"</td>
+  <td>@ref dates_and_times04.c "&lt;&lt; dates_and_times04.c"</td>
   <td align="right">@ref rich_strings.c "rich_strings.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -223,7 +240,7 @@ Example of writing "rich" multi-format strings to a worksheet.
 <table  width="600">
 <tr>
   <td>@ref rich_strings.c "&lt;&lt; rich_strings.c"</td>
-  <td align="right">@ref utf8.c "utf8.c &gt;&gt;"</td>
+  <td align="right">@ref dynamic_arrays.c "dynamic_arrays.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -234,11 +251,28 @@ Example of writing array formulas to a worksheet.
 
 
 
-@example utf8.c
+
+@example dynamic_arrays.c
 
 <table  width="600">
 <tr>
   <td>@ref array_formula.c "&lt;&lt; array_formula.c"</td>
+  <td align="right">@ref utf8.c "utf8.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of writing Excel 365 dynamic array formulas to a worksheet.
+
+@image html dynamic_arrays01.png
+
+
+
+
+@example utf8.c
+
+<table  width="600">
+<tr>
+  <td>@ref dynamic_arrays.c "&lt;&lt; dynamic_arrays.c"</td>
   <td align="right">@ref constant_memory.c "constant_memory.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -254,7 +288,7 @@ A simple Unicode UTF-8 example. Note, the source file is UTF-8 encoded.
 <table  width="600">
 <tr>
   <td>@ref utf8.c "&lt;&lt; utf8.c"</td>
-  <td align="right">@ref merge_range.c "merge_range.c &gt;&gt;"</td>
+  <td align="right">@ref output_buffer.c "output_buffer.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -266,11 +300,43 @@ mode.
 
 
 
-@example merge_range.c
+@example output_buffer.c
 
 <table  width="600">
 <tr>
   <td>@ref constant_memory.c "&lt;&lt; constant_memory.c"</td>
+  <td align="right">@ref image_buffer.c "image_buffer.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of using libxlsxwriter to write a workbook file to a memory buffer.
+
+@image html hello01.png
+
+
+
+
+@example image_buffer.c
+
+<table  width="600">
+<tr>
+  <td>@ref output_buffer.c "&lt;&lt; output_buffer.c"</td>
+  <td align="right">@ref merge_range.c "merge_range.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of adding an image to a worksheet from a memory buffer.
+
+@image html image_buffer2.png
+
+
+
+
+@example merge_range.c
+
+<table  width="600">
+<tr>
+  <td>@ref image_buffer.c "&lt;&lt; image_buffer.c"</td>
   <td align="right">@ref merge_rich_string.c "merge_rich_string.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -307,9 +373,9 @@ Example of merging cells with a rich string in a worksheet.
 </tr>
 </table>
 
-Example of adding an autofilter to a worksheet.
+Example of adding autofilters to a worksheets and adding filter conditions.
 
-@image html autofilter.png
+@image html autofilter3.png
 
 
 
@@ -319,7 +385,7 @@ Example of adding an autofilter to a worksheet.
 <table  width="600">
 <tr>
   <td>@ref autofilter.c "&lt;&lt; autofilter.c"</td>
-  <td align="right">@ref images.c "images.c &gt;&gt;"</td>
+  <td align="right">@ref conditional_format1.c "conditional_format1.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -330,12 +396,69 @@ Example of adding data validations to a worksheet.
 
 
 
-@example images.c
+@example conditional_format1.c
 
 <table  width="600">
 <tr>
   <td>@ref data_validate.c "&lt;&lt; data_validate.c"</td>
-  <td align="right">@ref image_buffer.c "image_buffer.c &gt;&gt;"</td>
+  <td align="right">@ref conditional_format2.c "conditional_format2.c &gt;&gt;"</td>
+</tr>
+</table>
+
+A simple example of how to add a conditional format a
+libxlsxwriter file. Conditional formatting allows you to apply
+a format to a cell or a range of cells based on certain criteria.
+
+@image html conditional_format12.png
+
+
+
+
+
+@example conditional_format2.c
+
+<table  width="600">
+<tr>
+  <td>@ref conditional_format1.c "&lt;&lt; conditional_format1.c"</td>
+  <td align="right">@ref tables.c "tables.c &gt;&gt;"</td>
+</tr>
+</table>
+
+A more comprehensive example of how to add conditional formatting
+to an libxlsxwriter file. Conditional formatting allows you to
+apply a format to a cell or a range of cells based on certain
+criteria.
+
+@image html conditional_format1.png
+
+
+
+
+
+@example tables.c
+
+<table  width="600">
+<tr>
+  <td>@ref conditional_format2.c "&lt;&lt; conditional_format2.c"</td>
+  <td align="right">@ref images.c "images.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of how to add tables to a worksheet. Tables in Excel are used to group
+rows and columns of data into a single structure that can be referenced in a
+formula or formatted collectively.
+
+@image html tables12.png
+
+
+
+
+@example images.c
+
+<table  width="600">
+<tr>
+  <td>@ref tables.c "&lt;&lt; tables.c"</td>
+  <td align="right">@ref headers_footers.c "headers_footers.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -346,27 +469,11 @@ Example of adding images to a worksheet.
 
 
 
-@example image_buffer.c
-
-<table  width="600">
-<tr>
-  <td>@ref images.c "&lt;&lt; images.c"</td>
-  <td align="right">@ref headers_footers.c "headers_footers.c &gt;&gt;"</td>
-</tr>
-</table>
-
-Example of adding an image to a worksheet from a memory buffer.
-
-@image html image_buffer2.png
-
-
-
-
 @example headers_footers.c
 
 <table  width="600">
 <tr>
-  <td>@ref image_buffer.c "&lt;&lt; image_buffer.c"</td>
+  <td>@ref images.c "&lt;&lt; images.c"</td>
   <td align="right">@ref defined_name.c "defined_name.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -418,7 +525,7 @@ Example of how to generate Excel outlines and grouping.
 <table  width="600">
 <tr>
   <td>@ref outline.c "&lt;&lt; outline.c"</td>
-  <td align="right">@ref tab_colors.c "tab_colors.c &gt;&gt;"</td>
+  <td align="right">@ref watermark.c "watermark.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -430,12 +537,46 @@ mainly on collapsed outlines.
 
 
 
-@example tab_colors.c
+@example watermark.c
 
 <table  width="600">
 <tr>
   <td>@ref outline_collapsed.c "&lt;&lt; outline_collapsed.c"</td>
-  <td align="right">@ref hide_sheet.c "hide_sheet.c &gt;&gt;"</td>
+  <td align="right">@ref background.c "background.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of how to a watermark image for a worksheet using the method suggested
+in the Microsoft documentation:
+https://support.microsoft.com/en-us/office/add-a-watermark-in-excel-a372182a-d733-484e-825c-18ddf3edf009
+
+@image html worksheet_watermark.png
+
+
+
+
+@example background.c
+
+<table  width="600">
+<tr>
+  <td>@ref watermark.c "&lt;&lt; watermark.c"</td>
+  <td align="right">@ref tab_colors.c "tab_colors.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of how to set the background image for a worksheet.
+
+@image html background.png
+
+
+
+
+@example tab_colors.c
+
+<table  width="600">
+<tr>
+  <td>@ref background.c "&lt;&lt; background.c"</td>
+  <td align="right">@ref diagonal_border.c "diagonal_border.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -446,11 +587,27 @@ Example of how to set Excel worksheet tab colors.
 
 
 
-@example hide_sheet.c
+@example diagonal_border.c
 
 <table  width="600">
 <tr>
   <td>@ref tab_colors.c "&lt;&lt; tab_colors.c"</td>
+  <td align="right">@ref hide_sheet.c "hide_sheet.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of how to set a worksheet cell diagonal border.
+
+@image html diagonal_border.png
+
+
+
+
+@example hide_sheet.c
+
+<table  width="600">
+<tr>
+  <td>@ref diagonal_border.c "&lt;&lt; diagonal_border.c"</td>
   <td align="right">@ref doc_properties.c "doc_properties.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -516,7 +673,7 @@ Example of setting Excel worksheet protection.
 <table  width="600">
 <tr>
   <td>@ref worksheet_protection.c "&lt;&lt; worksheet_protection.c"</td>
-  <td align="right">@ref hide_row_col.c "hide_row_col.c &gt;&gt;"</td>
+  <td align="right">@ref comments1.c "comments1.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -527,11 +684,44 @@ Example adding a VBA macro to a workbook.
 
 
 
-@example hide_row_col.c
+@example comments1.c
 
 <table  width="600">
 <tr>
   <td>@ref macro.c "&lt;&lt; macro.c"</td>
+  <td align="right">@ref comments2.c "comments2.c &gt;&gt;"</td>
+</tr>
+</table>
+
+A simple example of adding cell comments to a worksheet.
+
+@image html comments1.png
+
+
+
+
+@example comments2.c
+
+<table  width="600">
+<tr>
+  <td>@ref comments1.c "&lt;&lt; comments1.c"</td>
+  <td align="right">@ref hide_row_col.c "hide_row_col.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Another example of adding cell comments to a worksheet. This example
+demonstrates most of the available comment formatting options.
+
+@image html comments2.png
+
+
+
+
+@example hide_row_col.c
+
+<table  width="600">
+<tr>
+  <td>@ref comments2.c "&lt;&lt; comments2.c"</td>
   <td align="right">@ref panes.c "panes.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -548,7 +738,7 @@ Example of hiding rows and columns in an Excel worksheet.
 <table  width="600">
 <tr>
   <td>@ref hide_row_col.c "&lt;&lt; hide_row_col.c"</td>
-  <td align="right">@ref chart.c "chart.c &gt;&gt;"</td>
+  <td align="right">@ref ignore_errors.c "ignore_errors.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -560,11 +750,46 @@ An example of how to create panes in a worksheet, both "freeze" panes and
 
 
 
-@example chart.c
+@example ignore_errors.c
 
 <table  width="600">
 <tr>
   <td>@ref panes.c "&lt;&lt; panes.c"</td>
+  <td align="right">@ref lambda.c "lambda.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of hiding worksheet errors and warnings.
+
+@image html ignore_errors2.png
+
+
+
+
+@example lambda.c
+
+<table  width="600">
+<tr>
+  <td>@ref ignore_errors.c "&lt;&lt; ignore_errors.c"</td>
+  <td align="right">@ref chart.c "chart.c &gt;&gt;"</td>
+</tr>
+</table>
+
+Example of using the new Excel `LAMBDA()` function. It demonstrates how to
+create a lambda function in Excel and also how to assign a name to it so that
+it can be called as a user defined function. This particular example converts
+from Fahrenheit to Celsius.
+
+@image html lambda01.png
+
+
+
+
+@example chart.c
+
+<table  width="600">
+<tr>
+  <td>@ref lambda.c "&lt;&lt; lambda.c"</td>
   <td align="right">@ref chart_area.c "chart_area.c &gt;&gt;"</td>
 </tr>
 </table>
@@ -657,10 +882,16 @@ Percent stacked column chart:
 </tr>
 </table>
 
-Example of creating an Excel Line chart.
+Example of creating Excel Line charts. Three types of line chart are shown.
 
 The default line chart:
 @image html chart_line1.png
+
+Stacked line chart:
+@image html chart_line2.png
+
+Percent stacked line chart:
+@image html chart_line3.png
 
 
 
@@ -820,7 +1051,7 @@ Chart 2 is a column chart with default data table with legend keys:
 <table  width="600">
 <tr>
   <td>@ref chart_data_table.c "&lt;&lt; chart_data_table.c"</td>
-  <td align="right">@ref chart_fonts.c "chart_fonts.c &gt;&gt;"</td>
+  <td align="right">@ref chart_data_labels.c "chart_data_labels.c &gt;&gt;"</td>
 </tr>
 </table>
 
@@ -853,11 +1084,57 @@ Chart 7: chart with a trendline.
 
 
 
-@example chart_fonts.c
+@example chart_data_labels.c
 
 <table  width="600">
 <tr>
   <td>@ref chart_data_tools.c "&lt;&lt; chart_data_tools.c"</td>
+  <td align="right">@ref chart_fonts.c "chart_fonts.c &gt;&gt;"</td>
+</tr>
+</table>
+
+A demo of an various Excel chart data label features that are available via a
+libxlsxwriter chart, including custom data labels.
+
+Chart 1: chart with standard data labels.
+@image html chart_data_labels11.png
+
+Chart 2: chart with Category and Value data labels.
+@image html chart_data_labels12.png
+
+Chart 3: chart with data labels with a user defined font.
+@image html chart_data_labels13.png
+
+Chart 4: chart with data labels and formatting.
+@image html chart_data_labels22.png
+
+Chart 5: chart with custom string data labels.
+@image html chart_data_labels14.png
+
+Chart 6: chart with custom data labels referenced from worksheet cells.
+@image html chart_data_labels15.png
+
+Chart 7: chart with a mix of custom and default labels. The items initialized
+with '{0}' and items without a custom label (points 5 and 6 which come after
+NULL) will get the default value. We also set a font for the custom items as
+an extra example.
+@image html chart_data_labels16.png
+
+Chart 8: chart with some deleted custom labels and defaults.
+@image html chart_data_labels17.png
+
+Chart 9: chart with custom string data labels and formatting.
+@image html chart_data_labels23.png
+
+
+
+
+
+@example chart_fonts.c
+
+<table  width="600">
+<tr>
+  <td>@ref chart_data_labels.c "&lt;&lt; chart_data_labels.c"</td>
   <td align="right">@ref chart_pattern.c "chart_pattern.c &gt;&gt;"</td>
 </tr>
 </table>

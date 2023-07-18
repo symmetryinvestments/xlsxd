@@ -3,7 +3,7 @@
  *
  * Test to compare output against Excel files.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
@@ -11,7 +11,7 @@
 
 int main() {
 
-    lxw_workbook  *workbook  = new_workbook("test_outline05.xlsx");
+    lxw_workbook  *workbook  = workbook_new("test_outline05.xlsx");
     lxw_worksheet *worksheet2 = workbook_add_worksheet(workbook, "Collapsed Rows");
 
     lxw_format *bold = workbook_add_format(workbook);

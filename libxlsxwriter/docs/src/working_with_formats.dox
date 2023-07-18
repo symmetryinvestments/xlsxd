@@ -47,35 +47,35 @@ The following table shows the Excel format categories and the equivalent
   | Category        | Description          |  Method Name                   |
   | :-------------- | :------------------- |  :---------------------------  |
   | **Font**        | Font type            |  format_set_font_name()        |
-  |                 | Font size            |  format_set_font_size()        |
-  |                 | Font color           |  format_set_font_color()       |
-  |                 | Bold                 |  format_set_bold()             |
-  |                 | Italic               |  format_set_italic()           |
-  |                 | Underline            |  format_set_underline()        |
-  |                 | Strikeout            |  format_set_font_strikeout()   |
-  |                 | Super/Subscript      |  format_set_font_script()      |
+  | ^               | Font size            |  format_set_font_size()        |
+  | ^               | Font color           |  format_set_font_color()       |
+  | ^               | Bold                 |  format_set_bold()             |
+  | ^               | Italic               |  format_set_italic()           |
+  | ^               | Underline            |  format_set_underline()        |
+  | ^               | Strikeout            |  format_set_font_strikeout()   |
+  | ^               | Super/Subscript      |  format_set_font_script()      |
   | **Number**      | Numeric format       |  format_set_num_format()       |
   | **Protection**  | Unlock cells         |  format_set_unlocked()         |
-  |                 | Hide formulas        |  format_set_hidden()           |
+  | ^               | Hide formulas        |  format_set_hidden()           |
   | **Alignment**   | Horizontal align     |  format_set_align()            |
-  |                 | Vertical align       |  format_set_align()            |
-  |                 | Rotation             |  format_set_rotation()         |
-  |                 | Text wrap            |  format_set_text_wrap()        |
-  |                 | Indentation          |  format_set_indent()           |
-  |                 | Shrink to fit        |  format_set_shrink()           |
+  | ^               | Vertical align       |  format_set_align()            |
+  | ^               | Rotation             |  format_set_rotation()         |
+  | ^               | Text wrap            |  format_set_text_wrap()        |
+  | ^               | Indentation          |  format_set_indent()           |
+  | ^               | Shrink to fit        |  format_set_shrink()           |
   | **Pattern**     | Cell pattern         |  format_set_pattern()          |
-  |                 | Background color     |  format_set_bg_color()         |
-  |                 | Foreground color     |  format_set_fg_color()         |
+  | ^               | Background color     |  format_set_bg_color()         |
+  | ^               | Foreground color     |  format_set_fg_color()         |
   | **Border**      | Cell border          |  format_set_border()           |
-  |                 | Bottom border        |  format_set_bottom()           |
-  |                 | Top border           |  format_set_top()              |
-  |                 | Left border          |  format_set_left()             |
-  |                 | Right border         |  format_set_right()            |
-  |                 | Border color         |  format_set_border_color()     |
-  |                 | Bottom color         |  format_set_bottom_color()     |
-  |                 | Top color            |  format_set_top_color()        |
-  |                 | Left color           |  format_set_left_color()       |
-  |                 | Right color          |  format_set_right_color()      |
+  | ^               | Bottom border        |  format_set_bottom()           |
+  | ^               | Top border           |  format_set_top()              |
+  | ^               | Left border          |  format_set_left()             |
+  | ^               | Right border         |  format_set_right()            |
+  | ^               | Border color         |  format_set_border_color()     |
+  | ^               | Bottom color         |  format_set_bottom_color()     |
+  | ^               | Top color            |  format_set_top_color()        |
+  | ^               | Left color           |  format_set_left_color()       |
+  | ^               | Right color          |  format_set_right_color()      |
 
 
 @section ww_formats_colors Format Colors
@@ -141,7 +141,134 @@ of adding italic to any previous uses of `format`. The result in this case is
 that "Hello" and "World" will both appear as bold and italic.
 
 
-Next: @ref working_with_colors
+@section ww_formats_categories Number Format Categories
 
+The `format_set_num_format()` function shown below, is used to set the number
+format for numbers used with `worksheet_write_number()`:
+
+@code
+    #include "xlsxwriter.h"
+
+    int main() {
+
+        lxw_workbook  *workbook  = workbook_new("currency_format.xlsx");
+        lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
+
+        lxw_format *currency_format = workbook_add_format(workbook);
+
+        format_set_num_format(currency_format, "$#,##0.00");
+
+        worksheet_write_number(worksheet, 0, 0, 1234.56, currency_format);
+
+        workbook_close(workbook);
+
+        return 0;
+    }
+    @endcode
+
+If the number format you use is the same as one of Excel's built in number
+formats then it will have a number category such as "General", "Number",
+"Currency", "Accounting", "Date", "Time", "Percentage", "Fraction",
+"Scientific", "Text", "Special or "Custom". In the case of the example above
+the formatted output shows up as a Number category:
+
+@image html currency_format1.png
+
+If we wanted it to have a different category, such as Currency, then
+we would have to match the number format string with the number format used by
+Excel. The easiest way to do this is to open the Number Formatting dialog in
+Excel and set the format that you want:
+
+@image html currency_format2.png
+
+Then, while still in the dialog, change to Custom. The format displayed is the
+format used by Excel.
+
+@image html currency_format3.png
+
+If we put the format that we found (`"[$$-409]#,##0.00"`) into our previous
+example and rerun it we will get a number format in the Currency category:
+
+@code
+    include "xlsxwriter.h"
+
+    int main() {
+
+        lxw_workbook  *workbook  = workbook_new("currency_format.xlsx");
+        lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
+
+        lxw_format *currency_format = workbook_add_format(workbook);
+
+        format_set_num_format(currency_format, "[$$-409]#,##0.00");
+
+        worksheet_write_number(worksheet, 0, 0, 1234.56, currency_format);
+
+        workbook_close(workbook);
+
+        return 0;
+    }
+@endcode
+
+Here is the output:
+
+@image html currency_format4.png
+
+The same process can be used to find format strings for "Date" or
+"Accountancy" formats.
+
+
+
+@section ww_formats_locale Number Formats in different locales
+
+
+As shown in the previous section the `format_set_num_format()` method is used
+to set the number format for libxlsxwriter formats. A common use case is to
+set a number format with a "grouping/thousands" separator and a "decimal"
+point:
+
+@code
+    include "xlsxwriter.h"
+
+    int main() {
+
+        lxw_workbook  *workbook  = workbook_new("number_format.xlsx");
+        lxw_worksheet *worksheet = workbook_add_worksheet(workbook, NULL);
+
+        lxw_format *number_format = workbook_add_format(workbook);
+
+        format_set_num_format(number_format, "#,##0.00");
+
+        worksheet_write_number(worksheet, 0, 0, 1234.56, number_format);
+
+        workbook_close(workbook);
+
+        return 0;
+    }
+@endcode
+
+In the US locale (and some others) where the number "grouping/thousands"
+separator is "," and the "decimal" point is "." this would be shown in Excel
+as:
+
+@image html currency_format5.png
+
+In other locales these values may be reversed or different. They are generally
+set in the "Region" settings of Windows or Mac OS.  Excel handles this by
+storing the number format in the file format in the US locale, in this case
+`#,##0.00`, but renders it according to the regional settings of the host
+OS. For example, here is the same, unmodified, output file shown above in a
+German locale:
+
+@image html currency_format6.png
+
+And here is the same file in a Russian locale. Note the use of a space as the
+"grouping/thousands" separator:
+
+@image html currency_format7.png
+
+In order to replicate Excel's behavior all XlsxWriter programs should use US
+locale formatting which will then be rendered in the settings of your host OS.
+
+Next: @ref working_with_colors
 
 */

@@ -1,15 +1,19 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
+#ifdef _WIN32
+#define strdup _strdup
+#endif
 
 #include <string.h>
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/drawing.h"
+#include "../../../include/xlsxwriter/drawing.h"
+#include "../../../include/xlsxwriter/worksheet.h"
 
 // Test assembling a complete Drawing file.
 CTEST(drawing, drawing_image01) {
@@ -67,8 +71,8 @@ CTEST(drawing, drawing_image01) {
 
     lxw_drawing_object *drawing_object = calloc(1, sizeof(lxw_drawing_object));
 
-    drawing_object->anchor_type = LXW_ANCHOR_TYPE_IMAGE;
-    drawing_object->edit_as = LXW_ANCHOR_EDIT_AS_ONE_CELL;
+    drawing_object->type = LXW_DRAWING_IMAGE;
+    drawing_object->anchor = LXW_OBJECT_MOVE_DONT_SIZE;
 
     drawing_object->from.col = 2;
     drawing_object->from.col_offset = 0;
@@ -87,6 +91,8 @@ CTEST(drawing, drawing_image01) {
 
     drawing_object->width  = 1142857;
     drawing_object->height = 1142857;
+
+    drawing_object->rel_index = 1;
 
     lxw_add_drawing_object(drawing, drawing_object);
 

@@ -1,15 +1,15 @@
 /*
  * Tests for the libxlsxwriter library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/workbook.h"
-#include "xlsxwriter/shared_strings.h"
+#include "../../../include/xlsxwriter/workbook.h"
+#include "../../../include/xlsxwriter/shared_strings.h"
 
 /* Test a valid sheet name. */
 CTEST(workbook, validate_worksheet_name01) {
@@ -97,50 +97,8 @@ CTEST(workbook, validate_worksheet_name06) {
     lxw_workbook_free(workbook);
 }
 
-/* Test a sheet that has the reserved name "History". */
-CTEST(workbook, validate_worksheet_name07) {
-
-    const char* sheetname = "History";
-
-    lxw_workbook *workbook = workbook_new(NULL);
-    lxw_error exp = LXW_ERROR_SHEETNAME_RESERVED;
-    lxw_error got = workbook_validate_sheet_name(workbook, sheetname);
-
-    ASSERT_EQUAL(exp, got);
-
-    lxw_workbook_free(workbook);
-}
-
-/* Test a sheet that has the reserved name "History", case insensitive. */
-CTEST(workbook, validate_worksheet_name08) {
-
-    const char* sheetname = "history";
-
-    lxw_workbook *workbook = workbook_new(NULL);
-    lxw_error exp = LXW_ERROR_SHEETNAME_RESERVED;
-    lxw_error got = workbook_validate_sheet_name(workbook, sheetname);
-
-    ASSERT_EQUAL(exp, got);
-
-    lxw_workbook_free(workbook);
-}
-
-/* Test a sheet that has the reserved name "History", case insensitive. */
-CTEST(workbook, validate_worksheet_name09) {
-
-    const char* sheetname = "HiStOrY";
-
-    lxw_workbook *workbook = workbook_new(NULL);
-    lxw_error exp = LXW_ERROR_SHEETNAME_RESERVED;
-    lxw_error got = workbook_validate_sheet_name(workbook, sheetname);
-
-    ASSERT_EQUAL(exp, got);
-
-    lxw_workbook_free(workbook);
-}
-
 /* Test a sheet name that already exists, case insensitive. */
-CTEST(workbook, validate_worksheet_name10) {
+CTEST(workbook, validate_worksheet_name07) {
 
     const char* sheetname = "Sheet1";
 
@@ -156,7 +114,7 @@ CTEST(workbook, validate_worksheet_name10) {
 }
 
 /* Test a sheet name that already exists, case insensitive. */
-CTEST(workbook, validate_worksheet_name11) {
+CTEST(workbook, validate_worksheet_name08) {
 
     const char* sheetname = "Café";
 
@@ -172,7 +130,7 @@ CTEST(workbook, validate_worksheet_name11) {
 }
 
 /* Test a sheet name that already exists, case insensitive. */
-CTEST(workbook, validate_worksheet_name12) {
+CTEST(workbook, validate_worksheet_name09) {
 
     const char* sheetname = "abcde";
 

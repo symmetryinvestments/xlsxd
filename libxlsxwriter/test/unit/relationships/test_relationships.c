@@ -1,14 +1,14 @@
 /*
  * Tests for the lib_xlsx_writer library.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/relationships.h"
+#include "../../../include/xlsxwriter/relationships.h"
 
 // Test assembling a complete Relationships file.
 CTEST(relationships, relationships01) {

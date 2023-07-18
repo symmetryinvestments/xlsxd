@@ -1,14 +1,14 @@
 /*
  * Tests for xmlwriter.
  *
- * Copyright 2014-2019, John McNamara, jmcnamara@cpan.org
+ * Copyright 2014-2022, John McNamara, jmcnamara@cpan.org
  *
  */
 
 #include "../ctest.h"
 #include "../helper.h"
 
-#include "xlsxwriter/xmlwriter.h"
+#include "../../../include/xlsxwriter/xmlwriter.h"
 
 // Test _xml_declaration().
 CTEST(xmlwriter, xml_declaration) {

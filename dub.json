@@ -7,7 +7,7 @@
 	"copyright": "Symmetry Investments",
 	"license": "BSD",
 	"preBuildCommands-posix" : [
-		"make -C $PACKAGE_DIR libxlsxwriter/build/libxlsxwriter.a"
+		"make -C $PACKAGE_DIR libxlsxwriter/libxlsxwriter.a"
 	],
 	"preBuildCommands-windows-x86_mscoff" : [
 		"$PACKAGE_DIR\\windepbuild.bat Win32"
@@ -17,7 +17,7 @@
 	],
 	"libs" : ["xlsxwriter"],
 	"lflags-posix": [
-		"-L$PACKAGE_DIR/libxlsxwriter/build/"
+		"-L$PACKAGE_DIR/libxlsxwriter/"
 	],
 	"lflags-windows-x86_mscoff": [
 "/LIBPATH:$PACKAGE_DIR\\install_dir\\libxlsxwriter\\lib\\Win32\\Release"
