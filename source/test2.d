@@ -53,7 +53,7 @@ private template Identity(T) {
 		static lxw_rich_string_tuple tmp;
 		static lxw_rich_string_tuple*[2] ret;
 		tmp.format = null;
-		tmp.string = cast(char*)toStringz("Hello world");
+		tmp.string_ = cast(char*)(toStringz("Hello world"));
 
 		ret[0] = &tmp;
 		ret[1] = null;
@@ -75,6 +75,11 @@ private template Identity(T) {
 
 	lxw_image_options* genImageOptions() @safe {
 		static lxw_image_options ret;
+		return &ret;
+	}
+
+	lxw_chart_options* genChartOptions() @safe {
+		static lxw_chart_options ret;
 		return &ret;
 	}
 
@@ -145,6 +150,8 @@ private template Identity(T) {
 				val = genRowColOptions();
 			} else static if(is(typeof(val) == lxw_image_options*)) {
 				val = genImageOptions();
+			} else static if(is(typeof(val) == lxw_chart_options*)) {
+				val = genChartOptions();
 			} else static if(is(typeof(val) == lxw_data_validation*)) {
 				val = genDataValidation();
 			} else static if(is(typeof(val) == lxw_header_footer_options*)) {

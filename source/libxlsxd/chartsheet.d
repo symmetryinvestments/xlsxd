@@ -19,7 +19,7 @@ struct Chartsheet {
 			);
 	}
 
-	void setChartOpt(Chart chart, lxw_image_options* opt) @trusted {
+	void setChartOpt(Chart chart, lxw_chart_options* opt) @trusted {
 		enforce(chartsheet_set_chart_opt(this.handle, chart.handle, opt)
 				== LXW_NO_ERROR
 			);

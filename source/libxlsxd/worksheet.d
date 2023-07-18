@@ -637,7 +637,7 @@ struct Worksheet {
 	}
 
 	void insertChartOpt(RowType row, ColType col, Chart chart,
-			lxw_image_options* options) @trusted
+			lxw_chart_options* options) @trusted
 	{
 		enforce(worksheet_insert_chart_opt(this.handle, row,
 					col, chart.handle, options
