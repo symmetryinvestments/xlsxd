@@ -34,10 +34,6 @@ struct Format {
 		return lxw_format_get_fill_key(this.handle);
 	}
 
-	static lxw_color_t checkColor(lxw_color_t color) @nogc nothrow @trusted {
-		return lxw_format_check_color(color);
-	}
-
 	void setFontName(string fontname) nothrow @trusted {
 		format_set_font_name(this.handle, toStringz(fontname));
 	}
