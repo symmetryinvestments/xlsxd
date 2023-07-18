@@ -612,7 +612,7 @@ struct Worksheet {
 	}
 
 	void insertImageBuffer(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize) @trusted
+			object.size_t bufSize) @trusted
 	{
 		enforce(worksheet_insert_image_buffer(this.handle, row,
 					col, buf, cast(c_ulong)bufSize
@@ -622,7 +622,7 @@ struct Worksheet {
 	}
 
 	void insertImageBufferOpt(RowType row, ColType col, const(ubyte)* buf,
-			size_t bufSize, lxw_image_options* options) @trusted
+			object.size_t bufSize, lxw_image_options* options) @trusted
 	{
 		enforce(worksheet_insert_image_buffer_opt(this.handle, row,
 					col, buf, cast(c_ulong)bufSize, options
