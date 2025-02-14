@@ -70,7 +70,7 @@ In this example "datastructure\_method\_name".
 xlsxd can only write xlsx files, but there are more things to do
 
 * [xlsx](https://code.dlang.org/packages/xlsx) can read xlsx files
-* [excel-d](https://github.com/kaleidicassociates/excel-d) can create excel
+* [excel-d](https://github.com/symmetryinvestments/excel-d) can create excel
   plugins
 
 ## Updating libxlsxwriter
